@@ -1,11 +1,10 @@
 package it.skarafaz.mercury.data;
 
+import java.io.Serializable;
 import java.util.List;
 
-/**
- * Created by Skarafaz on 14/09/2014.
- */
-public class Server {
+public class Server implements Serializable {
+    private static final long serialVersionUID = 7247694914871605048L;
     private String name;
     private String host;
     private int port;

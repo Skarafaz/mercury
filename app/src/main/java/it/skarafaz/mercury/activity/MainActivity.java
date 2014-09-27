@@ -2,18 +2,25 @@ package it.skarafaz.mercury.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import it.skarafaz.mercury.R;
+import it.skarafaz.mercury.adapter.ServerPagerAdapter;
+import it.skarafaz.mercury.manager.ServerManager;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ServerPagerAdapter adapter = new ServerPagerAdapter(getSupportFragmentManager(), ServerManager.getInstance().getServers());
+        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(adapter);
     }
 
 

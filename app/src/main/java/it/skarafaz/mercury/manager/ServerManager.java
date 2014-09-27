@@ -15,14 +15,12 @@ import java.util.List;
 import it.skarafaz.mercury.MercuryApplication;
 import it.skarafaz.mercury.data.Server;
 
-/**
- * Created by Skarafaz on 14/09/2014.
- */
 public class ServerManager {
     private static ServerManager instance;
     private List<Server> servers;
 
     private ServerManager() {
+        servers = new ArrayList<Server>();
     }
 
     public static synchronized ServerManager getInstance() {
@@ -48,9 +46,9 @@ public class ServerManager {
         List<String> files = new ArrayList<String>();
         AssetManager assetManager = MercuryApplication.getContext().getAssets();
         try {
-            String[] assets = assetManager.list("");
+            String[] assets = assetManager.list("config");
             for (String asset: assets) {
-                InputStream inputStream = assetManager.open(asset);
+                InputStream inputStream = assetManager.open("config/" + asset);
                 files.add(IOUtils.toString(inputStream, "UTF-8"));
                 inputStream.close();
             }
