@@ -20,11 +20,7 @@ public class ServerPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int i) {
-        Fragment fragment = new ServerFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(ServerFragment.SERVER_ARG, servers.get(i));
-        fragment.setArguments(args);
-        return fragment;
+        return ServerFragment.newInstance(servers.get(i));
     }
 
     @Override
