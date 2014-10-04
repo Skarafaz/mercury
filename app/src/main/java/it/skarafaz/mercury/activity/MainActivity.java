@@ -1,10 +1,13 @@
 package it.skarafaz.mercury.activity;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.adapter.ServerPagerAdapter;
@@ -17,11 +20,28 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                ServerManager.getInstance().init();
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                postInit();
+            }
+        }.execute();
+    }
+
+    private void postInit() {
         ServerPagerAdapter adapter = new ServerPagerAdapter(getSupportFragmentManager(), ServerManager.getInstance().getServers());
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(adapter);
+        viewPager.setVisibility(View.VISIBLE);
+        ProgressBar progress = (ProgressBar) findViewById(R.id.progress);
+        progress.setVisibility(View.INVISIBLE);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
