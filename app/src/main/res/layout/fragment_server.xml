@@ -4,10 +4,16 @@
     android:layout_height="match_parent"
     tools:context="it.skarafaz.mercury.fragment.ServerFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView android:id="@+id/text"
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@android:id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
-
+        android:text="No items."
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 </FrameLayout>
