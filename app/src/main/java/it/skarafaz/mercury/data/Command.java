@@ -1,9 +1,9 @@
 package it.skarafaz.mercury.data;
 
-/**
- * Created by Skarafaz on 14/09/2014.
- */
-public class Command {
+import java.io.Serializable;
+
+public class Command implements Serializable {
+    private static final long serialVersionUID = -1107949489549383265L;
     private String name;
     private boolean sudo;
     private String cmd;
