@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import it.skarafaz.mercury.R;
@@ -35,10 +36,15 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void postInit() {
-        ServerPagerAdapter adapter = new ServerPagerAdapter(getSupportFragmentManager(), ServerManager.getInstance().getServers());
-        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        viewPager.setAdapter(adapter);
-        viewPager.setVisibility(View.VISIBLE);
+        if (ServerManager.getInstance().getServers().size() > 0) {
+            ServerPagerAdapter adapter = new ServerPagerAdapter(getSupportFragmentManager(), ServerManager.getInstance().getServers());
+            ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+            viewPager.setAdapter(adapter);
+            viewPager.setVisibility(View.VISIBLE);
+        } else {
+            LinearLayout empty = (LinearLayout) findViewById(R.id.empty);
+            empty.setVisibility(View.VISIBLE);
+        }
         ProgressBar progress = (ProgressBar) findViewById(R.id.progress);
         progress.setVisibility(View.INVISIBLE);
     }
