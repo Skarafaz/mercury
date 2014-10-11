@@ -15,21 +15,19 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="vertical"
-        android:visibility="invisible"
-        android:background="@android:color/holo_red_light">
+        android:visibility="invisible">
 
         <ImageView
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:background="@android:color/darker_gray" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_empty" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/no_servers"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
-            android:background="@android:color/holo_blue_light"/>
+            android:text="@string/no_servers" />
     </LinearLayout>
 
     <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
