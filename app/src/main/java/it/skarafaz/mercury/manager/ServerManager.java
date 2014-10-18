@@ -31,6 +31,7 @@ public class ServerManager {
     }
 
     public void init() {
+        this.servers.clear();
         List<String> files = getSampleConfigFiles();
         ObjectMapper mapper = new ObjectMapper();
         try {
