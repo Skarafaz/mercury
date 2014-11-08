@@ -43,7 +43,10 @@ public class CommandListAdapter extends ArrayAdapter<Command> {
         final Command command = getItem(position);
         TextView name = (TextView) row.findViewById(R.id.name);
         name.setText(command.getName());
-        name.setOnClickListener(new View.OnClickListener() {
+        TextView cmd = (TextView) row.findViewById(R.id.cmd);
+        cmd.setText(command.getCmd());
+        LinearLayout label = (LinearLayout) row.findViewById(R.id.label);
+        label.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d("CommandListAdapter", "details " + command.getName());
