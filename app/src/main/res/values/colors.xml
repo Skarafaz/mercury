@@ -2,4 +2,6 @@
 <resources>
     <color name="primary">#ff37474f</color>
     <color name="primary_dark">#ff263238</color>
+    <color name="list_even">#ff383838</color>
+    <color name="list_odd">#ff303030</color>
 </resources>

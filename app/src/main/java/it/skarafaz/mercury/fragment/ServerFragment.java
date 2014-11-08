@@ -44,9 +44,4 @@ public class ServerFragment extends ListFragment {
         listAdapter = new CommandListAdapter(getActivity(), server.getCommands());
         setListAdapter(listAdapter);
     }
-
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        Log.d(this.getClass().getSimpleName(), "details " + listAdapter.getItem(position).getName());
-    }
 }
