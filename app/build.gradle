@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.0.0"
+    buildToolsVersion "21.1.1"
 
     defaultConfig {
         applicationId "it.skarafaz.mercury"
         minSdkVersion 16
         targetSdkVersion 21
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
     }
     buildTypes {
         release {
@@ -28,4 +28,5 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind:2.4.2'
     compile 'commons-io:commons-io:2.4'
     compile 'com.android.support:support-v4:21.0.0'
+    compile 'com.jcraft:jsch:0.1.51'
 }
