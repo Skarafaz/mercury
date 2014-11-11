@@ -1,8 +1,6 @@
 package it.skarafaz.mercury.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,19 +9,20 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.data.Command;
+import it.skarafaz.mercury.listener.OnCommandDetailsListener;
+import it.skarafaz.mercury.listener.OnCommandExecListener;
 
 public class CommandListAdapter extends ArrayAdapter<Command> {
     private List<Command> commands;
     private Context context;
 
-    public CommandListAdapter(Context context, List<Command> objects) {
-        super(context, R.layout.command_list_item, objects);
-        commands = objects;
+    public CommandListAdapter(Context context, List<Command> commands) {
+        super(context, 0, commands);
+        this.commands = commands;
         this.context = context;
     }
 
@@ -46,19 +45,9 @@ public class CommandListAdapter extends ArrayAdapter<Command> {
         TextView cmd = (TextView) row.findViewById(R.id.cmd);
         cmd.setText(command.getCmd());
         LinearLayout label = (LinearLayout) row.findViewById(R.id.label);
-        label.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("CommandListAdapter", "details " + command.getName());
-            }
-        });
+        label.setOnClickListener(new OnCommandDetailsListener(command));
         ImageView play = (ImageView) row.findViewById(R.id.play);
-        play.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("CommandListAdapter", "play " + command.getName());
-            }
-        });
+        play.setOnClickListener(new OnCommandExecListener(command));
         return row;
     }
 
