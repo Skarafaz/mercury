@@ -17,12 +17,10 @@ import it.skarafaz.mercury.listener.OnCommandDetailsListener;
 import it.skarafaz.mercury.listener.OnCommandExecListener;
 
 public class CommandListAdapter extends ArrayAdapter<Command> {
-    private List<Command> commands;
     private Context context;
 
     public CommandListAdapter(Context context, List<Command> commands) {
         super(context, R.layout.command_list_item, commands);
-        this.commands = commands;
         this.context = context;
     }
 
@@ -53,16 +51,6 @@ public class CommandListAdapter extends ArrayAdapter<Command> {
         viewHolder.label.setOnClickListener(new OnCommandDetailsListener(command));
         viewHolder.play.setOnClickListener(new OnCommandExecListener(command));
         return convertView;
-    }
-
-    @Override
-    public Command getItem(int index) {
-        return commands.get(index);
-    }
-
-    @Override
-    public int getCount() {
-        return commands.size();
     }
 
     static class ViewHolder {
