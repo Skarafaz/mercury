@@ -21,34 +21,38 @@ public class CommandListAdapter extends ArrayAdapter<Command> {
     private Context context;
 
     public CommandListAdapter(Context context, List<Command> commands) {
-        super(context, 0, commands);
+        super(context, R.layout.command_list_item, commands);
         this.commands = commands;
         this.context = context;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View row = convertView;
-        if (row == null) {
+        Command command = getItem(position);
+        ViewHolder viewHolder;
+        if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.command_list_item, parent, false);
-        }
-        LinearLayout layout = (LinearLayout) row.findViewById(R.id.container);
-        if (position % 2 == 0) {
-            layout.setBackgroundColor(context.getResources().getColor(R.color.list_even));
+            convertView = inflater.inflate(R.layout.command_list_item, parent, false);
+            viewHolder = new ViewHolder();
+            viewHolder.layout = (LinearLayout) convertView.findViewById(R.id.container);
+            viewHolder.name = (TextView) convertView.findViewById(R.id.name);
+            viewHolder.cmd = (TextView) convertView.findViewById(R.id.cmd);
+            viewHolder.label = (LinearLayout) convertView.findViewById(R.id.label);
+            viewHolder.play = (ImageView) convertView.findViewById(R.id.play);
+            convertView.setTag(viewHolder);
         } else {
-            layout.setBackgroundColor(context.getResources().getColor(R.color.list_odd));
+            viewHolder = (ViewHolder) convertView.getTag();
         }
-        final Command command = getItem(position);
-        TextView name = (TextView) row.findViewById(R.id.name);
-        name.setText(command.getName());
-        TextView cmd = (TextView) row.findViewById(R.id.cmd);
-        cmd.setText(command.getCmd());
-        LinearLayout label = (LinearLayout) row.findViewById(R.id.label);
-        label.setOnClickListener(new OnCommandDetailsListener(command));
-        ImageView play = (ImageView) row.findViewById(R.id.play);
-        play.setOnClickListener(new OnCommandExecListener(command));
-        return row;
+        if (position % 2 == 0) {
+            viewHolder.layout.setBackgroundColor(context.getResources().getColor(R.color.list_even));
+        } else {
+            viewHolder.layout.setBackgroundColor(context.getResources().getColor(R.color.list_odd));
+        }
+        viewHolder.name.setText(command.getName());
+        viewHolder.cmd.setText(command.getCmd());
+        viewHolder.label.setOnClickListener(new OnCommandDetailsListener(command));
+        viewHolder.play.setOnClickListener(new OnCommandExecListener(command));
+        return convertView;
     }
 
     @Override
@@ -59,5 +63,13 @@ public class CommandListAdapter extends ArrayAdapter<Command> {
     @Override
     public int getCount() {
         return commands.size();
+    }
+
+    static class ViewHolder {
+        LinearLayout layout;
+        TextView name;
+        TextView cmd;
+        LinearLayout label;
+        ImageView play;
     }
 }
