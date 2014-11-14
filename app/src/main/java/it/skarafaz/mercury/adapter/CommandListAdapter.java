@@ -17,11 +17,9 @@ import it.skarafaz.mercury.listener.OnCommandDetailsListener;
 import it.skarafaz.mercury.listener.OnCommandExecListener;
 
 public class CommandListAdapter extends ArrayAdapter<Command> {
-    private Context context;
 
     public CommandListAdapter(Context context, List<Command> commands) {
         super(context, R.layout.command_list_item, commands);
-        this.context = context;
     }
 
     @Override
@@ -29,7 +27,7 @@ public class CommandListAdapter extends ArrayAdapter<Command> {
         Command command = getItem(position);
         ViewHolder viewHolder;
         if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.command_list_item, parent, false);
             viewHolder = new ViewHolder();
             viewHolder.layout = (LinearLayout) convertView.findViewById(R.id.container);
@@ -42,9 +40,9 @@ public class CommandListAdapter extends ArrayAdapter<Command> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         if (position % 2 == 0) {
-            viewHolder.layout.setBackgroundColor(context.getResources().getColor(R.color.list_even));
+            viewHolder.layout.setBackgroundColor(getContext().getResources().getColor(R.color.list_even));
         } else {
-            viewHolder.layout.setBackgroundColor(context.getResources().getColor(R.color.list_odd));
+            viewHolder.layout.setBackgroundColor(getContext().getResources().getColor(R.color.list_odd));
         }
         viewHolder.name.setText(command.getName());
         viewHolder.cmd.setText(command.getCmd());
