@@ -1,6 +1,5 @@
 package it.skarafaz.mercury.manager;
 
-import android.content.res.AssetManager;
 import android.os.Environment;
 import android.util.Log;
 
@@ -15,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.skarafaz.mercury.MercuryApplication;
+import it.skarafaz.mercury.data.InitTaskResult;
 import it.skarafaz.mercury.data.Server;
 
 public class ConfigManager {
@@ -32,47 +32,45 @@ public class ConfigManager {
         return instance;
     }
 
-    public void init() {
+    public InitTaskResult init() {
         servers.clear();
-        List<String> files = getConfigFiles();
-        try {
-            for (String file : files) {
-                servers.add(MercuryApplication.getObjectMapper().readValue(file, Server.class));
-            }
-        } catch (IOException e) {
-            Log.e(ConfigManager.class.getSimpleName(), e.getMessage());
-        }
-    }
-
-    private List<String> getConfigFiles() {
-        List<String> jsonFiles = new ArrayList<String>();
+        InitTaskResult result = InitTaskResult.SUCCESS;
         if (isExternalStorageReadable()) {
             File configDir = getConfigDir();
             if (configDir.exists() && configDir.isDirectory()) {
-                File[] files = configDir.listFiles(new FilenameFilter() {
-                    @Override
-                    public boolean accept(File dir, String filename) {
-                        return filename.toLowerCase().endsWith(".json");
+                List<String> files = getConfigFiles(configDir);
+                try {
+                    for (String file : files) {
+                        servers.add(MercuryApplication.getObjectMapper().readValue(file, Server.class));
                     }
-                });
-                for (File file : files) {
-                    try {
-                        InputStream is = FileUtils.openInputStream(file);
-                        jsonFiles.add(IOUtils.toString(is, "UTF-8"));
-                        is.close();
-                    } catch (IOException e) {
-                        Log.e(ConfigManager.class.getSimpleName(), e.getMessage());
-                    }
+                } catch (IOException e) {
+                    Log.e(ConfigManager.class.getSimpleName(), e.getMessage());
                 }
             } else {
-                Log.d(ConfigManager.class.getSimpleName(), "bad config dir");
-                //FIXME Toaster
-                //Toast.makeText(MercuryApplication.getContext(), R.string.bad_config_dir, Toast.LENGTH_LONG).show();
+                result = InitTaskResult.BAD_CONFIG_DIR;
             }
         } else {
-            Log.d(ConfigManager.class.getSimpleName(), "cannot read external");
-            //FIXME Toaster
-            //Toast.makeText(MercuryApplication.getContext(), R.string.external_read, Toast.LENGTH_LONG).show();
+            result = InitTaskResult.CANNOT_READ_EXT_STORAGE;
+        }
+        return result;
+    }
+
+    private List<String> getConfigFiles(File configDir) {
+        List<String> jsonFiles = new ArrayList<String>();
+        File[] files = configDir.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String filename) {
+                return filename.toLowerCase().endsWith(".json");
+            }
+        });
+        for (File file : files) {
+            try {
+                InputStream is = FileUtils.openInputStream(file);
+                jsonFiles.add(IOUtils.toString(is, "UTF-8"));
+                is.close();
+            } catch (IOException e) {
+                Log.e(ConfigManager.class.getSimpleName(), e.getMessage());
+            }
         }
         return jsonFiles;
     }
@@ -84,22 +82,6 @@ public class ConfigManager {
     private boolean isExternalStorageReadable() {
         String state = Environment.getExternalStorageState();
         return Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
-    }
-
-    private List<String> getSampleConfigFiles() {
-        List<String> files = new ArrayList<String>();
-        AssetManager assetManager = MercuryApplication.getContext().getAssets();
-        try {
-            String[] assets = assetManager.list("config");
-            for (String asset : assets) {
-                InputStream inputStream = assetManager.open("config/" + asset);
-                files.add(IOUtils.toString(inputStream, "UTF-8"));
-                inputStream.close();
-            }
-        } catch (IOException e) {
-            Log.e(ConfigManager.class.getSimpleName(), e.getMessage());
-        }
-        return files;
     }
 
     public List<Server> getServers() {
