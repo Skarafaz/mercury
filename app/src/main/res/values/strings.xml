@@ -4,4 +4,7 @@
     <string name="action_settings">Settings</string>
     <string name="no_servers">No servers!</string>
     <string name="no_commands">No commands!</string>
+    <string name="external_read">Cannot read external storage</string>
+    <string name="config_dir_creation_failed">Cannot create default config dir</string>
+    <string name="bad_config_dir">The specified config dir is not valid</string>
 </resources>

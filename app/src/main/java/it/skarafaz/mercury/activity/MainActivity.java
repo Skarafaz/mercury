@@ -12,7 +12,7 @@ import android.widget.ProgressBar;
 
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.adapter.ServerPagerAdapter;
-import it.skarafaz.mercury.manager.ServerManager;
+import it.skarafaz.mercury.manager.ConfigManager;
 
 
 public class MainActivity extends FragmentActivity {
@@ -24,7 +24,7 @@ public class MainActivity extends FragmentActivity {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                ServerManager.getInstance().init();
+                ConfigManager.getInstance().init();
                 return null;
             }
 
@@ -36,8 +36,8 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void postInit() {
-        if (ServerManager.getInstance().getServers().size() > 0) {
-            ServerPagerAdapter adapter = new ServerPagerAdapter(getSupportFragmentManager(), ServerManager.getInstance().getServers());
+        if (ConfigManager.getInstance().getServers().size() > 0) {
+            ServerPagerAdapter adapter = new ServerPagerAdapter(getSupportFragmentManager(), ConfigManager.getInstance().getServers());
             ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
             viewPager.setAdapter(adapter);
             viewPager.setVisibility(View.VISIBLE);
