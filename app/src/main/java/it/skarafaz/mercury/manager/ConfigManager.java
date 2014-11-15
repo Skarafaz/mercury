@@ -52,7 +52,7 @@ public class ConfigManager {
                 File[] files = configDir.listFiles(new FilenameFilter() {
                     @Override
                     public boolean accept(File dir, String filename) {
-                        return filename.toLowerCase().endsWith("*.json");
+                        return filename.toLowerCase().endsWith(".json");
                     }
                 });
                 for (File file : files) {
