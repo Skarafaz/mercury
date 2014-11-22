@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Mercury-SSH</string>
     <string name="action_settings">Settings</string>
     <string name="no_servers">No config files found in config directory</string>
@@ -7,4 +8,7 @@
     <string name="cannot_read_ext_storage">Cannot read external storage</string>
     <string name="config_dir_creation_failed">Cannot create default config dir</string>
     <string name="bad_config_dir">The specified config dir does not exist or it is not a valid directory</string>
+    <string name="title_activity_preferences">PreferencesActivity</string>
+    <string name="hello_world">Hello world!</string>
+
 </resources>
