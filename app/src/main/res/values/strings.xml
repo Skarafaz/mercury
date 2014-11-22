@@ -9,6 +9,6 @@
     <string name="config_dir_creation_failed">Cannot create default config dir</string>
     <string name="bad_config_dir">The specified config dir does not exist or it is not a valid directory</string>
     <string name="title_activity_preferences">Preferences</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="config_dir">Config dir</string>
 
 </resources>
