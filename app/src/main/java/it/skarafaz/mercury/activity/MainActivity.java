@@ -78,7 +78,7 @@ public class MainActivity extends FragmentActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_preferences) {
             Intent intent = new Intent(this, PreferencesActivity.class);
             startActivity(intent);
             return true;
