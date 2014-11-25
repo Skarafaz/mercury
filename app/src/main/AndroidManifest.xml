@@ -20,14 +20,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="it.skarafaz.mercury.activity.PreferencesActivity"
-            android:label="@string/title_activity_preferences"
-            android:parentActivityName="it.skarafaz.mercury.activity.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="it.skarafaz.mercury.activity.MainActivity" />
-        </activity>
     </application>
 
 </manifest>
