@@ -4,6 +4,5 @@
     <string name="no_servers">No config files found in config directory</string>
     <string name="no_commands">No commands defined in config file</string>
     <string name="cannot_read_ext_storage">Cannot read external storage</string>
-    <string name="config_dir_creation_failed">Cannot create default config dir</string>
-    <string name="bad_config_dir">The specified config dir does not exist or it is not a valid directory</string>
+    <string name="cannot_create_config_dir">Cannot create config dir</string>
 </resources>

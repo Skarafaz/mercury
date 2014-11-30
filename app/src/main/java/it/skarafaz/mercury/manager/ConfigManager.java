@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.skarafaz.mercury.MercuryApplication;
+import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.data.InitTaskResult;
 import it.skarafaz.mercury.data.Server;
 
@@ -32,6 +33,10 @@ public class ConfigManager {
         return instance;
     }
 
+    public List<Server> getServers() {
+        return servers;
+    }
+
     public InitTaskResult init() {
         servers.clear();
         InitTaskResult result = InitTaskResult.SUCCESS;
@@ -47,12 +52,19 @@ public class ConfigManager {
                     Log.e(ConfigManager.class.getSimpleName(), e.getMessage());
                 }
             } else {
-                result = InitTaskResult.BAD_CONFIG_DIR;
+                if (!createDir(configDir)) {
+                    result = InitTaskResult.CANNOT_CREATE_CONFIG_DIR;
+                }
             }
         } else {
             result = InitTaskResult.CANNOT_READ_EXT_STORAGE;
         }
         return result;
+    }
+
+    private File getConfigDir() {
+        String appName = MercuryApplication.getContext().getResources().getString(R.string.app_name);
+        return new File(Environment.getExternalStorageDirectory(), appName);
     }
 
     private List<String> getConfigFiles(File configDir) {
@@ -75,8 +87,8 @@ public class ConfigManager {
         return jsonFiles;
     }
 
-    private File getConfigDir() {
-        return new File(Environment.getExternalStorageDirectory(), PreferencesManager.getInstance().getConfigDir());
+    private boolean createDir(File configDir) {
+        return isExternalStorageWritable() && configDir.mkdirs();
     }
 
     private boolean isExternalStorageReadable() {
@@ -84,16 +96,8 @@ public class ConfigManager {
         return Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
     }
 
-    public List<Server> getServers() {
-        return servers;
-    }
-
-    public boolean createConfigDir() {
-        boolean success = true;
-        File configDir = getConfigDir();
-        if (!configDir.exists()) {
-            success = configDir.mkdirs();
-        }
-        return success;
+    private boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(state);
     }
 }

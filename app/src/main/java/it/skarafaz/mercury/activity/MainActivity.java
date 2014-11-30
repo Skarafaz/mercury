@@ -59,8 +59,8 @@ public class MainActivity extends FragmentActivity {
             case CANNOT_READ_EXT_STORAGE:
                 message = R.string.cannot_read_ext_storage;
                 break;
-            case BAD_CONFIG_DIR:
-                message = R.string.bad_config_dir;
+            case CANNOT_CREATE_CONFIG_DIR:
+                message = R.string.cannot_create_config_dir;
                 break;
         }
         return message;

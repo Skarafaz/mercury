@@ -1,5 +1,5 @@
 package it.skarafaz.mercury.data;
 
 public enum InitTaskResult {
-    SUCCESS, CANNOT_READ_EXT_STORAGE, BAD_CONFIG_DIR
+    SUCCESS, CANNOT_READ_EXT_STORAGE, CANNOT_CREATE_CONFIG_DIR
 }
