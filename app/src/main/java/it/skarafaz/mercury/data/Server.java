@@ -1,5 +1,7 @@
 package it.skarafaz.mercury.data;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -52,6 +54,7 @@ public class Server implements Serializable {
         this.password = password;
     }
 
+    @JsonManagedReference
     public List<Command> getCommands() {
         return commands;
     }

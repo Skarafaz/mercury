@@ -1,5 +1,7 @@
 package it.skarafaz.mercury.data;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.io.Serializable;
 
 public class Command implements Serializable {
@@ -7,6 +9,7 @@ public class Command implements Serializable {
     private String name;
     private boolean sudo;
     private String cmd;
+    private Server server;
 
     public String getName() {
         return name;
@@ -30,5 +33,14 @@ public class Command implements Serializable {
 
     public void setCmd(String cmd) {
         this.cmd = cmd;
+    }
+
+    @JsonBackReference
+    public Server getServer() {
+        return server;
+    }
+
+    public void setServer(Server server) {
+        this.server = server;
     }
 }
