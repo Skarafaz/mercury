@@ -9,7 +9,7 @@ public class Server implements Serializable {
     private static final long serialVersionUID = 7247694914871605048L;
     private String name;
     private String host;
-    private int port;
+    private Integer port;
     private String user;
     private String password;
     private List<Command> commands;
@@ -30,11 +30,11 @@ public class Server implements Serializable {
         this.host = host;
     }
 
-    public int getPort() {
+    public Integer getPort() {
         return port;
     }
 
-    public void setPort(int port) {
+    public void setPort(Integer port) {
         this.port = port;
     }
 
