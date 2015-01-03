@@ -5,4 +5,6 @@
     <string name="no_commands">No commands defined in config file</string>
     <string name="cannot_read_ext_storage">Cannot read external storage</string>
     <string name="cannot_create_config_dir">Cannot create config dir</string>
+    <string name="command_sent">Command sent...</string>
+    <string name="connection_failed">Failed to connect to server</string>
 </resources>

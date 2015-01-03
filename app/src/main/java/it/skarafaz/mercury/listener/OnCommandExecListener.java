@@ -1,17 +1,14 @@
 package it.skarafaz.mercury.listener;
 
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
-import com.jcraft.jsch.ChannelExec;
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.Session;
-
-import java.io.InputStream;
-
+import it.skarafaz.mercury.MercuryApplication;
+import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.data.Command;
-import it.skarafaz.mercury.data.Server;
+import it.skarafaz.mercury.data.ExecCommandTaskResult;
+import it.skarafaz.mercury.manager.SSHManager;
 
 public class OnCommandExecListener implements View.OnClickListener {
     Command command;
@@ -22,51 +19,33 @@ public class OnCommandExecListener implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        Log.d("OnCommandExecListener", "exec " + command.getName());
-        new AsyncTask<Void, Void, Void>() {
+        new AsyncTask<Void, Void, ExecCommandTaskResult>() {
             @Override
-            protected Void doInBackground(Void... params) {
-                execCommand();
-                return null;
+            protected ExecCommandTaskResult doInBackground(Void... params) {
+                ExecCommandTaskResult result = ExecCommandTaskResult.COMMAND_SENT;
+                SSHManager sshManager = new SSHManager(command);
+                if (sshManager.connect()) {
+                    if (!sshManager.sendCommand()) {
+                        result = ExecCommandTaskResult.CONNECTION_FAILED;
+                    }
+                    sshManager.disconnect();
+                } else {
+                    result = ExecCommandTaskResult.CONNECTION_FAILED;
+                }
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(ExecCommandTaskResult result) {
+                String message = "";
+                if (result == ExecCommandTaskResult.COMMAND_SENT) {
+                    message = MercuryApplication.getContext().getResources().getString(R.string.command_sent);
+                } else if (result == ExecCommandTaskResult.CONNECTION_FAILED) {
+                    message = MercuryApplication.getContext().getResources().getString(R.string.connection_failed);
+                }
+                Toast toast = Toast.makeText(MercuryApplication.getContext(), message, Toast.LENGTH_SHORT);
+                toast.show();
             }
         }.execute();
-    }
-
-    private void execCommand() {
-        try {
-            Server server = command.getServer();
-            JSch jsch = new JSch();
-            Session session = jsch.getSession(server.getUser(), server.getHost(), server.getPort());
-            session.setPassword(server.getPassword());
-            session.setConfig("StrictHostKeyChecking", "no"); // FIXME known hosts management
-            session.connect();
-            ChannelExec channel = (ChannelExec) session.openChannel("exec");
-            channel.setCommand(command.getCmd());
-            channel.setInputStream(null);
-            channel.setErrStream(System.err);
-            InputStream in = channel.getInputStream();
-            channel.connect();
-            byte[] tmp = new byte[1024];
-            while (true) {
-                while (in.available() > 0) {
-                    int i = in.read(tmp, 0, 1024);
-                    if (i < 0) break;
-                    System.out.print(new String(tmp, 0, i));
-                }
-                if (channel.isClosed()) {
-                    if (in.available() > 0) continue;
-                    System.out.println("exit-status: " + channel.getExitStatus());
-                    break;
-                }
-                try {
-                    Thread.sleep(1000);
-                } catch (Exception ee) {
-                }
-            }
-            channel.disconnect();
-            session.disconnect();
-        } catch (Exception e) {
-            Log.e(this.getClass().getSimpleName(), e.getMessage());
-        }
     }
 }
