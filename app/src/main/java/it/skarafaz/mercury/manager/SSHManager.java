@@ -62,8 +62,6 @@ public class SSHManager {
                 cmdInput = new ByteArrayInputStream((password + "\n").getBytes());
             }
             channel.setInputStream(cmdInput);
-            channel.setOutputStream(System.out);
-            channel.setErrStream(System.err);
             channel.connect(TIMEOUT);
             try {
                 Thread.sleep(SLEEP);
