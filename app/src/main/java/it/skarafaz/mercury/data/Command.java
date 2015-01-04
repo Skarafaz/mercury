@@ -7,7 +7,7 @@ import java.io.Serializable;
 public class Command implements Serializable {
     private static final long serialVersionUID = -1107949489549383265L;
     private String name;
-    private boolean sudo;
+    private Boolean sudo = false;
     private String cmd;
     private Server server;
 
@@ -19,11 +19,11 @@ public class Command implements Serializable {
         this.name = name;
     }
 
-    public boolean isSudo() {
+    public Boolean isSudo() {
         return sudo;
     }
 
-    public void setSudo(boolean sudo) {
+    public void setSudo(Boolean sudo) {
         this.sudo = sudo;
     }
 

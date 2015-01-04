@@ -7,17 +7,21 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
+import java.io.ByteArrayInputStream;
+
 import it.skarafaz.mercury.data.Command;
 
 public class SSHManager {
     private static final int TIMEOUT = 10000;
+    public static final int SLEEP = 1000;
     private JSch jsch;
+    private Session session;
     private String host;
     private Integer port;
     private String user;
     private String password;
-    private Session session;
     private String command;
+    private Boolean sudo;
 
 
     public SSHManager(Command command) {
@@ -27,6 +31,7 @@ public class SSHManager {
         user = command.getServer().getUser();
         password = command.getServer().getPassword();
         this.command = command.getCmd();
+        sudo = command.isSudo();
     }
 
     public boolean connect() {
@@ -47,11 +52,24 @@ public class SSHManager {
         boolean success = true;
         try {
             ChannelExec channel = (ChannelExec) session.openChannel("exec");
-            channel.setCommand(command);
-            channel.setInputStream(null);
+            if (sudo) {
+                channel.setCommand("sudo -S -p '' " + command);
+            } else {
+                channel.setCommand(command);
+            }
+            ByteArrayInputStream cmdInput = null;
+            if (sudo) {
+                cmdInput = new ByteArrayInputStream((password + "\n").getBytes());
+            }
+            channel.setInputStream(cmdInput);
             channel.setOutputStream(System.out);
             channel.setErrStream(System.err);
             channel.connect(TIMEOUT);
+            try {
+                Thread.sleep(SLEEP);
+            } catch (Exception e) {
+                Log.e(SSHManager.class.getSimpleName(), e.getMessage());
+            }
             channel.disconnect();
         } catch (JSchException e) {
             Log.e(SSHManager.class.getSimpleName(), e.getMessage());
