@@ -3,13 +3,9 @@ package it.skarafaz.mercury.manager;
 import android.os.Environment;
 import android.util.Log;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,9 +39,9 @@ public class ConfigManager {
         if (isExternalStorageReadable()) {
             File configDir = getConfigDir();
             if (configDir.exists() && configDir.isDirectory()) {
-                List<String> files = getConfigFiles(configDir);
+                File[] files = getConfigFiles(configDir);
                 try {
-                    for (String file : files) {
+                    for (File file : files) {
                         servers.add(MercuryApplication.getObjectMapper().readValue(file, Server.class));
                     }
                 } catch (IOException e) {
@@ -67,24 +63,13 @@ public class ConfigManager {
         return new File(Environment.getExternalStorageDirectory(), appName);
     }
 
-    private List<String> getConfigFiles(File configDir) {
-        List<String> jsonFiles = new ArrayList<String>();
-        File[] files = configDir.listFiles(new FilenameFilter() {
+    private File[] getConfigFiles(File configDir) {
+        return configDir.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
                 return filename.toLowerCase().endsWith(".json");
             }
         });
-        for (File file : files) {
-            try {
-                InputStream is = FileUtils.openInputStream(file);
-                jsonFiles.add(IOUtils.toString(is, "UTF-8"));
-                is.close();
-            } catch (IOException e) {
-                Log.e(ConfigManager.class.getSimpleName(), e.getMessage());
-            }
-        }
-        return jsonFiles;
     }
 
     private boolean createDir(File configDir) {
