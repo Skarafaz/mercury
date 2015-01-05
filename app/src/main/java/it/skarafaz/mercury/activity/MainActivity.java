@@ -2,8 +2,8 @@ package it.skarafaz.mercury.activity;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -15,11 +15,12 @@ import it.skarafaz.mercury.data.InitTaskResult;
 import it.skarafaz.mercury.manager.ConfigManager;
 
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setElevation(0);
         setContentView(R.layout.activity_main);
         new AsyncTask<Void, Void, InitTaskResult>() {
             @Override
