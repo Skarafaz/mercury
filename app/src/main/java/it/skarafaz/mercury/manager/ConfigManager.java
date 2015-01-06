@@ -11,7 +11,7 @@ import java.util.List;
 
 import it.skarafaz.mercury.MercuryApplication;
 import it.skarafaz.mercury.R;
-import it.skarafaz.mercury.data.InitTaskResult;
+import it.skarafaz.mercury.data.LoadConfigTaskResult;
 import it.skarafaz.mercury.data.Server;
 
 public class ConfigManager {
@@ -33,9 +33,9 @@ public class ConfigManager {
         return servers;
     }
 
-    public InitTaskResult init() {
+    public LoadConfigTaskResult load() {
         servers.clear();
-        InitTaskResult result = InitTaskResult.SUCCESS;
+        LoadConfigTaskResult result = LoadConfigTaskResult.SUCCESS;
         if (isExternalStorageReadable()) {
             File configDir = getConfigDir();
             if (configDir.exists() && configDir.isDirectory()) {
@@ -48,17 +48,17 @@ public class ConfigManager {
                     Log.e(ConfigManager.class.getSimpleName(), e.getMessage());
                 }
             } else {
-                if (!createDir(configDir)) {
-                    result = InitTaskResult.CANNOT_CREATE_CONFIG_DIR;
+                if (!createConfigDir(configDir)) {
+                    result = LoadConfigTaskResult.CANNOT_CREATE_CONFIG_DIR;
                 }
             }
         } else {
-            result = InitTaskResult.CANNOT_READ_EXT_STORAGE;
+            result = LoadConfigTaskResult.CANNOT_READ_EXT_STORAGE;
         }
         return result;
     }
 
-    private File getConfigDir() {
+    public File getConfigDir() {
         String appName = MercuryApplication.getContext().getResources().getString(R.string.app_name);
         return new File(Environment.getExternalStorageDirectory(), appName);
     }
@@ -72,7 +72,7 @@ public class ConfigManager {
         });
     }
 
-    private boolean createDir(File configDir) {
+    private boolean createConfigDir(File configDir) {
         return isExternalStorageWritable() && configDir.mkdirs();
     }
 
