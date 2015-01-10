@@ -3,6 +3,8 @@ package it.skarafaz.mercury.manager;
 import android.os.Environment;
 import android.util.Log;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -16,9 +18,11 @@ import it.skarafaz.mercury.data.Server;
 
 public class ConfigManager {
     private static ConfigManager instance;
+    private ObjectMapper mapper;
     private List<Server> servers;
 
     private ConfigManager() {
+        mapper = new ObjectMapper();
         servers = new ArrayList<>();
     }
 
@@ -42,7 +46,7 @@ public class ConfigManager {
                 File[] files = getConfigFiles(configDir);
                 for (File file : files) {
                     try {
-                        servers.add(MercuryApplication.getObjectMapper().readValue(file, Server.class));
+                        servers.add(mapper.readValue(file, Server.class));
                     } catch (IOException e) {
                         Log.e(ConfigManager.class.getSimpleName(), e.getMessage());
                     }
@@ -63,6 +67,10 @@ public class ConfigManager {
         return new File(Environment.getExternalStorageDirectory(), appName);
     }
 
+    private boolean createConfigDir(File configDir) {
+        return isExternalStorageWritable() && configDir.mkdirs();
+    }
+
     private File[] getConfigFiles(File configDir) {
         return configDir.listFiles(new FilenameFilter() {
             @Override
@@ -70,10 +78,6 @@ public class ConfigManager {
                 return filename.toLowerCase().endsWith(".json");
             }
         });
-    }
-
-    private boolean createConfigDir(File configDir) {
-        return isExternalStorageWritable() && configDir.mkdirs();
     }
 
     private boolean isExternalStorageReadable() {
