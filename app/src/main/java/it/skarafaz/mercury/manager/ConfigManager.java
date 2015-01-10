@@ -19,7 +19,7 @@ public class ConfigManager {
     private List<Server> servers;
 
     private ConfigManager() {
-        servers = new ArrayList<Server>();
+        servers = new ArrayList<>();
     }
 
     public static synchronized ConfigManager getInstance() {
@@ -40,12 +40,12 @@ public class ConfigManager {
             File configDir = getConfigDir();
             if (configDir.exists() && configDir.isDirectory()) {
                 File[] files = getConfigFiles(configDir);
-                try {
-                    for (File file : files) {
+                for (File file : files) {
+                    try {
                         servers.add(MercuryApplication.getObjectMapper().readValue(file, Server.class));
+                    } catch (IOException e) {
+                        Log.e(ConfigManager.class.getSimpleName(), e.getMessage());
                     }
-                } catch (IOException e) {
-                    Log.e(ConfigManager.class.getSimpleName(), e.getMessage());
                 }
             } else {
                 if (!createConfigDir(configDir)) {
