@@ -3,8 +3,6 @@ package it.skarafaz.mercury.manager;
 import android.os.Environment;
 import android.util.Log;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -15,14 +13,16 @@ import it.skarafaz.mercury.MercuryApplication;
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.data.LoadConfigTaskResult;
 import it.skarafaz.mercury.data.Server;
+import it.skarafaz.mercury.exception.ValidationException;
+import it.skarafaz.mercury.jackson.ServerMapper;
 
 public class ConfigManager {
     private static ConfigManager instance;
-    private ObjectMapper mapper;
+    private ServerMapper mapper;
     private List<Server> servers;
 
     private ConfigManager() {
-        mapper = new ObjectMapper();
+        mapper = new ServerMapper();
         servers = new ArrayList<>();
     }
 
@@ -46,8 +46,8 @@ public class ConfigManager {
                 File[] files = getConfigFiles(configDir);
                 for (File file : files) {
                     try {
-                        servers.add(mapper.readValue(file, Server.class));
-                    } catch (IOException e) {
+                        servers.add(mapper.readValue(file));
+                    } catch (IOException | ValidationException e) {
                         Log.e(ConfigManager.class.getSimpleName(), e.getMessage());
                     }
                 }

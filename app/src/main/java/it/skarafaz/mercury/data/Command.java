@@ -6,8 +6,8 @@ import java.io.Serializable;
 
 public class Command implements Serializable {
     private static final long serialVersionUID = -1107949489549383265L;
-    private String name = "Command";
-    private Boolean sudo = false;
+    private String name;
+    private Boolean sudo;
     private String cmd;
     private Server server;
 

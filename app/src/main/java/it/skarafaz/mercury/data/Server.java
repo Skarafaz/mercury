@@ -3,17 +3,16 @@ package it.skarafaz.mercury.data;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Server implements Serializable {
     private static final long serialVersionUID = 7247694914871605048L;
-    private String name = "Server";
+    private String name;
     private String host;
-    private Integer port = 22;
+    private Integer port;
     private String user;
     private String password;
-    private List<Command> commands = new ArrayList<>();
+    private List<Command> commands;
 
     public String getName() {
         return name;
