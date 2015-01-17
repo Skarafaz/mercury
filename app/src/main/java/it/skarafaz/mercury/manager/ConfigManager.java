@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import it.skarafaz.mercury.MercuryApplication;
@@ -75,12 +76,14 @@ public class ConfigManager {
     }
 
     private File[] getConfigFiles(File configDir) {
-        return configDir.listFiles(new FilenameFilter() {
+        File[] files = configDir.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
                 return filename.toLowerCase().endsWith(".json");
             }
         });
+        Arrays.sort(files);
+        return files;
     }
 
     private boolean isExternalStorageReadable() {
