@@ -14,14 +14,7 @@
         </triggeringPolicy>
     </appender>
 
-    <appender name="LOGCAT" class="ch.qos.logback.classic.android.LogcatAppender">
-        <encoder>
-            <pattern>%msg</pattern>
-        </encoder>
-    </appender>
-
     <root level="WARN">
         <appender-ref ref="LOGFILE" />
-        <appender-ref ref="LOGCAT" />
     </root>
 </configuration>
