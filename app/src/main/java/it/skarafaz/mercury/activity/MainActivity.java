@@ -71,10 +71,11 @@ public class MainActivity extends ActionBarActivity {
 
             @Override
             protected void onPostExecute(LoadConfigTaskResult result) {
+                progress.setVisibility(View.INVISIBLE);
                 if (ConfigManager.getInstance().getServers().size() > 0) {
+                    pager.setVisibility(View.VISIBLE);
                     ServerPagerAdapter adapter = new ServerPagerAdapter(getSupportFragmentManager(), ConfigManager.getInstance().getServers());
                     pager.setAdapter(adapter);
-                    pager.setVisibility(View.VISIBLE);
                     if (result == LoadConfigTaskResult.ERRORS_FOUND) {
                         Toast.makeText(MainActivity.this, getString(R.string.errors_found), Toast.LENGTH_SHORT).show();
                     }
@@ -82,7 +83,6 @@ public class MainActivity extends ActionBarActivity {
                     message.setText(getEmptyMessage(result));
                     empty.setVisibility(View.VISIBLE);
                 }
-                progress.setVisibility(View.INVISIBLE);
             }
         }.execute();
     }
