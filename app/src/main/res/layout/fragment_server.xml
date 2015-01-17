@@ -10,10 +10,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <TextView
+    <LinearLayout
         android:id="@android:id/empty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/no_commands"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_empty" />
+
+        <TextView
+            android:id="@+id/message"
+            android:text="@string/no_commands"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/empty"
+            android:gravity="center"
+            android:lineSpacingExtra="3dp" />
+    </LinearLayout>
 </FrameLayout>
