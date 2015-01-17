@@ -1,11 +1,14 @@
 package it.skarafaz.mercury.listener;
 
-import android.util.Log;
 import android.view.View;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import it.skarafaz.mercury.data.Command;
 
 public class OnCommandDetailsListener implements View.OnClickListener {
+    private static final Logger logger = LoggerFactory.getLogger(OnCommandDetailsListener.class);
     Command command;
 
     public OnCommandDetailsListener(Command command) {
@@ -14,6 +17,6 @@ public class OnCommandDetailsListener implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        Log.d(OnCommandDetailsListener.class.getSimpleName(), "details: " + command.getName());
+        logger.debug("show details: " + command.getName());
     }
 }

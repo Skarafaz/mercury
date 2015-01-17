@@ -1,7 +1,9 @@
 package it.skarafaz.mercury.manager;
 
 import android.os.Environment;
-import android.util.Log;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -18,8 +20,9 @@ import it.skarafaz.mercury.exception.ValidationException;
 import it.skarafaz.mercury.jackson.ServerMapper;
 
 public class ConfigManager {
-    public static final int LOAD_TIMEOUT = 1000;
+    public static final int SLEEP = 1000;
     public static final String JSON_EXT = ".json";
+    private static final Logger logger = LoggerFactory.getLogger(ConfigManager.class);
     private static ConfigManager instance;
     private ServerMapper mapper;
     private List<Server> servers;
@@ -41,7 +44,7 @@ public class ConfigManager {
     }
 
     public LoadConfigTaskResult load() {
-        timeout();
+        sleep();
         servers.clear();
         LoadConfigTaskResult result = LoadConfigTaskResult.SUCCESS;
         if (isExternalStorageReadable()) {
@@ -53,7 +56,7 @@ public class ConfigManager {
                         servers.add(mapper.readValue(file));
                     } catch (IOException | ValidationException e) {
                         result = LoadConfigTaskResult.ERRORS_FOUND;
-                        Log.e(ConfigManager.class.getSimpleName(), e.getMessage());
+                        logger.error(e.getMessage());
                     }
                 }
             } else {
@@ -97,11 +100,11 @@ public class ConfigManager {
         return Environment.MEDIA_MOUNTED.equals(state);
     }
 
-    private void timeout() {
+    private void sleep() {
         try {
-            Thread.sleep(LOAD_TIMEOUT);
+            Thread.sleep(SLEEP);
         } catch (InterruptedException e) {
-            Log.e(ConfigManager.class.getSimpleName(), e.getMessage());
+            Thread.currentThread().interrupt();
         }
     }
 }

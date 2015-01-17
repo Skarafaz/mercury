@@ -1,11 +1,12 @@
 package it.skarafaz.mercury.manager;
 
-import android.util.Log;
-
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 
@@ -14,6 +15,7 @@ import it.skarafaz.mercury.data.Command;
 public class SSHManager {
     private static final int TIMEOUT = 10000;
     public static final int SLEEP = 1000;
+    private static final Logger logger = LoggerFactory.getLogger(SSHManager.class);
     private JSch jsch;
     private Session session;
     private String host;
@@ -42,7 +44,7 @@ public class SSHManager {
             session.setConfig("StrictHostKeyChecking", "no"); // TODO known_hosts mng
             session.connect(TIMEOUT);
         } catch (JSchException e) {
-            Log.e(SSHManager.class.getSimpleName(), e.getMessage());
+            logger.error(e.getMessage());
             success = false;
         }
         return success;
@@ -63,14 +65,10 @@ public class SSHManager {
             }
             channel.setInputStream(cmdInput);
             channel.connect(TIMEOUT);
-            try {
-                Thread.sleep(SLEEP);
-            } catch (Exception e) {
-                Log.e(SSHManager.class.getSimpleName(), e.getMessage());
-            }
+            sleep();
             channel.disconnect();
         } catch (JSchException e) {
-            Log.e(SSHManager.class.getSimpleName(), e.getMessage());
+            logger.error(e.getMessage());
             success = false;
         }
         return success;
@@ -78,5 +76,13 @@ public class SSHManager {
 
     public void disconnect() {
         session.disconnect();
+    }
+
+    private void sleep() {
+        try {
+            Thread.sleep(SLEEP);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }
