@@ -5,5 +5,9 @@
         android:id="@+id/reload"
         android:title="@string/reload"
         android:icon="@drawable/ic_action_refresh"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/log"
+        android:title="@string/log"
+        app:showAsAction="collapseActionView" />
 </menu>

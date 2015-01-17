@@ -1,5 +1,6 @@
 package it.skarafaz.mercury.activity;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -49,6 +50,10 @@ public class MainActivity extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.reload:
                 reload();
+                return true;
+            case R.id.log:
+                Intent intent = new Intent(this, LogActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

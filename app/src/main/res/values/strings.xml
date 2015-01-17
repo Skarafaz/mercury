@@ -10,4 +10,7 @@
     <string name="command_sent">Command sent!</string>
     <string name="connection_failed">Failed to connect to server</string>
     <string name="reload">Reload</string>
+    <string name="clear">Clear log</string>
+    <string name="title_activity_log">Log</string>
+    <string name="log">Log</string>
 </resources>
