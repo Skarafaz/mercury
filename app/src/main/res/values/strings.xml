@@ -9,4 +9,5 @@
     <string name="sending_command">Sending command&#8230;</string>
     <string name="command_sent">Command sent!</string>
     <string name="connection_failed">Failed to connect to server</string>
+    <string name="reload">Reload</string>
 </resources>

@@ -4,6 +4,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -17,13 +20,50 @@ import it.skarafaz.mercury.manager.ConfigManager;
 
 
 public class MainActivity extends ActionBarActivity {
+    private ProgressBar progress;
+    private LinearLayout empty;
+    private TextView message;
+    private ViewPager pager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setElevation(0);
         setContentView(R.layout.activity_main);
+        progress = (ProgressBar) findViewById(R.id.progress);
+        empty = (LinearLayout) findViewById(R.id.empty);
+        message = (TextView) findViewById(R.id.message);
+        pager = (ViewPager) findViewById(R.id.pager);
+        reload();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.reload:
+                reload();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void reload() {
         new AsyncTask<Void, Void, LoadConfigTaskResult>() {
+            @Override
+            protected void onPreExecute() {
+                progress.setVisibility(View.VISIBLE);
+                empty.setVisibility(View.INVISIBLE);
+                pager.setVisibility(View.INVISIBLE);
+            }
+
             @Override
             protected LoadConfigTaskResult doInBackground(Void... params) {
                 return ConfigManager.getInstance().load();
@@ -33,20 +73,15 @@ public class MainActivity extends ActionBarActivity {
             protected void onPostExecute(LoadConfigTaskResult result) {
                 if (ConfigManager.getInstance().getServers().size() > 0) {
                     ServerPagerAdapter adapter = new ServerPagerAdapter(getSupportFragmentManager(), ConfigManager.getInstance().getServers());
-                    ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-                    viewPager.setAdapter(adapter);
-                    viewPager.setVisibility(View.VISIBLE);
+                    pager.setAdapter(adapter);
+                    pager.setVisibility(View.VISIBLE);
                     if (result == LoadConfigTaskResult.ERRORS_FOUND) {
-                        Toast toast = Toast.makeText(MainActivity.this, getString(R.string.errors_found), Toast.LENGTH_SHORT);
-                        toast.show();
+                        Toast.makeText(MainActivity.this, getString(R.string.errors_found), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    TextView message = (TextView) findViewById(R.id.message);
                     message.setText(getEmptyMessage(result));
-                    LinearLayout empty = (LinearLayout) findViewById(R.id.empty);
                     empty.setVisibility(View.VISIBLE);
                 }
-                ProgressBar progress = (ProgressBar) findViewById(R.id.progress);
                 progress.setVisibility(View.INVISIBLE);
             }
         }.execute();
