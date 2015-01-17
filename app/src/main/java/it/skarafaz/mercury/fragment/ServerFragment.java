@@ -13,7 +13,6 @@ import it.skarafaz.mercury.data.Server;
 public class ServerFragment extends ListFragment {
     public static final String SERVER_ARG = "SERVER_ARG";
     private Server server;
-    private CommandListAdapter listAdapter;
 
     public static ServerFragment newInstance(Server server) {
         ServerFragment fragment = new ServerFragment();
@@ -37,7 +36,6 @@ public class ServerFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        listAdapter = new CommandListAdapter(getActivity(), server.getCommands());
-        setListAdapter(listAdapter);
+        setListAdapter(new CommandListAdapter(getActivity(), server.getCommands()));
     }
 }

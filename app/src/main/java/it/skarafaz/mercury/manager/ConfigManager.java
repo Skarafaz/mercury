@@ -19,6 +19,7 @@ import it.skarafaz.mercury.jackson.ServerMapper;
 
 public class ConfigManager {
     public static final int LOAD_TIMEOUT = 1000;
+    public static final String JSON_EXT = ".json";
     private static ConfigManager instance;
     private ServerMapper mapper;
     private List<Server> servers;
@@ -79,7 +80,7 @@ public class ConfigManager {
         File[] files = configDir.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
-                return filename.toLowerCase().endsWith(".json");
+                return filename.toLowerCase().endsWith(JSON_EXT);
             }
         });
         Arrays.sort(files);

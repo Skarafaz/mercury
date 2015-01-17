@@ -14,6 +14,6 @@ public class OnCommandDetailsListener implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        Log.d("OnCommandDetailsListener", "details " + command.getName());
+        Log.d(OnCommandDetailsListener.class.getSimpleName(), "details: " + command.getName());
     }
 }
