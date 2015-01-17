@@ -17,6 +17,7 @@ import it.skarafaz.mercury.exception.ValidationException;
 import it.skarafaz.mercury.jackson.ServerMapper;
 
 public class ConfigManager {
+    public static final int LOAD_TIMEOUT = 1000;
     private static ConfigManager instance;
     private ServerMapper mapper;
     private List<Server> servers;
@@ -38,6 +39,7 @@ public class ConfigManager {
     }
 
     public LoadConfigTaskResult load() {
+        timeout();
         servers.clear();
         LoadConfigTaskResult result = LoadConfigTaskResult.SUCCESS;
         if (isExternalStorageReadable()) {
@@ -89,5 +91,13 @@ public class ConfigManager {
     private boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
         return Environment.MEDIA_MOUNTED.equals(state);
+    }
+
+    private void timeout() {
+        try {
+            Thread.sleep(LOAD_TIMEOUT);
+        } catch (InterruptedException e) {
+            Log.e(ConfigManager.class.getSimpleName(), e.getMessage());
+        }
     }
 }
