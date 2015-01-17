@@ -48,6 +48,7 @@ public class ConfigManager {
                     try {
                         servers.add(mapper.readValue(file));
                     } catch (IOException | ValidationException e) {
+                        result = LoadConfigTaskResult.ERRORS_FOUND;
                         Log.e(ConfigManager.class.getSimpleName(), e.getMessage());
                     }
                 }

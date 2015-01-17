@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.adapter.ServerPagerAdapter;
@@ -35,6 +36,10 @@ public class MainActivity extends ActionBarActivity {
                     ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
                     viewPager.setAdapter(adapter);
                     viewPager.setVisibility(View.VISIBLE);
+                    if (result == LoadConfigTaskResult.ERRORS_FOUND) {
+                        Toast toast = Toast.makeText(MainActivity.this, getString(R.string.errors_found), Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
                 } else {
                     TextView message = (TextView) findViewById(R.id.message);
                     message.setText(getEmptyMessage(result));
@@ -51,17 +56,16 @@ public class MainActivity extends ActionBarActivity {
         String message = "";
         switch (result) {
             case SUCCESS:
-                StringBuilder sb = new StringBuilder();
-                sb.append(getResources().getString(R.string.no_servers));
-                sb.append("\n");
-                sb.append(ConfigManager.getInstance().getConfigDir());
-                message = sb.toString();
+                message = String.format(getString(R.string.empty_config_dir), ConfigManager.getInstance().getConfigDir());
+                break;
+            case ERRORS_FOUND:
+                message = getString(R.string.errors_found);
                 break;
             case CANNOT_READ_EXT_STORAGE:
-                message = getResources().getString(R.string.cannot_read_ext_storage);
+                message = getString(R.string.cannot_read_ext_storage);
                 break;
             case CANNOT_CREATE_CONFIG_DIR:
-                message = getResources().getString(R.string.cannot_create_config_dir);
+                message = String.format(getString(R.string.cannot_create_config_dir), ConfigManager.getInstance().getConfigDir());
                 break;
         }
         return message;
