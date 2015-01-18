@@ -10,7 +10,7 @@
             <FileNamePattern>mercury.log.%i</FileNamePattern>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <MaxFileSize>500KB</MaxFileSize>
+            <MaxFileSize>100KB</MaxFileSize>
         </triggeringPolicy>
     </appender>
 
