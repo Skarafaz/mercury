@@ -13,4 +13,5 @@
     <string name="clear">Clear log</string>
     <string name="title_activity_log">Log</string>
     <string name="log">Log</string>
+    <string name="cannot_read_log_file">Cannot read log file</string>
 </resources>

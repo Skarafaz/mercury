@@ -1,6 +1,6 @@
 <configuration>
     <appender name="LOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>/sdcard/Mercury-SSH/log/mercury.log</file>
+        <file>/data/data/it.skarafaz.mercury/app_log/mercury.log</file>
         <encoder>
             <pattern>%d{HH:mm:ss} %-5level - %msg%n</pattern>
         </encoder>
