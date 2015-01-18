@@ -3,7 +3,6 @@ package it.skarafaz.mercury.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +23,7 @@ import java.util.List;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.util.ContextInitializer;
 import ch.qos.logback.core.joran.spi.JoranException;
+import ch.qos.logback.core.util.StatusPrinter;
 import it.skarafaz.mercury.R;
 
 public class LogFragment extends ListFragment {
@@ -97,7 +97,7 @@ public class LogFragment extends ListFragment {
         try {
             ci.autoConfig();
         } catch (JoranException e) {
-            Log.e(LogFragment.class.getSimpleName(), e.getMessage());
+            StatusPrinter.printInCaseOfErrorsOrWarnings(lc);
         }
     }
 }
