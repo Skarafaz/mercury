@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/reload"
-        android:title="@string/reload"
+        android:title="@string/action_reload"
         android:icon="@drawable/ic_action_refresh"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/log"
-        android:title="@string/log"
+        android:title="@string/action_log"
         app:showAsAction="collapseActionView" />
 </menu>

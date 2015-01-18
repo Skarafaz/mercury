@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="action_clear">Clear</string>
+    <string name="action_log">Error log</string>
+    <string name="action_reload">Reload</string>
     <string name="app_name">Mercury-SSH</string>
-    <string name="empty_config_dir">No config files found in\n%s</string>
-    <string name="errors_found">One or more config files did not pass the validity check, please see log for details</string>
-    <string name="cannot_read_ext_storage">Cannot read external storage</string>
     <string name="cannot_create_config_dir">Cannot create\n%s</string>
-    <string name="no_commands">No commands defined for this server</string>
-    <string name="sending_command">Sending command&#8230;</string>
+    <string name="cannot_read_ext_storage">Cannot read external storage</string>
     <string name="command_sent">Command sent!</string>
     <string name="connection_failed">Failed to connect to server</string>
-    <string name="reload">Reload</string>
-    <string name="clear">Clear log</string>
-    <string name="title_activity_log">Log</string>
-    <string name="log">Log</string>
+    <string name="empty_config_dir">No config files found in\n%s</string>
     <string name="empty_log">Log file is empty</string>
+    <string name="errors_found">One or more config files did not pass the validity check, please see log for details</string>
+    <string name="no_commands">No commands defined for this server</string>
+    <string name="sending_command">Sending command&#8230;</string>
+    <string name="title_activity_log">Error log</string>
 </resources>
