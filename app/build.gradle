@@ -17,13 +17,6 @@ android {
         }
     }
 
-    productFlavors {
-        logcat {
-        }
-        file {
-        }
-    }
-
     packagingOptions {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/LICENSE.txt'
