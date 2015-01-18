@@ -21,15 +21,19 @@ import java.util.List;
 import it.skarafaz.mercury.R;
 
 public class LogActivity extends ActionBarActivity {
+    public static final String LOG_DIR = "log";
+    public static final String LOG_FILE = "mercury.log";
+    public static final String ENCODING = "UTF-8";
     private static final Logger logger = LoggerFactory.getLogger(LogActivity.class);
+    ListView list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setElevation(0);
         setContentView(R.layout.activity_log);
-        ListView list = (ListView) findViewById(R.id.list);
-        list.setAdapter(new ArrayAdapter<>(this, R.layout.log_list_item, readLogFile()));
+        list = (ListView) findViewById(R.id.list);
+        reload();
     }
 
     @Override
@@ -43,25 +47,33 @@ public class LogActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.clear:
-                clear();
+                clearLog();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private List<String> readLogFile() {
-        File file = new File(getDir("log", Context.MODE_PRIVATE), "mercury.log");
+    private void reload() {
+        list.setAdapter(new ArrayAdapter<>(this, R.layout.log_list_item, readLog()));
+    }
+
+    private List<String> readLog() {
+        File file = new File(getDir(LOG_DIR, Context.MODE_PRIVATE), LOG_FILE);
         List<String> lines = new ArrayList<>();
         try {
-            lines = FileUtils.readLines(file, "UTF-8");
+            lines = FileUtils.readLines(file, ENCODING);
         } catch (IOException e) {
             logger.debug(e.getMessage());
         }
         return lines;
     }
 
-    private void clear() {
-        logger.debug("Clear log");
+    private void clearLog() {
+        File logDir = getDir(LOG_DIR, Context.MODE_PRIVATE);
+        for (File file : logDir.listFiles()) {
+            file.delete();
+        }
+        reload();
     }
 }
