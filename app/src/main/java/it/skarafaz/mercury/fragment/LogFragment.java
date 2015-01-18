@@ -57,7 +57,7 @@ public class LogFragment extends ListFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.clear:
+            case R.id.action_clear:
                 clearLog();
                 return true;
             default:

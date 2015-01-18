@@ -48,10 +48,10 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.reload:
+            case R.id.action_reload:
                 reload();
                 return true;
-            case R.id.log:
+            case R.id.action_log:
                 Intent intent = new Intent(this, LogActivity.class);
                 startActivity(intent);
                 return true;

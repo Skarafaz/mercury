@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/reload"
+        android:id="@+id/action_reload"
         android:title="@string/action_reload"
         android:icon="@drawable/ic_action_refresh"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/log"
+        android:id="@+id/action_log"
         android:title="@string/action_log"
         app:showAsAction="collapseActionView" />
 </menu>
