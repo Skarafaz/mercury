@@ -1,6 +1,9 @@
 <configuration>
     <appender name="LOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>/data/data/it.skarafaz.mercury/app_log/mercury.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
         <encoder>
             <pattern>%d{HH:mm:ss} %-5level - %msg%n</pattern>
         </encoder>
@@ -14,7 +17,14 @@
         </triggeringPolicy>
     </appender>
 
-    <root level="WARN">
+    <appender name="LOGCAT" class="ch.qos.logback.classic.android.LogcatAppender">
+        <encoder>
+            <pattern>%msg</pattern>
+        </encoder>
+    </appender>
+
+    <root level="TRACE">
         <appender-ref ref="LOGFILE" />
+        <appender-ref ref="LOGCAT" />
     </root>
 </configuration>
