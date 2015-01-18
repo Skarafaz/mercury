@@ -20,7 +20,7 @@ import it.skarafaz.mercury.exception.ValidationException;
 import it.skarafaz.mercury.jackson.ServerMapper;
 
 public class ConfigManager {
-    public static final int SLEEP = 1000;
+    public static final int SLEEP = 500;
     public static final String JSON_EXT = ".json";
     private static final Logger logger = LoggerFactory.getLogger(ConfigManager.class);
     private static ConfigManager instance;

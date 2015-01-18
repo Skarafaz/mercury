@@ -9,7 +9,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -25,6 +24,7 @@ import ch.qos.logback.classic.util.ContextInitializer;
 import ch.qos.logback.core.joran.spi.JoranException;
 import ch.qos.logback.core.util.StatusPrinter;
 import it.skarafaz.mercury.R;
+import it.skarafaz.mercury.adapter.LogListAdapter;
 
 public class LogFragment extends ListFragment {
     public static final String LOG_DIR = "log";
@@ -66,7 +66,7 @@ public class LogFragment extends ListFragment {
     }
 
     private void reload() {
-        setListAdapter(new ArrayAdapter<>(getActivity(), R.layout.log_list_item, readLog()));
+        setListAdapter(new LogListAdapter(getActivity(), readLog()));
     }
 
     private List<String> readLog() {
