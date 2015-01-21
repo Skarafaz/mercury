@@ -5,12 +5,12 @@
             <level>WARN</level>
         </filter>
         <encoder>
-            <pattern>%d{HH:mm:ss} %-5level - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level - %msg%n</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <minIndex>1</minIndex>
-            <maxIndex>5</maxIndex>
-            <FileNamePattern>mercury.log.%i</FileNamePattern>
+            <maxIndex>3</maxIndex>
+            <FileNamePattern>mercury.%i.old</FileNamePattern>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
             <MaxFileSize>100KB</MaxFileSize>
