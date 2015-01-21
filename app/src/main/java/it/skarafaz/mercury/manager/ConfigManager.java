@@ -2,14 +2,17 @@ package it.skarafaz.mercury.manager;
 
 import android.os.Environment;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOCase;
+import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import it.skarafaz.mercury.MercuryApplication;
@@ -21,7 +24,7 @@ import it.skarafaz.mercury.jackson.ServerMapper;
 
 public class ConfigManager {
     public static final int SLEEP = 1000;
-    public static final String JSON_EXT = ".json";
+    public static final String JSON_EXT = "json";
     private static final Logger logger = LoggerFactory.getLogger(ConfigManager.class);
     private static ConfigManager instance;
     private ServerMapper mapper;
@@ -56,7 +59,7 @@ public class ConfigManager {
                         servers.add(mapper.readValue(file));
                     } catch (IOException | ValidationException e) {
                         result = LoadConfigTaskResult.ERRORS_FOUND;
-                        logger.error(e.getMessage());
+                        logger.error(e.getMessage().replace("\n", " "));
                     }
                 }
             } else {
@@ -80,14 +83,11 @@ public class ConfigManager {
     }
 
     private File[] getConfigFiles(File configDir) {
-        File[] files = configDir.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String filename) {
-                return filename.toLowerCase().endsWith(JSON_EXT);
-            }
-        });
-        Arrays.sort(files);
-        return files;
+        SuffixFileFilter filter = new SuffixFileFilter(new String[]{JSON_EXT}, IOCase.INSENSITIVE);
+        Collection<File> files = FileUtils.listFiles(configDir, filter, null);
+        File[] toReturn = files.toArray(new File[files.size()]);
+        Arrays.sort(toReturn);
+        return toReturn;
     }
 
     private boolean isExternalStorageReadable() {

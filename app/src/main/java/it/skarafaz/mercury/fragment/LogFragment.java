@@ -17,18 +17,16 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.classic.util.ContextInitializer;
-import ch.qos.logback.core.joran.spi.JoranException;
-import ch.qos.logback.core.util.StatusPrinter;
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.adapter.LogListAdapter;
 
 public class LogFragment extends ListFragment {
     public static final String LOG_DIR = "log";
     public static final String LOG_FILE = "mercury.log";
+    public static final String OLD_EXT = "old";
     public static final String ENCODING = "UTF-8";
     private static final Logger logger = LoggerFactory.getLogger(LogFragment.class);
 
@@ -83,21 +81,16 @@ public class LogFragment extends ListFragment {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private void clearLog() {
         File logDir = getActivity().getDir(LOG_DIR, Context.MODE_PRIVATE);
-        for (File file : logDir.listFiles()) {
+        File logFile = new File(logDir, LOG_FILE);
+        try {
+            FileUtils.write(logFile, "");
+        } catch (IOException e) {
+            logger.debug(e.getMessage());
+        }
+        Collection<File> oldFiles = FileUtils.listFiles(logDir, new String[]{OLD_EXT}, false);
+        for (File file : oldFiles) {
             file.delete();
         }
-        resetLoggerContext();
         reload();
-    }
-
-    private void resetLoggerContext() {
-        LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
-        ContextInitializer ci = new ContextInitializer(lc);
-        lc.reset();
-        try {
-            ci.autoConfig();
-        } catch (JoranException e) {
-            StatusPrinter.printInCaseOfErrorsOrWarnings(lc);
-        }
     }
 }

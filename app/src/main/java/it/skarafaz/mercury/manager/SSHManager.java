@@ -44,7 +44,7 @@ public class SSHManager {
             session.setConfig("StrictHostKeyChecking", "no"); // TODO known_hosts mng
             session.connect(TIMEOUT);
         } catch (JSchException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage().replace("\n", " "));
             success = false;
         }
         return success;
@@ -68,7 +68,7 @@ public class SSHManager {
             sleep();
             channel.disconnect();
         } catch (JSchException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage().replace("\n", " "));
             success = false;
         }
         return success;
