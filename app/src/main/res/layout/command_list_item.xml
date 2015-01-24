@@ -1,17 +1,15 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/label"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
         android:background="?android:attr/selectableItemBackground"
         android:orientation="vertical"
-        android:padding="5dp">
+        android:padding="10dp">
 
         <TextView
             android:id="@+id/name"
@@ -28,13 +26,5 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:textSize="12sp" />
-
     </LinearLayout>
-
-    <ImageView
-        android:id="@+id/play"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:background="?android:attr/selectableItemBackground"
-        android:src="@drawable/ic_play" />
-</LinearLayout>
+</RelativeLayout>
