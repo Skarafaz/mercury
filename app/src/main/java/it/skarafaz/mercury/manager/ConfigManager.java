@@ -11,8 +11,8 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import it.skarafaz.mercury.MercuryApplication;
@@ -53,7 +53,7 @@ public class ConfigManager {
         if (isExternalStorageReadable()) {
             File configDir = getConfigDir();
             if (configDir.exists() && configDir.isDirectory()) {
-                File[] files = getConfigFiles(configDir);
+                Collection<File> files = getConfigFiles(configDir);
                 for (File file : files) {
                     try {
                         servers.add(mapper.readValue(file));
@@ -62,6 +62,7 @@ public class ConfigManager {
                         logger.error(e.getMessage().replace("\n", " "));
                     }
                 }
+                Collections.sort(servers);
             } else {
                 if (!createConfigDir(configDir)) {
                     result = LoadConfigTaskResult.CANNOT_CREATE_CONFIG_DIR;
@@ -82,12 +83,9 @@ public class ConfigManager {
         return isExternalStorageWritable() && configDir.mkdirs();
     }
 
-    private File[] getConfigFiles(File configDir) {
+    private Collection<File> getConfigFiles(File configDir) {
         SuffixFileFilter filter = new SuffixFileFilter(new String[]{JSON_EXT}, IOCase.INSENSITIVE);
-        Collection<File> files = FileUtils.listFiles(configDir, filter, null);
-        File[] toReturn = files.toArray(new File[files.size()]);
-        Arrays.sort(toReturn);
-        return toReturn;
+        return FileUtils.listFiles(configDir, filter, null);
     }
 
     private boolean isExternalStorageReadable() {

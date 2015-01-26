@@ -1,11 +1,13 @@
 package it.skarafaz.mercury.data;
 
+import android.support.annotation.NonNull;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class Server implements Serializable {
+public class Server implements Serializable, Comparable<Server> {
     private static final long serialVersionUID = 7247694914871605048L;
     private String name;
     private String host;
@@ -61,5 +63,10 @@ public class Server implements Serializable {
 
     public void setCommands(List<Command> commands) {
         this.commands = commands;
+    }
+
+    @Override
+    public int compareTo(@NonNull Server another) {
+        return name.toLowerCase().compareTo(another.getName().toLowerCase());
     }
 }
