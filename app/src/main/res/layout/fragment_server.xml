@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     tools:context="it.skarafaz.mercury.fragment.ServerFragment">
 
-
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
@@ -25,13 +24,13 @@
 
         <TextView
             android:id="@+id/message"
-            android:text="@string/no_commands"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:textColor="@color/empty"
             android:gravity="center"
-            android:lineSpacingExtra="3dp" />
+            android:lineSpacingExtra="3dp"
+            android:text="@string/no_commands"
+            android:textColor="@color/empty" />
     </LinearLayout>
 </FrameLayout>
