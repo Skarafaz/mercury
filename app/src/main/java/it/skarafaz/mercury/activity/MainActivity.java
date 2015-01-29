@@ -14,6 +14,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.astuetz.PagerSlidingTabStrip;
+
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.adapter.ServerPagerAdapter;
 import it.skarafaz.mercury.data.LoadConfigTaskResult;
@@ -25,6 +27,7 @@ public class MainActivity extends ActionBarActivity {
     private LinearLayout empty;
     private TextView message;
     private ViewPager pager;
+    private LinearLayout pagerContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,7 @@ public class MainActivity extends ActionBarActivity {
         empty = (LinearLayout) findViewById(R.id.empty);
         message = (TextView) findViewById(R.id.message);
         pager = (ViewPager) findViewById(R.id.pager);
+        pagerContainer = (LinearLayout) findViewById(R.id.pagerContainer);
         reload();
     }
 
@@ -66,7 +70,7 @@ public class MainActivity extends ActionBarActivity {
             protected void onPreExecute() {
                 progress.setVisibility(View.VISIBLE);
                 empty.setVisibility(View.INVISIBLE);
-                pager.setVisibility(View.INVISIBLE);
+                pagerContainer.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -78,9 +82,11 @@ public class MainActivity extends ActionBarActivity {
             protected void onPostExecute(LoadConfigTaskResult result) {
                 progress.setVisibility(View.INVISIBLE);
                 if (ConfigManager.getInstance().getServers().size() > 0) {
-                    pager.setVisibility(View.VISIBLE);
+                    pagerContainer.setVisibility(View.VISIBLE);
                     ServerPagerAdapter adapter = new ServerPagerAdapter(getSupportFragmentManager(), ConfigManager.getInstance().getServers());
                     pager.setAdapter(adapter);
+                    PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+                    tabs.setViewPager(pager);
                     if (result == LoadConfigTaskResult.ERRORS_FOUND) {
                         Toast.makeText(MainActivity.this, getString(R.string.errors_found), Toast.LENGTH_SHORT).show();
                     }
