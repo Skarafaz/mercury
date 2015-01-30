@@ -48,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="?attr/colorPrimary"
-            android:paddingLeft="60dp"
+            psts:pstsPaddingMiddle="true"
             psts:pstsTabBackground="?attr/selectableItemBackground"
             psts:pstsTextAlpha="0.6" />
 
