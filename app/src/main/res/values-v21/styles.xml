@@ -9,4 +9,9 @@
         <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
         <item name="android:navigationBarColor">?attr/colorPrimaryDark</item>
     </style>
+
+    <style name="TabTextAppearance" parent="TabTextAppearance.Base">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textStyle">normal</item>
+    </style>
 </resources>

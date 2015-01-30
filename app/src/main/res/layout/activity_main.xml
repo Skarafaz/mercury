@@ -1,5 +1,4 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:psts="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true">
@@ -36,25 +35,21 @@
             android:textColor="@color/empty" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/pagerContainer"
+    <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_height="match_parent"
         android:visibility="invisible">
 
-        <com.astuetz.PagerSlidingTabStrip
-            android:id="@+id/tabs"
+        <android.support.v4.view.PagerTabStrip
+            android:id="@+id/pager_tab_strip"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="?attr/colorPrimary"
-            psts:pstsPaddingMiddle="true"
-            psts:pstsTabBackground="?attr/selectableItemBackground"
-            psts:pstsTextAlpha="0.6" />
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/pager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </LinearLayout>
+            android:layout_gravity="top"
+            android:background="@color/primary"
+            android:gravity="center_vertical"
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp"
+            android:textAppearance="@style/TabTextAppearance" />
+    </android.support.v4.view.ViewPager>
 </FrameLayout>
