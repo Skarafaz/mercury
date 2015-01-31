@@ -38,7 +38,7 @@ public class CommandListAdapter extends ArrayAdapter<Command> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         viewHolder.name.setText(command.getName());
-        viewHolder.info.setOnClickListener(new OnCommandDetailsListener(command));
+        viewHolder.info.setOnClickListener(new OnCommandDetailsListener(getContext(), command));
         viewHolder.row.setOnClickListener(new OnCommandExecListener(getContext(), command));
         return convertView;
     }
