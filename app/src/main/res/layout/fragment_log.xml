@@ -19,6 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:alpha="0.3"
             android:src="@drawable/ic_empty" />
 
         <TextView
@@ -30,6 +31,6 @@
             android:gravity="center"
             android:lineSpacingExtra="3dp"
             android:text="@string/empty_log"
-            android:textColor="@color/empty" />
+            android:textColor="@color/text_disabled" />
     </LinearLayout>
 </FrameLayout>

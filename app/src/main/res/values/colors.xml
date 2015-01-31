@@ -4,5 +4,5 @@
     <color name="primary_dark">#ff263238</color>
     <color name="text_primary">#ffffffff</color>
     <color name="text_secondary">#b2ffffff</color>
-    <color name="empty">#ff828282</color>
+    <color name="text_disabled">#4cffffff</color>
 </resources>
