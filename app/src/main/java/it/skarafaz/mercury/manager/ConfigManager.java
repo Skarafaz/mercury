@@ -23,7 +23,6 @@ import it.skarafaz.mercury.exception.ValidationException;
 import it.skarafaz.mercury.jackson.ServerMapper;
 
 public class ConfigManager {
-    public static final int SLEEP = 1000;
     public static final String JSON_EXT = "json";
     private static final Logger logger = LoggerFactory.getLogger(ConfigManager.class);
     private static ConfigManager instance;
@@ -47,7 +46,6 @@ public class ConfigManager {
     }
 
     public LoadConfigTaskResult load() {
-        sleep();
         servers.clear();
         LoadConfigTaskResult result = LoadConfigTaskResult.SUCCESS;
         if (isExternalStorageReadable()) {
@@ -96,13 +94,5 @@ public class ConfigManager {
     private boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
         return Environment.MEDIA_MOUNTED.equals(state);
-    }
-
-    private void sleep() {
-        try {
-            Thread.sleep(SLEEP);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
     }
 }
