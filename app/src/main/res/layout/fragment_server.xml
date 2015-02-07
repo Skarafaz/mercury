@@ -32,6 +32,7 @@
             android:gravity="center"
             android:lineSpacingExtra="3dp"
             android:text="@string/no_commands"
-            android:textColor="@color/text_disabled" />
+            android:textColor="@color/text_disabled"
+            android:textSize="16sp" />
     </LinearLayout>
 </FrameLayout>

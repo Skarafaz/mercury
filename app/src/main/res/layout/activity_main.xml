@@ -33,7 +33,8 @@
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:lineSpacingExtra="3dp"
-            android:textColor="@color/text_disabled" />
+            android:textColor="@color/text_disabled"
+            android:textSize="16sp" />
     </LinearLayout>
 
     <android.support.v4.view.ViewPager
