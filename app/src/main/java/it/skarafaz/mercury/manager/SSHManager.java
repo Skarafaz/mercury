@@ -8,13 +8,10 @@ import com.jcraft.jsch.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
-
 import it.skarafaz.mercury.data.Command;
 
 public class SSHManager {
     private static final int TIMEOUT = 10000;
-    public static final int SLEEP = 1000;
     private static final Logger logger = LoggerFactory.getLogger(SSHManager.class);
     private JSch jsch;
     private Session session;
@@ -55,17 +52,11 @@ public class SSHManager {
         try {
             ChannelExec channel = (ChannelExec) session.openChannel("exec");
             if (sudo) {
-                channel.setCommand("sudo -S -p '' " + command);
+                channel.setCommand("echo " + password + " | sudo -S -p '' " + command);
             } else {
                 channel.setCommand(command);
             }
-            ByteArrayInputStream cmdInput = null;
-            if (sudo) {
-                cmdInput = new ByteArrayInputStream((password + "\n").getBytes());
-            }
-            channel.setInputStream(cmdInput);
             channel.connect(TIMEOUT);
-            sleep();
             channel.disconnect();
         } catch (JSchException e) {
             logger.error(e.getMessage().replace("\n", " "));
@@ -76,13 +67,5 @@ public class SSHManager {
 
     public void disconnect() {
         session.disconnect();
-    }
-
-    private void sleep() {
-        try {
-            Thread.sleep(SLEEP);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
     }
 }
