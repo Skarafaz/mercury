@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.skarafaz.mercury.data.Server;
@@ -12,14 +13,9 @@ import it.skarafaz.mercury.fragment.ServerFragment;
 public class ServerPagerAdapter extends FragmentStatePagerAdapter {
     List<Server> servers;
 
-    public ServerPagerAdapter(FragmentManager fm, List<Server> servers) {
+    public ServerPagerAdapter(FragmentManager fm) {
         super(fm);
-        this.servers = servers;
-    }
-
-    @Override
-    public Fragment getItem(int i) {
-        return ServerFragment.newInstance(servers.get(i));
+        servers = new ArrayList<>();
     }
 
     @Override
@@ -28,7 +24,23 @@ public class ServerPagerAdapter extends FragmentStatePagerAdapter {
     }
 
     @Override
+    public Fragment getItem(int i) {
+        return ServerFragment.newInstance(servers.get(i));
+    }
+
+    @Override
     public CharSequence getPageTitle(int position) {
         return servers.get(position).getName();
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
+    }
+
+    public void updateServers(List<Server> servers) {
+        this.servers.clear();
+        this.servers.addAll(servers);
+        notifyDataSetChanged();
     }
 }

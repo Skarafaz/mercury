@@ -14,12 +14,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.List;
-
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.adapter.ServerPagerAdapter;
 import it.skarafaz.mercury.data.LoadConfigTaskResult;
-import it.skarafaz.mercury.data.Server;
 import it.skarafaz.mercury.manager.ConfigManager;
 
 
@@ -29,6 +26,7 @@ public class MainActivity extends ActionBarActivity {
     private LinearLayout empty;
     private TextView message;
     private ViewPager pager;
+    private ServerPagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +37,8 @@ public class MainActivity extends ActionBarActivity {
         empty = (LinearLayout) findViewById(R.id.empty);
         message = (TextView) findViewById(R.id.message);
         pager = (ViewPager) findViewById(R.id.pager);
+        adapter = new ServerPagerAdapter(getSupportFragmentManager());
+        pager.setAdapter(adapter);
         reload();
     }
 
@@ -83,11 +83,9 @@ public class MainActivity extends ActionBarActivity {
                 @Override
                 protected void onPostExecute(LoadConfigTaskResult result) {
                     progress.setVisibility(View.INVISIBLE);
-                    List<Server> dataSet = ConfigManager.getInstance().getServers();
-                    if (dataSet.size() > 0) {
+                    if (ConfigManager.getInstance().getServers().size() > 0) {
+                        adapter.updateServers(ConfigManager.getInstance().getServers());
                         pager.setVisibility(View.VISIBLE);
-                        ServerPagerAdapter adapter = new ServerPagerAdapter(getSupportFragmentManager(), dataSet);
-                        pager.setAdapter(adapter);
                         if (result == LoadConfigTaskResult.ERRORS_FOUND) {
                             Toast.makeText(MainActivity.this, getString(R.string.errors_found), Toast.LENGTH_SHORT).show();
                         }
