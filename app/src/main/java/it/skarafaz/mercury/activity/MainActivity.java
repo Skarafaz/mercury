@@ -14,9 +14,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.adapter.ServerPagerAdapter;
 import it.skarafaz.mercury.data.LoadConfigTaskResult;
+import it.skarafaz.mercury.data.Server;
 import it.skarafaz.mercury.manager.ConfigManager;
 
 
@@ -80,9 +83,10 @@ public class MainActivity extends ActionBarActivity {
                 @Override
                 protected void onPostExecute(LoadConfigTaskResult result) {
                     progress.setVisibility(View.INVISIBLE);
-                    if (ConfigManager.getInstance().getServers().size() > 0) {
+                    List<Server> dataSet = ConfigManager.getInstance().getServers();
+                    if (dataSet.size() > 0) {
                         pager.setVisibility(View.VISIBLE);
-                        ServerPagerAdapter adapter = new ServerPagerAdapter(getSupportFragmentManager(), ConfigManager.getInstance().getServers());
+                        ServerPagerAdapter adapter = new ServerPagerAdapter(getSupportFragmentManager(), dataSet);
                         pager.setAdapter(adapter);
                         if (result == LoadConfigTaskResult.ERRORS_FOUND) {
                             Toast.makeText(MainActivity.this, getString(R.string.errors_found), Toast.LENGTH_SHORT).show();

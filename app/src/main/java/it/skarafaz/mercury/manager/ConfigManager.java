@@ -42,7 +42,7 @@ public class ConfigManager {
     }
 
     public List<Server> getServers() {
-        return servers;
+        return new ArrayList<>(servers);
     }
 
     public LoadConfigTaskResult load() {
