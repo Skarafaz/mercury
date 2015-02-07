@@ -21,6 +21,7 @@ import it.skarafaz.mercury.manager.ConfigManager;
 
 
 public class MainActivity extends ActionBarActivity {
+    private boolean loading = false;
     private ProgressBar progress;
     private LinearLayout empty;
     private TextView message;
@@ -61,35 +62,39 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void reload() {
-        new AsyncTask<Void, Void, LoadConfigTaskResult>() {
-            @Override
-            protected void onPreExecute() {
-                progress.setVisibility(View.VISIBLE);
-                empty.setVisibility(View.INVISIBLE);
-                pager.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            protected LoadConfigTaskResult doInBackground(Void... params) {
-                return ConfigManager.getInstance().load();
-            }
-
-            @Override
-            protected void onPostExecute(LoadConfigTaskResult result) {
-                progress.setVisibility(View.INVISIBLE);
-                if (ConfigManager.getInstance().getServers().size() > 0) {
-                    pager.setVisibility(View.VISIBLE);
-                    ServerPagerAdapter adapter = new ServerPagerAdapter(getSupportFragmentManager(), ConfigManager.getInstance().getServers());
-                    pager.setAdapter(adapter);
-                    if (result == LoadConfigTaskResult.ERRORS_FOUND) {
-                        Toast.makeText(MainActivity.this, getString(R.string.errors_found), Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    message.setText(getEmptyMessage(result));
-                    empty.setVisibility(View.VISIBLE);
+        if (!loading) {
+            new AsyncTask<Void, Void, LoadConfigTaskResult>() {
+                @Override
+                protected void onPreExecute() {
+                    loading = true;
+                    progress.setVisibility(View.VISIBLE);
+                    empty.setVisibility(View.INVISIBLE);
+                    pager.setVisibility(View.INVISIBLE);
                 }
-            }
-        }.execute();
+
+                @Override
+                protected LoadConfigTaskResult doInBackground(Void... params) {
+                    return ConfigManager.getInstance().load();
+                }
+
+                @Override
+                protected void onPostExecute(LoadConfigTaskResult result) {
+                    progress.setVisibility(View.INVISIBLE);
+                    if (ConfigManager.getInstance().getServers().size() > 0) {
+                        pager.setVisibility(View.VISIBLE);
+                        ServerPagerAdapter adapter = new ServerPagerAdapter(getSupportFragmentManager(), ConfigManager.getInstance().getServers());
+                        pager.setAdapter(adapter);
+                        if (result == LoadConfigTaskResult.ERRORS_FOUND) {
+                            Toast.makeText(MainActivity.this, getString(R.string.errors_found), Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        message.setText(getEmptyMessage(result));
+                        empty.setVisibility(View.VISIBLE);
+                    }
+                    loading = false;
+                }
+            }.execute();
+        }
     }
 
     private String getEmptyMessage(LoadConfigTaskResult result) {
