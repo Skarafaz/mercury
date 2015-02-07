@@ -5,15 +5,37 @@ Mercury-SSH acts like a remote for your servers, sending pre-configured commands
 ## Usage
 
 Mercury-SSH reads configuration data from standard JSON files saved in the external storage.
-Each file defines a server and the commands you want to send to it.
+Each configuration file must contain a valid JSON object defining a server and its commands.
 Simply put your configuration files in /sdcard/Mercuty-SSH.
 
-## Configuration file format
+Here is a sample configuration file:
 
-Each configuration file (UTF-8 encoded, .json extension) must contain a valid JSON object representing
-a server and its commands.
+```javascript
+{
+    "name" : "Mediaserver",
+    "host" : "192.168.0.150",
+    "port" : 22,
+    "user" : "an",
+    "password" : "12345",
+    "commands" : [ {
+        "name" : "Restart plex",
+        "sudo" : true,
+        "cmd" : "service plexmediaserver restart"
+    }, {
+        "name" : "Shutdown",
+        "sudo" : true,
+        "cmd" : "shutdown -h now"
+    }, {
+        "name" : "Rsync music",
+        "sudo" : true,
+        "cmd" : "rsync -a --delete --exclude '.@__qini' --chown=root:root --chmod=D775,F664 /mnt/nas/music/ /var/data/music/"
+    } ]
+}
+```
 
-### Server
+*NOTE:* each file must be UTF-8/16/32 encoded and must have `.json` extension.
+
+### Server property summary
 
 Property | Type | Notes | Description
 ---------|------|-------|------------
@@ -24,7 +46,7 @@ Property | Type | Notes | Description
 `password` | string | mandatory | Login password
 `commands` | array | optional | Array of objects defining available commands for this server. See next section for details about command objects
 
-### Command
+### Server property summary
 
 Property | Type | Notes | Description
 ---------|------|-------|------------
