@@ -1,31 +1,31 @@
 # Mercury-SSH Commander
 
-Simple Android app intended to execute pre-configured commands on remote servers through SSH.
+Simple Android app intended to send pre-configured commands to remote servers through SSH.
 
 ## Usage
 
 Mercury-SSH reads configuration data from standard JSON files saved in the external storage.
-Each configuration file (an UTF-8/16/32 encoded text file with `.json` extension) must contain a valid
-JSON object defining a server and its commands according to the following specifications:
+Each configuration file (UTF-8/16/32 encoded text file with `.json` extension) must contain a valid
+JSON object defining a server and its commands according to the following specifications.
 
-### Server property summary
-
-Property | Type | Notes | Description
----------|------|-------|------------
-`name` | string | optional, default "Server" | Friendly name (used as label)
-`host` | string | mandatory | Hostname or IP address
-`port` | integer (1-65535) | optional, deafult 22 | Port
-`user` | string | mandatory | Login user
-`password` | string | mandatory | Login password
-`commands` | array | optional | Array of objects defining available commands for this server. See next section for details about command objects
-
-### Server property summary
+Server property summary:
 
 Property | Type | Notes | Description
 ---------|------|-------|------------
-`name` | string | optional, default "Command" | Friendly name (used as label)
-`sudo` | boolean | optional, default `false` | State if the command has to be executed as root
-`cmd` | string | mandatory | The command
+`name` | string | optional, defaults to `"Server"` | A friendly name for this server (used as label).
+`host` | string | mandatory | Target hostname or IP address.
+`port` | integer (1-65535) | optional, defaults to 22 | Target port.
+`user` | string | mandatory | Login user.
+`password` | string | mandatory | Login password.
+`commands` | array | optional | Array of objects defining available commands for this server. Read more for details.
+
+Command property summary:
+
+Property | Type | Notes | Description
+---------|------|-------|------------
+`name` | string | optional, defaults to `"Command"` | A friendly name for this command (used as label).
+`sudo` | boolean | optional, defaults to `false` | State if the command needs to be executed as root.
+`cmd` | string | mandatory | The command itself.
 
 Here is a sample configuration file:
 
@@ -52,5 +52,9 @@ Here is a sample configuration file:
 }
 ```
 
-Simply put your configuration files in the directory called *Mercury-SSH* in the device external storage,
-the app will do the rest.
+Simply put your configuration files into the folder named *Mercury-SSH* on the device's external storage:
+all the commands will be ready to run from the app.
+
+## Limitations
+
+This app is intended to be used as a remote, so interactive commands and output handling are not supported.
