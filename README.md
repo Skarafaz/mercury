@@ -2,8 +2,6 @@
 
 Simple Android app intended to send pre-configured commands to remote servers through SSH.
 
-![Screenshots](https://github.com/Skarafaz/mercury/blob/master/art/screen_small.png)
-
 ## Usage
 
 Mercury-SSH reads configuration data from standard JSON files saved in the external storage.
