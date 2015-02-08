@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="AppTheme.Base" />
+    <style name="AppTheme" parent="AppThemeBase" />
 
-    <style name="AppTheme.Base" parent="Theme.AppCompat">
-        <item name="colorPrimary">@color/primary</item>
+    <style name="AppThemeBase" parent="Theme.AppCompat">
+    <item name="colorPrimary">@color/primary</item>
         <item name="md_dark_theme">true</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="android:textColorPrimary">@color/text_primary</item>
         <item name="android:textColorSecondary">@color/text_secondary</item>
     </style>
 
-    <style name="TabTextAppearance" parent="TabTextAppearance.Base" />
+    <style name="TabTextAppearance" parent="TabTextAppearanceBase" />
 
-    <style name="TabTextAppearance.Base">
-        <item name="android:textSize">14sp</item>
+    <style name="TabTextAppearanceBase">
+    <item name="android:textSize">14sp</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:textStyle">bold</item>

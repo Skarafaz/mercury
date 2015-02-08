@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="AppTheme.Base">
-        <item name="android:windowContentTransitions">true</item>
+    <style name="AppTheme" parent="AppThemeBase">
+    <item name="android:windowContentTransitions">true</item>
         <item name="android:windowAllowEnterTransitionOverlap">true</item>
         <item name="android:windowAllowReturnTransitionOverlap">true</item>
         <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
@@ -10,8 +10,8 @@
         <item name="android:navigationBarColor">?attr/colorPrimaryDark</item>
     </style>
 
-    <style name="TabTextAppearance" parent="TabTextAppearance.Base">
-        <item name="android:fontFamily">sans-serif-medium</item>
+    <style name="TabTextAppearance" parent="TabTextAppearanceBase">
+    <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textStyle">normal</item>
     </style>
 </resources>
