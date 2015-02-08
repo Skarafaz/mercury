@@ -7,7 +7,7 @@
     <string name="cannot_create_config_dir">Cannot create\n%s</string>
     <string name="cannot_read_ext_storage">Cannot read external storage</string>
     <string name="command_sent">Command sent!</string>
-    <string name="connection_failed">Failed to connect to server</string>
+    <string name="connection_failed">Failed to connect to server, please see log for details</string>
     <string name="empty_config_dir">No config files found in\n%s</string>
     <string name="empty_log">Log file is empty</string>
     <string name="errors_found">One or more config files did not pass the validity check, please see log for details</string>
