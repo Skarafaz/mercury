@@ -2,7 +2,7 @@
 <resources>
 
     <style name="AppTheme" parent="AppThemeBase">
-    <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowContentTransitions">true</item>
         <item name="android:windowAllowEnterTransitionOverlap">true</item>
         <item name="android:windowAllowReturnTransitionOverlap">true</item>
         <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
@@ -11,7 +11,7 @@
     </style>
 
     <style name="TabTextAppearance" parent="TabTextAppearanceBase">
-    <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textStyle">normal</item>
     </style>
 </resources>
