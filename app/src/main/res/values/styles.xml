@@ -4,7 +4,7 @@
     <style name="AppTheme" parent="AppThemeBase" />
 
     <style name="AppThemeBase" parent="Theme.AppCompat">
-    <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimary">@color/primary</item>
         <item name="md_dark_theme">true</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="android:textColorPrimary">@color/text_primary</item>
@@ -14,7 +14,7 @@
     <style name="TabTextAppearance" parent="TabTextAppearanceBase" />
 
     <style name="TabTextAppearanceBase">
-    <item name="android:textSize">14sp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:textStyle">bold</item>
