@@ -8,6 +8,7 @@ import java.util.List;
 import it.skarafaz.mercury.R;
 
 public class LogListAdapter extends ArrayAdapter<String> {
+
     public LogListAdapter(Context context, List<String> lines) {
         super(context, R.layout.log_list_item, lines);
     }

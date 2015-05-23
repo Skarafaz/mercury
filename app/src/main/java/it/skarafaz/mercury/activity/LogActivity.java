@@ -1,11 +1,12 @@
 package it.skarafaz.mercury.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 
 import it.skarafaz.mercury.R;
 
-public class LogActivity extends ActionBarActivity {
+public class LogActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
