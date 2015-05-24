@@ -10,9 +10,9 @@ import org.slf4j.LoggerFactory;
 
 import it.skarafaz.mercury.data.Command;
 
-public class SSHManager {
+public class SshCommand {
     private static final int TIMEOUT = 10000;
-    private static final Logger logger = LoggerFactory.getLogger(SSHManager.class);
+    private static final Logger logger = LoggerFactory.getLogger(SshCommand.class);
     private JSch jsch;
     private Session session;
     private String host;
@@ -23,7 +23,7 @@ public class SSHManager {
     private Boolean sudo;
 
 
-    public SSHManager(Command command) {
+    public SshCommand(Command command) {
         jsch = new JSch();
         host = command.getServer().getHost();
         port = command.getServer().getPort();

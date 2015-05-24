@@ -9,7 +9,7 @@ import android.widget.Toast;
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.data.Command;
 import it.skarafaz.mercury.data.ExecCommandTaskResult;
-import it.skarafaz.mercury.manager.SSHManager;
+import it.skarafaz.mercury.manager.SshCommand;
 
 public class OnCommandExecListener implements View.OnClickListener {
     Context context;
@@ -36,12 +36,12 @@ public class OnCommandExecListener implements View.OnClickListener {
             @Override
             protected ExecCommandTaskResult doInBackground(Void... params) {
                 ExecCommandTaskResult result = ExecCommandTaskResult.COMMAND_SENT;
-                SSHManager sshManager = new SSHManager(command);
-                if (sshManager.connect()) {
-                    if (!sshManager.sendCommand()) {
+                SshCommand sshCommand = new SshCommand(command);
+                if (sshCommand.connect()) {
+                    if (!sshCommand.sendCommand()) {
                         result = ExecCommandTaskResult.CONNECTION_FAILED;
                     }
-                    sshManager.disconnect();
+                    sshCommand.disconnect();
                 } else {
                     result = ExecCommandTaskResult.CONNECTION_FAILED;
                 }
