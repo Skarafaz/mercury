@@ -1,28 +1,28 @@
 package it.skarafaz.mercury.listener;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.Toast;
 
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.data.Command;
 import it.skarafaz.mercury.data.ExecCommandTaskResult;
+import it.skarafaz.mercury.dialog.ProgressDialogFragment;
 import it.skarafaz.mercury.manager.SshCommand;
 
 public class OnCommandExecListener implements View.OnClickListener {
-    Context context;
-    Command command;
-    ProgressDialog pDialog;
+    private static final String PROGRESS_DIALOG_TAG = "PROGRESS_DIALOG_TAG";
+    private Context context;
+    private Command command;
 
     public OnCommandExecListener(Context context, Command command) {
         this.context = context;
         this.command = command;
-        pDialog = new ProgressDialog(this.context);
-        pDialog.setMessage(this.context.getResources().getString(R.string.sending_command));
-        pDialog.setIndeterminate(true);
-        pDialog.setCancelable(false);
     }
 
     @Override
@@ -30,7 +30,7 @@ public class OnCommandExecListener implements View.OnClickListener {
         new AsyncTask<Void, Void, ExecCommandTaskResult>() {
             @Override
             protected void onPreExecute() {
-                pDialog.show();
+                showDialog();
             }
 
             @Override
@@ -57,9 +57,25 @@ public class OnCommandExecListener implements View.OnClickListener {
                     message = context.getResources().getString(R.string.connection_failed);
                 }
                 Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
-                pDialog.dismiss();
                 toast.show();
+                dismissDialog();
             }
         }.execute();
+    }
+
+    private void showDialog() {
+        FragmentTransaction ft = ((FragmentActivity) context).getSupportFragmentManager().beginTransaction();
+        ft.add(ProgressDialogFragment.newInstance(), PROGRESS_DIALOG_TAG);
+        ft.commitAllowingStateLoss();
+    }
+
+    private void dismissDialog() {
+        FragmentManager fm = ((FragmentActivity) context).getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        Fragment frag = fm.findFragmentByTag(PROGRESS_DIALOG_TAG);
+        if (frag != null) {
+            ft.remove(frag);
+        }
+        ft.commitAllowingStateLoss();
     }
 }
