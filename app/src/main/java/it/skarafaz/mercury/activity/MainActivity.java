@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.adapter.ServerPagerAdapter;
-import it.skarafaz.mercury.data.LoadConfigTaskResult;
+import it.skarafaz.mercury.data.enums.LoadConfigTaskResult;
 import it.skarafaz.mercury.manager.ConfigManager;
 
 
