@@ -30,7 +30,7 @@ public class OnCommandExecListener implements View.OnClickListener {
         new AsyncTask<Void, Void, ExecCommandTaskResult>() {
             @Override
             protected void onPreExecute() {
-                showDialog();
+                showProgressDialog();
             }
 
             @Override
@@ -50,26 +50,30 @@ public class OnCommandExecListener implements View.OnClickListener {
 
             @Override
             protected void onPostExecute(ExecCommandTaskResult result) {
-                String message = "";
-                if (result == ExecCommandTaskResult.COMMAND_SENT) {
-                    message = context.getResources().getString(R.string.command_sent);
-                } else if (result == ExecCommandTaskResult.CONNECTION_FAILED) {
-                    message = context.getResources().getString(R.string.connection_failed);
-                }
-                Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
-                toast.show();
-                dismissDialog();
+                showToaster(result);
+                dismissProgressDialog();
             }
         }.execute();
     }
 
-    private void showDialog() {
+    private void showToaster(ExecCommandTaskResult result) {
+        String message = "";
+        if (result == ExecCommandTaskResult.COMMAND_SENT) {
+            message = context.getResources().getString(R.string.command_sent);
+        } else if (result == ExecCommandTaskResult.CONNECTION_FAILED) {
+            message = context.getResources().getString(R.string.connection_failed);
+        }
+        Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    private void showProgressDialog() {
         FragmentTransaction ft = ((FragmentActivity) context).getSupportFragmentManager().beginTransaction();
         ft.add(ProgressDialogFragment.newInstance(), PROGRESS_DIALOG_TAG);
         ft.commitAllowingStateLoss();
     }
 
-    private void dismissDialog() {
+    private void dismissProgressDialog() {
         FragmentManager fm = ((FragmentActivity) context).getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         Fragment frag = fm.findFragmentByTag(PROGRESS_DIALOG_TAG);
