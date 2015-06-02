@@ -1,4 +1,4 @@
-package it.skarafaz.mercury.dialog;
+package it.skarafaz.mercury.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;

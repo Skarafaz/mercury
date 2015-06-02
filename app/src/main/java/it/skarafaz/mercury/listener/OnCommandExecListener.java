@@ -12,7 +12,7 @@ import android.widget.Toast;
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.data.Command;
 import it.skarafaz.mercury.data.ExecCommandTaskResult;
-import it.skarafaz.mercury.dialog.ProgressDialogFragment;
+import it.skarafaz.mercury.fragment.ProgressDialogFragment;
 import it.skarafaz.mercury.manager.SshCommand;
 
 public class OnCommandExecListener implements View.OnClickListener {
