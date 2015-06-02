@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setElevation(0);
+        setActionBarElevation();
         setContentView(R.layout.activity_main);
         progress = (ProgressBar) findViewById(R.id.progress);
         empty = (LinearLayout) findViewById(R.id.empty);
@@ -40,6 +41,13 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ServerPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(adapter);
         reload();
+    }
+
+    private void setActionBarElevation() {
+        ActionBar aBar = getSupportActionBar();
+        if (aBar != null) {
+            aBar.setElevation(0);
+        }
     }
 
     @Override
