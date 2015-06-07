@@ -87,7 +87,7 @@ public class LogFragment extends ListFragment {
         } catch (IOException e) {
             logger.debug(e.getMessage());
         }
-        Collection<File> oldFiles = FileUtils.listFiles(logDir, new String[]{OLD_EXT}, false);
+        Collection<File> oldFiles = FileUtils.listFiles(logDir, new String[]{ OLD_EXT }, false);
         for (File file : oldFiles) {
             file.delete();
         }
