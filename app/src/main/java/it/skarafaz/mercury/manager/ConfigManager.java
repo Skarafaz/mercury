@@ -23,7 +23,7 @@ import it.skarafaz.mercury.exception.ValidationException;
 import it.skarafaz.mercury.jackson.ServerMapper;
 
 public class ConfigManager {
-    public static final String JSON_EXT = "json";
+    public static final String JSON = "json";
     private static final Logger logger = LoggerFactory.getLogger(ConfigManager.class);
     private static ConfigManager instance;
     private ServerMapper mapper;
@@ -39,10 +39,6 @@ public class ConfigManager {
             instance = new ConfigManager();
         }
         return instance;
-    }
-
-    public List<Server> getServers() {
-        return servers;
     }
 
     public LoadConfigTaskResult load() {
@@ -72,8 +68,12 @@ public class ConfigManager {
         return result;
     }
 
+    public List<Server> getServers() {
+        return servers;
+    }
+
     public File getConfigDir() {
-        String appName = MercuryApplication.getContext().getResources().getString(R.string.app_name);
+        String appName = MercuryApplication.getContext().getString(R.string.app_name);
         return new File(Environment.getExternalStorageDirectory(), appName);
     }
 
@@ -82,7 +82,7 @@ public class ConfigManager {
     }
 
     private Collection<File> getConfigFiles(File configDir) {
-        SuffixFileFilter filter = new SuffixFileFilter(new String[]{JSON_EXT}, IOCase.INSENSITIVE);
+        SuffixFileFilter filter = new SuffixFileFilter(new String[]{JSON}, IOCase.INSENSITIVE);
         return FileUtils.listFiles(configDir, filter, null);
     }
 
