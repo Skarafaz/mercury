@@ -8,10 +8,11 @@ import android.view.ViewGroup;
 
 import it.skarafaz.mercury.R;
 
-public class ProgressDialogFragment extends DialogFragment {
+public class SendingCommandDialogFragment extends DialogFragment {
+    public static final String TAG = "SENDING_COMMAND_DIALOG";
 
-    public static ProgressDialogFragment newInstance() {
-        return new ProgressDialogFragment();
+    public static SendingCommandDialogFragment newInstance() {
+        return new SendingCommandDialogFragment();
     }
 
     @Override

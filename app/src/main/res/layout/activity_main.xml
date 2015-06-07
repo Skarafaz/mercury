@@ -43,7 +43,7 @@
         android:layout_height="match_parent"
         android:visibility="invisible">
 
-        <it.skarafaz.mercury.widget.PagerTabStrip
+        <it.skarafaz.mercury.view.PagerTabStrip
             android:id="@+id/pager_tab_strip"
             android:layout_width="match_parent"
             android:layout_height="48dp"

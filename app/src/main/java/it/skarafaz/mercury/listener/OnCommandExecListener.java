@@ -12,11 +12,10 @@ import android.widget.Toast;
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.data.Command;
 import it.skarafaz.mercury.data.enums.ExecCommandTaskResult;
-import it.skarafaz.mercury.fragment.ProgressDialogFragment;
-import it.skarafaz.mercury.manager.SshCommand;
+import it.skarafaz.mercury.fragment.SendingCommandDialogFragment;
+import it.skarafaz.mercury.ssh.SshCommand;
 
 public class OnCommandExecListener implements View.OnClickListener {
-    private static final String PROGRESS_DIALOG_TAG = "PROGRESS_DIALOG_TAG";
     private Context context;
     private Command command;
 
@@ -38,7 +37,7 @@ public class OnCommandExecListener implements View.OnClickListener {
                 ExecCommandTaskResult result = ExecCommandTaskResult.COMMAND_SENT;
                 SshCommand sshCommand = new SshCommand(command);
                 if (sshCommand.connect()) {
-                    if (!sshCommand.sendCommand()) {
+                    if (!sshCommand.send()) {
                         result = ExecCommandTaskResult.CONNECTION_FAILED;
                     }
                     sshCommand.disconnect();
@@ -69,14 +68,14 @@ public class OnCommandExecListener implements View.OnClickListener {
 
     private void showProgressDialog() {
         FragmentTransaction ft = ((FragmentActivity) context).getSupportFragmentManager().beginTransaction();
-        ft.add(ProgressDialogFragment.newInstance(), PROGRESS_DIALOG_TAG);
+        ft.add(SendingCommandDialogFragment.newInstance(), SendingCommandDialogFragment.TAG);
         ft.commitAllowingStateLoss();
     }
 
     private void dismissProgressDialog() {
         FragmentManager fm = ((FragmentActivity) context).getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        Fragment frag = fm.findFragmentByTag(PROGRESS_DIALOG_TAG);
+        Fragment frag = fm.findFragmentByTag(SendingCommandDialogFragment.TAG);
         if (frag != null) {
             ft.remove(frag);
         }

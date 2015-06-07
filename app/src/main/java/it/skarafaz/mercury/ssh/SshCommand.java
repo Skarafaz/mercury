@@ -1,4 +1,4 @@
-package it.skarafaz.mercury.manager;
+package it.skarafaz.mercury.ssh;
 
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
@@ -47,7 +47,7 @@ public class SshCommand {
         return success;
     }
 
-    public boolean sendCommand() {
+    public boolean send() {
         boolean success = true;
         try {
             ChannelExec channel = (ChannelExec) session.openChannel("exec");

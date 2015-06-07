@@ -1,4 +1,4 @@
-package it.skarafaz.mercury.widget;
+package it.skarafaz.mercury.view;
 
 import android.content.Context;
 import android.util.AttributeSet;

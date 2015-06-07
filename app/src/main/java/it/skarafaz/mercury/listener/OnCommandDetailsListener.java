@@ -19,8 +19,8 @@ public class OnCommandDetailsListener implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         new MaterialDialog.Builder(context)
-                .title(command.getName())
-                .content(command.getCmd())
-                .show();
+            .title(command.getName())
+            .content(command.getCmd())
+            .show();
     }
 }
