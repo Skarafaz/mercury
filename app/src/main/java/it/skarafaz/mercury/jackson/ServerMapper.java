@@ -58,7 +58,7 @@ public class ServerMapper {
                 if (StringUtils.isBlank(command.getName())) {
                     command.setName(DEFAULT_COMMAND_LABEL_);
                 }
-                if (command.isSudo() == null) {
+                if (command.getSudo() == null) {
                     command.setSudo(Boolean.FALSE);
                 }
                 if (StringUtils.isBlank(command.getCmd())) {

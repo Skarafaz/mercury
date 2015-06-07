@@ -30,7 +30,7 @@ public class SshCommand {
         user = command.getServer().getUser();
         password = command.getServer().getPassword();
         this.command = command.getCmd();
-        sudo = command.isSudo();
+        sudo = command.getSudo();
     }
 
     public boolean connect() {

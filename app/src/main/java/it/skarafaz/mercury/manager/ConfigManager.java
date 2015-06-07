@@ -18,7 +18,7 @@ import java.util.List;
 import it.skarafaz.mercury.MercuryApplication;
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.data.Server;
-import it.skarafaz.mercury.data.enums.LoadConfigTaskResult;
+import it.skarafaz.mercury.enums.LoadConfigTaskResult;
 import it.skarafaz.mercury.exception.ValidationException;
 import it.skarafaz.mercury.jackson.ServerMapper;
 

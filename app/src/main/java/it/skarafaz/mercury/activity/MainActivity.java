@@ -7,7 +7,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -17,7 +16,7 @@ import android.widget.Toast;
 
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.adapter.ServerPagerAdapter;
-import it.skarafaz.mercury.data.enums.LoadConfigTaskResult;
+import it.skarafaz.mercury.enums.LoadConfigTaskResult;
 import it.skarafaz.mercury.manager.ConfigManager;
 
 
@@ -40,20 +39,19 @@ public class MainActivity extends AppCompatActivity {
         pager = (ViewPager) findViewById(R.id.pager);
         adapter = new ServerPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(adapter);
-        reload();
+        load();
     }
 
     private void setActionBarElevation() {
-        ActionBar aBar = getSupportActionBar();
-        if (aBar != null) {
-            aBar.setElevation(0);
+        ActionBar bar = getSupportActionBar();
+        if (bar != null) {
+            bar.setElevation(0);
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -61,18 +59,17 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_reload:
-                reload();
+                load();
                 return true;
             case R.id.action_log:
-                Intent intent = new Intent(this, LogActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(this, LogActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void reload() {
+    private void load() {
         if (!loading) {
             new AsyncTask<Void, Void, LoadConfigTaskResult>() {
                 @Override

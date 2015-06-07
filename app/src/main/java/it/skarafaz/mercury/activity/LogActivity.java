@@ -16,9 +16,9 @@ public class LogActivity extends AppCompatActivity {
     }
 
     private void setActionBarElevation() {
-        ActionBar aBar = getSupportActionBar();
-        if (aBar != null) {
-            aBar.setElevation(0);
+        ActionBar bar = getSupportActionBar();
+        if (bar != null) {
+            bar.setElevation(0);
         }
     }
 }

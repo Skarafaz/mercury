@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.data.Command;
-import it.skarafaz.mercury.data.enums.ExecCommandTaskResult;
+import it.skarafaz.mercury.enums.ExecCommandTaskResult;
 import it.skarafaz.mercury.fragment.SendingCommandDialogFragment;
 import it.skarafaz.mercury.ssh.SshCommand;
 

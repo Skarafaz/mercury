@@ -19,7 +19,7 @@ public class Command implements Serializable {
         this.name = name;
     }
 
-    public Boolean isSudo() {
+    public Boolean getSudo() {
         return sudo;
     }
 
