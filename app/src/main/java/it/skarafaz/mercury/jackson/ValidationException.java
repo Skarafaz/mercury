@@ -1,4 +1,4 @@
-package it.skarafaz.mercury.exception;
+package it.skarafaz.mercury.jackson;
 
 public class ValidationException extends Exception {
     private static final long serialVersionUID = 5137298023298850552L;
