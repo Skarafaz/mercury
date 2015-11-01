@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +18,7 @@ import it.skarafaz.mercury.enums.LoadConfigTaskResult;
 import it.skarafaz.mercury.manager.ConfigManager;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends MercuryActivity {
     private boolean loading = false;
     private ProgressBar progress;
     private LinearLayout empty;
@@ -31,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setActionBarElevation();
         setContentView(R.layout.activity_main);
         progress = (ProgressBar) findViewById(R.id.progress);
         empty = (LinearLayout) findViewById(R.id.empty);
@@ -40,13 +37,6 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ServerPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(adapter);
         load();
-    }
-
-    private void setActionBarElevation() {
-        ActionBar bar = getSupportActionBar();
-        if (bar != null) {
-            bar.setElevation(0);
-        }
     }
 
     @Override
