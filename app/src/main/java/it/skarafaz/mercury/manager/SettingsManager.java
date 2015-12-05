@@ -6,6 +6,10 @@ import android.preference.PreferenceManager;
 import it.skarafaz.mercury.MercuryApplication;
 
 public class SettingsManager {
+    public static final String DEFAULT_PORT = "defaultPort";
+    public static final String DEFAULT_SERVER_LABEL = "defaultServerLabel";
+    public static final String DEFAULT_COMMAND_LABEL = "defaultCommandLabel";
+    public static final String SORT_COMMANDS = "sortCommands";
     private static SettingsManager instance;
     private SharedPreferences prefs;
     // app
@@ -23,10 +27,10 @@ public class SettingsManager {
         logDir = "log";
         logFile = "mercury.log";
         // user
-        defaultPort = prefs.getInt("defaultPort", 22);
-        defaultServerLabel = prefs.getString("defaultServerLabel", "Server");
-        defaultCommandLabel = prefs.getString("defaultCommandLabel", "Command");
-        sortCommands = prefs.getBoolean("sortCommands", false);
+        defaultPort = prefs.getInt(DEFAULT_PORT, 22);
+        defaultServerLabel = prefs.getString(DEFAULT_SERVER_LABEL, "Server");
+        defaultCommandLabel = prefs.getString(DEFAULT_COMMAND_LABEL, "Command");
+        sortCommands = prefs.getBoolean(SORT_COMMANDS, false);
     }
 
     public static synchronized SettingsManager getInstance() {
@@ -36,6 +40,7 @@ public class SettingsManager {
         return instance;
     }
 
+    // app
     public String getLogDir() {
         return logDir;
     }
@@ -44,13 +49,14 @@ public class SettingsManager {
         return logFile;
     }
 
+    // user
     public int getDefaultPort() {
         return defaultPort;
     }
 
     public void setDefaultPort(int defaultPort) {
         this.defaultPort = defaultPort;
-        prefs.edit().putInt("defaultPort", this.defaultPort).apply();
+        prefs.edit().putInt(DEFAULT_PORT, this.defaultPort).apply();
     }
 
     public String getDefaultServerLabel() {
@@ -59,7 +65,7 @@ public class SettingsManager {
 
     public void setDefaultServerLabel(String defaultServerLabel) {
         this.defaultServerLabel = defaultServerLabel;
-        prefs.edit().putString("defaultServerLabel", this.defaultServerLabel).apply();
+        prefs.edit().putString(DEFAULT_SERVER_LABEL, this.defaultServerLabel).apply();
     }
 
     public String getDefaultCommandLabel() {
@@ -68,7 +74,7 @@ public class SettingsManager {
 
     public void setDefaultCommandLabel(String defaultCommandLabel) {
         this.defaultCommandLabel = defaultCommandLabel;
-        prefs.edit().putString("defaultCommandLabel", this.defaultCommandLabel).apply();
+        prefs.edit().putString(DEFAULT_COMMAND_LABEL, this.defaultCommandLabel).apply();
     }
 
     public boolean getSortCommands() {
@@ -77,6 +83,6 @@ public class SettingsManager {
 
     public void setSortCommands(boolean sortCommands) {
         this.sortCommands = sortCommands;
-        prefs.edit().putBoolean("sortCommands", this.sortCommands).apply();
+        prefs.edit().putBoolean(SORT_COMMANDS, this.sortCommands).apply();
     }
 }
