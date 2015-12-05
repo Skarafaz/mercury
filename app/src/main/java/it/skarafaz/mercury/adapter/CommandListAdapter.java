@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.listener.OnCommandDetailsListener;
 import it.skarafaz.mercury.listener.OnCommandExecListener;
@@ -23,29 +25,33 @@ public class CommandListAdapter extends ArrayAdapter<Command> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        Command command = getItem(position);
-        ViewHolder viewHolder;
-        if (convertView == null) {
+    public View getView(int position, View view, ViewGroup parent) {
+        ViewHolder holder;
+        if (view == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.command_list_item, parent, false);
-            viewHolder = new ViewHolder();
-            viewHolder.row = (RelativeLayout) convertView.findViewById(R.id.row);
-            viewHolder.name = (TextView) convertView.findViewById(R.id.name);
-            viewHolder.info = (ImageView) convertView.findViewById(R.id.info);
-            convertView.setTag(viewHolder);
+            view = inflater.inflate(R.layout.command_list_item, parent, false);
+            holder = new ViewHolder(view);
+            view.setTag(holder);
         } else {
-            viewHolder = (ViewHolder) convertView.getTag();
+            holder = (ViewHolder) view.getTag();
         }
-        viewHolder.name.setText(command.getName());
-        viewHolder.info.setOnClickListener(new OnCommandDetailsListener(getContext(), command));
-        viewHolder.row.setOnClickListener(new OnCommandExecListener(getContext(), command));
-        return convertView;
+        Command command = getItem(position);
+        holder.name.setText(command.getName());
+        holder.info.setOnClickListener(new OnCommandDetailsListener(getContext(), command));
+        holder.row.setOnClickListener(new OnCommandExecListener(getContext(), command));
+        return view;
     }
 
     static class ViewHolder {
+        @Bind(R.id.row)
         RelativeLayout row;
+        @Bind(R.id.name)
         TextView name;
+        @Bind(R.id.info)
         ImageView info;
+
+        public ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 }

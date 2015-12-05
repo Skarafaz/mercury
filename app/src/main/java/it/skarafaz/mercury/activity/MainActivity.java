@@ -12,6 +12,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.adapter.ServerPagerAdapter;
 import it.skarafaz.mercury.enums.LoadConfigTaskResult;
@@ -19,21 +21,23 @@ import it.skarafaz.mercury.manager.ConfigManager;
 
 
 public class MainActivity extends MercuryActivity {
+    @Bind(R.id.progress)
+    protected ProgressBar progress;
+    @Bind(R.id.empty)
+    protected LinearLayout empty;
+    @Bind(R.id.message)
+    protected TextView message;
+    @Bind(R.id.pager)
+    protected ViewPager pager;
+
     private boolean loading = false;
-    private ProgressBar progress;
-    private LinearLayout empty;
-    private TextView message;
-    private ViewPager pager;
     private ServerPagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        progress = (ProgressBar) findViewById(R.id.progress);
-        empty = (LinearLayout) findViewById(R.id.empty);
-        message = (TextView) findViewById(R.id.message);
-        pager = (ViewPager) findViewById(R.id.pager);
+        ButterKnife.bind(this);
         adapter = new ServerPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(adapter);
         load();
