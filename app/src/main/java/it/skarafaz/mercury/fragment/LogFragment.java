@@ -22,12 +22,9 @@ import java.util.List;
 
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.adapter.LogListAdapter;
+import it.skarafaz.mercury.manager.SettingsManager;
 
 public class LogFragment extends ListFragment {
-    public static final String LOG_DIR = "log";
-    public static final String LOG_FILE = "mercury.log";
-    public static final String OLD_EXT = "old";
-    public static final String ENCODING = "UTF-8";
     private static final Logger logger = LoggerFactory.getLogger(LogFragment.class);
 
     @Override
@@ -68,10 +65,10 @@ public class LogFragment extends ListFragment {
     }
 
     private List<String> readLog() {
-        File file = new File(getActivity().getDir(LOG_DIR, Context.MODE_PRIVATE), LOG_FILE);
+        File file = new File(getActivity().getDir(SettingsManager.getInstance().getLogDir(), Context.MODE_PRIVATE), SettingsManager.getInstance().getLogFile());
         List<String> lines = new ArrayList<>();
         try {
-            lines = FileUtils.readLines(file, ENCODING);
+            lines = FileUtils.readLines(file, "UTF-8");
         } catch (IOException e) {
             logger.debug(e.getMessage());
         }
@@ -80,14 +77,14 @@ public class LogFragment extends ListFragment {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private void clearLog() {
-        File logDir = getActivity().getDir(LOG_DIR, Context.MODE_PRIVATE);
-        File logFile = new File(logDir, LOG_FILE);
+        File logDir = getActivity().getDir(SettingsManager.getInstance().getLogDir(), Context.MODE_PRIVATE);
+        File logFile = new File(logDir, SettingsManager.getInstance().getLogFile());
         try {
             FileUtils.write(logFile, "");
         } catch (IOException e) {
             logger.debug(e.getMessage());
         }
-        Collection<File> oldFiles = FileUtils.listFiles(logDir, new String[]{ OLD_EXT }, false);
+        Collection<File> oldFiles = FileUtils.listFiles(logDir, new String[]{ "old" }, false);
         for (File file : oldFiles) {
             file.delete();
         }

@@ -10,13 +10,11 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import it.skarafaz.mercury.manager.SettingsManager;
 import it.skarafaz.mercury.model.Command;
 import it.skarafaz.mercury.model.Server;
 
 public class ServerMapper {
-    public static final String DEFAULT_SERVER_LABEL = "Server";
-    public static final String DEFAULT_COMMAND_LABEL = "Command";
-    public static final int DEFAULT_PORT = 22;
     public static final String MISSING_MSG = "is missing";
     public static final String INVALID_MSG = "is invalid";
     private ObjectMapper mapper;
@@ -37,13 +35,13 @@ public class ServerMapper {
     private Map<String, String> validateServer(Server server) {
         Map<String, String> errors = new LinkedHashMap<>();
         if (StringUtils.isBlank(server.getName())) {
-            server.setName(DEFAULT_SERVER_LABEL);
+            server.setName(SettingsManager.getInstance().getDefaultServerLabel());
         }
         if (StringUtils.isBlank(server.getHost())) {
             errors.put("host", MISSING_MSG);
         }
         if (server.getPort() == null) {
-            server.setPort(DEFAULT_PORT);
+            server.setPort(SettingsManager.getInstance().getDefaultPort());
         } else if (server.getPort() < 1 || server.getPort() > 65535) {
             errors.put("port", INVALID_MSG);
         }
@@ -66,7 +64,7 @@ public class ServerMapper {
     private Map<String, String> validateCommand(Command command, int index) {
         Map<String, String> errors = new LinkedHashMap<>();
         if (StringUtils.isBlank(command.getName())) {
-            command.setName(DEFAULT_COMMAND_LABEL);
+            command.setName(SettingsManager.getInstance().getDefaultCommandLabel());
         }
         if (command.getSudo() == null) {
             command.setSudo(Boolean.FALSE);
