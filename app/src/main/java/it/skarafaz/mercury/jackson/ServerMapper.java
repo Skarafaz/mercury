@@ -14,10 +14,11 @@ import it.skarafaz.mercury.data.Command;
 import it.skarafaz.mercury.data.Server;
 
 public class ServerMapper {
-    public static final String IS_MISSING = "is missing";
     public static final String DEFAULT_SERVER_LABEL = "Server";
     public static final String DEFAULT_COMMAND_LABEL = "Command";
     public static final int DEFAULT_PORT = 22;
+    public static final String MISSING_MSG = "is missing";
+    public static final String INVALID_MSG = "is invalid";
     private ObjectMapper mapper;
 
     public ServerMapper() {
@@ -26,9 +27,9 @@ public class ServerMapper {
 
     public Server readValue(File src) throws IOException, ValidationException {
         Server server = mapper.readValue(src, Server.class);
-        Map<String, String> validationErrors = validateServer(server);
-        if (validationErrors.size() > 0) {
-            throw new ValidationException(getValidationErrorMessage(src, validationErrors));
+        Map<String, String> errors = validateServer(server);
+        if (errors.size() > 0) {
+            throw new ValidationException(getValidationErrorMessage(src, errors));
         }
         return server;
     }
@@ -39,32 +40,39 @@ public class ServerMapper {
             server.setName(DEFAULT_SERVER_LABEL);
         }
         if (StringUtils.isBlank(server.getHost())) {
-            errors.put("host", IS_MISSING);
+            errors.put("host", MISSING_MSG);
         }
         if (server.getPort() == null) {
             server.setPort(DEFAULT_PORT);
+        } else if (server.getPort() < 1 || server.getPort() > 65535) {
+            errors.put("port", INVALID_MSG);
         }
         if (StringUtils.isBlank(server.getUser())) {
-            errors.put("user", IS_MISSING);
+            errors.put("user", MISSING_MSG);
         }
         if (StringUtils.isBlank(server.getPassword())) {
-            errors.put("password", IS_MISSING);
+            errors.put("password", MISSING_MSG);
         }
         if (server.getCommands() == null) {
             server.setCommands(new ArrayList<Command>());
         } else {
             for (int i = 0; i < server.getCommands().size(); i++) {
-                Command command = server.getCommands().get(i);
-                if (StringUtils.isBlank(command.getName())) {
-                    command.setName(DEFAULT_COMMAND_LABEL);
-                }
-                if (command.getSudo() == null) {
-                    command.setSudo(Boolean.FALSE);
-                }
-                if (StringUtils.isBlank(command.getCmd())) {
-                    errors.put(String.format("commands[%d].cmd", i), IS_MISSING);
-                }
+                errors.putAll(validateCommand(server.getCommands().get(i), i));
             }
+        }
+        return errors;
+    }
+
+    private Map<String, String> validateCommand(Command command, int index) {
+        Map<String, String> errors = new LinkedHashMap<>();
+        if (StringUtils.isBlank(command.getName())) {
+            command.setName(DEFAULT_COMMAND_LABEL);
+        }
+        if (command.getSudo() == null) {
+            command.setSudo(Boolean.FALSE);
+        }
+        if (StringUtils.isBlank(command.getCmd())) {
+            errors.put(String.format("commands[%d].cmd", index), MISSING_MSG);
         }
         return errors;
     }
