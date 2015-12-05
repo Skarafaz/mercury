@@ -1,10 +1,13 @@
 package it.skarafaz.mercury.data;
 
+import android.support.annotation.NonNull;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import java.io.Serializable;
 
-public class Command implements Serializable {
+@SuppressWarnings("unused")
+public class Command implements Serializable, Comparable<Command> {
     private static final long serialVersionUID = -1107949489549383265L;
     private String name;
     private Boolean sudo;
@@ -42,5 +45,10 @@ public class Command implements Serializable {
 
     public void setServer(Server server) {
         this.server = server;
+    }
+
+    @Override
+    public int compareTo(@NonNull Command another) {
+        return name.toLowerCase().compareTo(another.getName().toLowerCase());
     }
 }

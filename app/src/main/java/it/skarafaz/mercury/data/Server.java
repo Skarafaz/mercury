@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class Server implements Serializable, Comparable<Server> {
     private static final long serialVersionUID = 7247694914871605048L;
     private String name;
