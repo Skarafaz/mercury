@@ -10,9 +10,9 @@ import android.view.View;
 import android.widget.Toast;
 
 import it.skarafaz.mercury.R;
-import it.skarafaz.mercury.data.Command;
 import it.skarafaz.mercury.enums.ExecCommandTaskResult;
 import it.skarafaz.mercury.fragment.SendingCommandDialogFragment;
+import it.skarafaz.mercury.model.Command;
 import it.skarafaz.mercury.ssh.SshCommand;
 
 public class OnCommandExecListener implements View.OnClickListener {

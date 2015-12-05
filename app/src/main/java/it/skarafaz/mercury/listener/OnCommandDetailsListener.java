@@ -5,7 +5,7 @@ import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import it.skarafaz.mercury.data.Command;
+import it.skarafaz.mercury.model.Command;
 
 public class OnCommandDetailsListener implements View.OnClickListener {
     Context context;

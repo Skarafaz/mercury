@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import it.skarafaz.mercury.data.Command;
-import it.skarafaz.mercury.data.Server;
+import it.skarafaz.mercury.model.Command;
+import it.skarafaz.mercury.model.Server;
 
 public class ServerMapper {
     public static final String DEFAULT_SERVER_LABEL = "Server";

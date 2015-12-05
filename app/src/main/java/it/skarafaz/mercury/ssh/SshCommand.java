@@ -8,7 +8,7 @@ import com.jcraft.jsch.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import it.skarafaz.mercury.data.Command;
+import it.skarafaz.mercury.model.Command;
 
 public class SshCommand {
     private static final int TIMEOUT = 10000;

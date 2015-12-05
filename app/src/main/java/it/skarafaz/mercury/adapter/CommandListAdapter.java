@@ -12,9 +12,9 @@ import android.widget.TextView;
 import java.util.List;
 
 import it.skarafaz.mercury.R;
-import it.skarafaz.mercury.data.Command;
 import it.skarafaz.mercury.listener.OnCommandDetailsListener;
 import it.skarafaz.mercury.listener.OnCommandExecListener;
+import it.skarafaz.mercury.model.Command;
 
 public class CommandListAdapter extends ArrayAdapter<Command> {
 

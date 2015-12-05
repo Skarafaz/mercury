@@ -1,4 +1,4 @@
-package it.skarafaz.mercury.data;
+package it.skarafaz.mercury.model;
 
 import android.support.annotation.NonNull;
 
