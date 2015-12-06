@@ -15,6 +15,7 @@ public class SettingsManager {
     // app
     private String logDir;
     private String logFile;
+    private String wikiUrl;
     // user
     private int defaultPort;
     private String defaultServerLabel;
@@ -26,6 +27,7 @@ public class SettingsManager {
         //app
         logDir = "log";
         logFile = "mercury.log";
+        wikiUrl = "http://www.skarafaz.ovh/mercury-ssh";
         // user
         defaultPort = prefs.getInt(DEFAULT_PORT, 22);
         defaultServerLabel = prefs.getString(DEFAULT_SERVER_LABEL, "Server");
@@ -47,6 +49,10 @@ public class SettingsManager {
 
     public String getLogFile() {
         return logFile;
+    }
+
+    public String getWikiUrl() {
+        return wikiUrl;
     }
 
     // user
