@@ -30,6 +30,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="it.skarafaz.mercury.activity.MainActivity" />
         </activity>
+        <activity
+            android:name="it.skarafaz.mercury.activity.WikiActivity"
+            android:label="@string/title_activity_wiki"
+            android:parentActivityName="it.skarafaz.mercury.activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="it.skarafaz.mercury.activity.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

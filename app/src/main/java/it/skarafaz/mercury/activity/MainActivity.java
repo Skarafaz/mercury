@@ -58,6 +58,9 @@ public class MainActivity extends MercuryActivity {
             case R.id.action_log:
                 startActivity(new Intent(this, LogActivity.class));
                 return true;
+            case R.id.action_wiki:
+                startActivity(new Intent(this, WikiActivity.class));
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

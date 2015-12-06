@@ -3,6 +3,7 @@
     <string name="action_clear">Clear</string>
     <string name="action_log">Log</string>
     <string name="action_reload">Reload</string>
+    <string name="action_wiki">Wiki</string>
     <string name="app_name">Mercury-SSH</string>
     <string name="cannot_create_config_dir">Cannot create\n%s</string>
     <string name="cannot_read_ext_storage">Cannot read external storage</string>
@@ -14,4 +15,5 @@
     <string name="no_commands">No commands defined\nfor this server</string>
     <string name="sending_command">Sending command&#8230;</string>
     <string name="title_activity_log">Log</string>
+    <string name="title_activity_wiki">Wiki</string>
 </resources>
