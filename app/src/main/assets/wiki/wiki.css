@@ -1,0 +1,27 @@
+body {
+    background-color: #303030;
+    color: #bfbfbf;
+}
+
+h3, h4 {
+    color: white;
+}
+
+pre {
+    background-color: #303030;
+    color: #bfbfbf;
+    border: 1px solid #6d6d6d;
+}
+
+code {
+    background-color: #37474f;
+    color: white;
+}
+
+.table>thead>tr>th {
+    border-bottom: 2px solid #6d6d6d;
+}
+
+.table>tbody>tr>td {
+    border: none;
+}

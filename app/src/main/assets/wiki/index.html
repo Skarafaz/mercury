@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="file:///android_asset/wiki/bootstrap.min.css">
+    <link rel="stylesheet" href="file:///android_asset/wiki/wiki.css">
+    <title>Wiki</title>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <h3>Usage</h3>
+            <p>Mercury-SSH reads configuration data from standard JSON files saved on the device's external storage. Simply put your configuration files into the folder named Mercury-SSH on the device's external storage and you are ready to go.</p>
+            <h3>Writing a configuration file</h3>
+            <p>Few lines of code are better than thousand words, so let's start with a sample configuration file:</p>
+            <pre>
+{
+  "name" : "Server",
+  "host" : "192.168.0.1",
+  "port" : 22,
+  "user" : "user",
+  "password" : "12345678",
+  "commands" : [ {
+    "name" : "Restart apache",
+    "sudo" : true,
+    "cmd" : "service apache2 restart"
+  }, {
+    "name" : "Rsync",
+    "sudo" : true,
+    "cmd" : "rsync -a /src/ /dst/"
+  } ]
+}
+            </pre>
+            <p>As you can see, a configuration file wrapps all the information you need to connect to a remote server and all the commands you want to send to it into a JSON object. The structure of this object is quite simple and is summarized below.</p>
+            <h4>Server property summary</h4>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Property</th>
+                    <th>Type</th>
+                    <th>Notes</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>name</code></td>
+                    <td>string</td>
+                    <td>Friendly name (used as label). Optional, defaults to <code>"Server"</code>.</td>
+                </tr>
+                <tr>
+                    <td><code>host</code></td>
+                    <td>string</td>
+                    <td>Target hostname or IP address. Mandatory.</td>
+                </tr>
+                <tr>
+                    <td><code>port</code></td>
+                    <td>integer</td>
+                    <td>Target port (1-65535). Optional, defaults to <code>22</code>.</td>
+                </tr>
+                <tr>
+                    <td><code>user</code></td>
+                    <td>string</td>
+                    <td>Login user. Mandatory.</td>
+                </tr>
+                <tr>
+                    <td><code>password</code></td>
+                    <td>string</td>
+                    <td>Login password. Mandatory.</td>
+                </tr>
+                <tr>
+                    <td><code>commands</code></td>
+                    <td>array</td>
+                    <td>An array of objects defining available commands for the server. Optional.</td>
+                </tr>
+                </tbody>
+            </table>
+            <h4>Command property summary</h4>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Property</th>
+                    <th>Type</th>
+                    <th>Notes</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>name</code></td>
+                    <td>string</td>
+                    <td>Friendly name (used as label). Optional, defaults to <code>"Command"</code>.</td>
+                </tr>
+                <tr>
+                    <td><code>sudo</code></td>
+                    <td>boolean</td>
+                    <td>State if the command needs to be executed as root. Optional, defaults to <code>false</code>.</td>
+                </tr>
+                <tr>
+                    <td><code>cmd</code></td>
+                    <td>string</td>
+                    <td>The command itself. Mandatory.</td>
+                </tr>
+                </tbody>
+            </table>
+            <h4>Format</h4>
+            <p>Each configuration file must be an UTF-8/16/32 encoded text file with <code>.json</code> extension.</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

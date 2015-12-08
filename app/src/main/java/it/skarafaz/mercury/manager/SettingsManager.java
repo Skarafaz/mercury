@@ -27,7 +27,7 @@ public class SettingsManager {
         //app
         logDir = "log";
         logFile = "mercury.log";
-        wikiUrl = "http://www.skarafaz.ovh/mercury-ssh";
+        wikiUrl = "file:///android_asset/wiki/index.html";
         // user
         defaultPort = prefs.getInt(DEFAULT_PORT, 22);
         defaultServerLabel = prefs.getString(DEFAULT_SERVER_LABEL, "Server");
