@@ -22,7 +22,6 @@ import java.util.List;
 
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.adapter.LogListAdapter;
-import it.skarafaz.mercury.manager.SettingsManager;
 
 public class LogFragment extends ListFragment {
     private static final Logger logger = LoggerFactory.getLogger(LogFragment.class);
@@ -65,7 +64,7 @@ public class LogFragment extends ListFragment {
     }
 
     private List<String> readLog() {
-        File file = new File(getActivity().getDir(SettingsManager.getInstance().getLogDir(), Context.MODE_PRIVATE), SettingsManager.getInstance().getLogFile());
+        File file = getLogFile();
         List<String> lines = new ArrayList<>();
         try {
             lines = FileUtils.readLines(file, "UTF-8");
@@ -77,17 +76,24 @@ public class LogFragment extends ListFragment {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private void clearLog() {
-        File logDir = getActivity().getDir(SettingsManager.getInstance().getLogDir(), Context.MODE_PRIVATE);
-        File logFile = new File(logDir, SettingsManager.getInstance().getLogFile());
+        File logFile = getLogFile();
         try {
             FileUtils.write(logFile, "");
         } catch (IOException e) {
             logger.debug(e.getMessage());
         }
-        Collection<File> oldFiles = FileUtils.listFiles(logDir, new String[]{ "old" }, false);
+        Collection<File> oldFiles = FileUtils.listFiles(getLogDir(), new String[]{ "old" }, false);
         for (File file : oldFiles) {
             file.delete();
         }
         reload();
+    }
+
+    private File getLogFile() {
+        return new File(getLogDir(), "mercury.log");
+    }
+
+    private File getLogDir() {
+        return getActivity().getDir("log", Context.MODE_PRIVATE);
     }
 }

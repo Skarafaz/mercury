@@ -8,7 +8,6 @@ import android.webkit.WebViewClient;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.skarafaz.mercury.R;
-import it.skarafaz.mercury.manager.SettingsManager;
 
 public class WikiActivity extends MercuryActivity {
     @Bind(R.id.webview)
@@ -21,6 +20,6 @@ public class WikiActivity extends MercuryActivity {
         ButterKnife.bind(this);
         webView.setBackgroundColor(Color.TRANSPARENT);
         webView.setWebViewClient(new WebViewClient());
-        webView.loadUrl(SettingsManager.getInstance().getWikiUrl());
+        webView.loadUrl("file:///android_asset/wiki/index.html");
     }
 }

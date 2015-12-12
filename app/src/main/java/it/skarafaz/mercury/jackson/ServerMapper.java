@@ -10,13 +10,12 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import it.skarafaz.mercury.manager.SettingsManager;
+import it.skarafaz.mercury.MercuryApplication;
+import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.model.Command;
 import it.skarafaz.mercury.model.Server;
 
 public class ServerMapper {
-    public static final String MISSING_MSG = "is missing";
-    public static final String INVALID_MSG = "is invalid";
     private ObjectMapper mapper;
 
     public ServerMapper() {
@@ -35,21 +34,21 @@ public class ServerMapper {
     private Map<String, String> validateServer(Server server) {
         Map<String, String> errors = new LinkedHashMap<>();
         if (StringUtils.isBlank(server.getName())) {
-            server.setName(SettingsManager.getInstance().getDefaultServerLabel());
+            server.setName(getString(R.string.server));
         }
         if (StringUtils.isBlank(server.getHost())) {
-            errors.put("host", MISSING_MSG);
+            errors.put("host", getString(R.string.validation_missing));
         }
         if (server.getPort() == null) {
-            server.setPort(SettingsManager.getInstance().getDefaultPort());
+            server.setPort(22);
         } else if (server.getPort() < 1 || server.getPort() > 65535) {
-            errors.put("port", INVALID_MSG);
+            errors.put("port", getString(R.string.validation_invalid));
         }
         if (StringUtils.isBlank(server.getUser())) {
-            errors.put("user", MISSING_MSG);
+            errors.put("user", getString(R.string.validation_missing));
         }
         if (StringUtils.isBlank(server.getPassword())) {
-            errors.put("password", MISSING_MSG);
+            errors.put("password", getString(R.string.validation_missing));
         }
         if (server.getCommands() == null) {
             server.setCommands(new ArrayList<Command>());
@@ -64,19 +63,19 @@ public class ServerMapper {
     private Map<String, String> validateCommand(Command command, int index) {
         Map<String, String> errors = new LinkedHashMap<>();
         if (StringUtils.isBlank(command.getName())) {
-            command.setName(SettingsManager.getInstance().getDefaultCommandLabel());
+            command.setName(getString(R.string.command));
         }
         if (command.getSudo() == null) {
             command.setSudo(Boolean.FALSE);
         }
         if (StringUtils.isBlank(command.getCmd())) {
-            errors.put(String.format("commands[%d].cmd", index), MISSING_MSG);
+            errors.put(String.format("commands[%d].cmd", index), getString(R.string.validation_missing));
         }
         return errors;
     }
 
     private String getValidationErrorMessage(File src, Map<String, String> errors) {
-        StringBuilder sb = new StringBuilder(String.format("Failed to validate [%s]: ", src));
+        StringBuilder sb = new StringBuilder(getString(R.string.validation_file, src));
         int i = 1;
         for (Map.Entry<String, String> entry : errors.entrySet()) {
             sb.append(String.format("%s %s", entry.getKey(), entry.getValue()));
@@ -86,5 +85,13 @@ public class ServerMapper {
             i++;
         }
         return sb.toString();
+    }
+
+    private String getString(int resId) {
+        return MercuryApplication.getContext().getString(resId);
+    }
+
+    private String getString(int resId, Object... formatArgs) {
+        return MercuryApplication.getContext().getString(resId, formatArgs);
     }
 }
