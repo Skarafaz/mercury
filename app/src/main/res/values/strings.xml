@@ -3,7 +3,7 @@
     <string name="action_clear">Clear</string>
     <string name="action_log">Log</string>
     <string name="action_reload">Reload</string>
-    <string name="action_wiki">Wiki</string>
+    <string name="action_help">Help</string>
     <string name="app_name">Mercury-SSH</string>
     <string name="cannot_create_config_dir">Cannot create\n%s</string>
     <string name="cannot_read_ext_storage">Cannot read external storage</string>
@@ -17,7 +17,7 @@
     <string name="sending_command">Sending command&#8230;</string>
     <string name="server">Server</string>
     <string name="title_activity_log">Log</string>
-    <string name="title_activity_wiki">Wiki</string>
+    <string name="title_activity_help">Help</string>
     <string name="validation_missing">is missing</string>
     <string name="validation_invalid">is invalid</string>
     <string name="validation_file">Failed to validate [%s]: </string>

@@ -9,17 +9,17 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.skarafaz.mercury.R;
 
-public class WikiActivity extends MercuryActivity {
+public class HelpActivity extends MercuryActivity {
     @Bind(R.id.webview)
     protected WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wiki);
+        setContentView(R.layout.activity_help);
         ButterKnife.bind(this);
         webView.setBackgroundColor(Color.TRANSPARENT);
         webView.setWebViewClient(new WebViewClient());
-        webView.loadUrl("file:///android_asset/wiki/index.html");
+        webView.loadUrl("file:///android_asset/help/index.html");
     }
 }

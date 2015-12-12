@@ -11,7 +11,7 @@
         android:title="@string/action_log"
         app:showAsAction="collapseActionView" />
     <item
-        android:id="@+id/action_wiki"
-        android:title="@string/action_wiki"
+        android:id="@+id/action_help"
+        android:title="@string/action_help"
         app:showAsAction="collapseActionView" />
 </menu>

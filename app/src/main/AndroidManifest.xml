@@ -31,8 +31,8 @@
                 android:value="it.skarafaz.mercury.activity.MainActivity" />
         </activity>
         <activity
-            android:name="it.skarafaz.mercury.activity.WikiActivity"
-            android:label="@string/title_activity_wiki"
+            android:name="it.skarafaz.mercury.activity.HelpActivity"
+            android:label="@string/title_activity_help"
             android:parentActivityName="it.skarafaz.mercury.activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
