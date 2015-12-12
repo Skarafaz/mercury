@@ -38,7 +38,7 @@ public class SshCommand {
         try {
             session = jsch.getSession(user, host, port);
             session.setPassword(password);
-            session.setConfig("StrictHostKeyChecking", "no"); // TODO known_hosts mng
+            session.setConfig("StrictHostKeyChecking", "no");
             session.connect(TIMEOUT);
         } catch (JSchException e) {
             logger.error(e.getMessage().replace("\n", " "));
@@ -51,11 +51,7 @@ public class SshCommand {
         boolean success = true;
         try {
             ChannelExec channel = (ChannelExec) session.openChannel("exec");
-            if (sudo) {
-                channel.setCommand("echo " + password + " | sudo -S -p '' " + command);
-            } else {
-                channel.setCommand(command);
-            }
+            channel.setCommand(sudo ? String.format("echo %s | sudo -S -p '' %s", password, command) : command);
             channel.connect(TIMEOUT);
             channel.disconnect();
         } catch (JSchException e) {
