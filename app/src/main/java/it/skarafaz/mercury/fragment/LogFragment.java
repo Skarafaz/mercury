@@ -69,7 +69,7 @@ public class LogFragment extends ListFragment {
         try {
             lines = FileUtils.readLines(file, "UTF-8");
         } catch (IOException e) {
-            logger.debug(e.getMessage());
+            logger.error(e.getMessage());
         }
         return lines;
     }
@@ -80,7 +80,7 @@ public class LogFragment extends ListFragment {
         try {
             FileUtils.write(logFile, "");
         } catch (IOException e) {
-            logger.debug(e.getMessage());
+            logger.error(e.getMessage());
         }
         Collection<File> oldFiles = FileUtils.listFiles(getLogDir(), new String[]{ "old" }, false);
         for (File file : oldFiles) {

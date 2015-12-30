@@ -30,7 +30,7 @@ public class MercuryApplication extends Application {
                 menuKeyField.setBoolean(config, false);
             }
         } catch (Exception e) {
-            logger.debug(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 }
