@@ -1,5 +1,6 @@
 package it.skarafaz.mercury.manager;
 
+import android.Manifest;
 import android.os.Environment;
 
 import org.apache.commons.io.FileUtils;
@@ -9,11 +10,11 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import it.skarafaz.mercury.enums.LoadConfigTaskResult;
+import it.skarafaz.mercury.MercuryApplication;
+import it.skarafaz.mercury.enums.LoadConfigExitStatus;
 import it.skarafaz.mercury.jackson.ServerMapper;
 import it.skarafaz.mercury.jackson.ValidationException;
 import it.skarafaz.mercury.model.Server;
@@ -46,38 +47,33 @@ public class ConfigManager {
         return servers;
     }
 
-    public boolean createConfigDir() {
-        return isExternalStorageWritable() && configDir.mkdirs();
-    }
-
-    public LoadConfigTaskResult load() {
+    public LoadConfigExitStatus loadConfigFiles() {
         servers.clear();
-        LoadConfigTaskResult result = LoadConfigTaskResult.SUCCESS;
+        LoadConfigExitStatus result = LoadConfigExitStatus.SUCCESS;
         if (isExternalStorageReadable()) {
-            if (configDir.exists() && configDir.isDirectory()) {
-                Collection<File> files = listConfigFiles();
-                for (File file : files) {
-                    try {
-                        servers.add(mapper.readValue(file));
-                    } catch (IOException | ValidationException e) {
-                        result = LoadConfigTaskResult.ERRORS_FOUND;
-                        logger.error(e.getMessage().replace("\n", " "));
+            if (MercuryApplication.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                if (configDir.exists() && configDir.isDirectory()) {
+                    for (File file : FileUtils.listFiles(configDir, new String[]{"json", "JSON"}, false)) {
+                        try {
+                            servers.add(mapper.readValue(file));
+                        } catch (IOException | ValidationException e) {
+                            result = LoadConfigExitStatus.ERRORS_FOUND;
+                            logger.error(e.getMessage().replace("\n", " "));
+                        }
+                    }
+                    Collections.sort(servers);
+                } else {
+                    if (!(isExternalStorageWritable() && configDir.mkdirs())) {
+                        result = LoadConfigExitStatus.CANNOT_CREATE_CONFIG_DIR;
                     }
                 }
-                Collections.sort(servers);
             } else {
-                if (!createConfigDir()) {
-                    result = LoadConfigTaskResult.CANNOT_CREATE_CONFIG_DIR;
-                }
+                result = LoadConfigExitStatus.PERMISSION;
             }
         } else {
-            result = LoadConfigTaskResult.CANNOT_READ_EXT_STORAGE;
+            result = LoadConfigExitStatus.CANNOT_READ_EXT_STORAGE;
         }
         return result;
-    }
-
-    private Collection<File> listConfigFiles() {
-        return FileUtils.listFiles(configDir, new String[] { "json", "JSON" }, false);
     }
 
     private boolean isExternalStorageReadable() {
