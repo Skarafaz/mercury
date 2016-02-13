@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import it.skarafaz.mercury.MercuryApplication;
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.adapter.ServerPagerAdapter;
 import it.skarafaz.mercury.enums.LoadConfigExitStatus;
@@ -106,7 +105,6 @@ public class MainActivity extends MercuryActivity {
 
                 @Override
                 protected void onPostExecute(LoadConfigExitStatus status) {
-                    loading = false;
                     progress.setVisibility(View.INVISIBLE);
                     if (ConfigManager.getInstance().getServers().size() > 0) {
                         adapter.updateServers(ConfigManager.getInstance().getServers());
@@ -119,32 +117,29 @@ public class MainActivity extends MercuryActivity {
                         empty.setVisibility(View.VISIBLE);
                         if (status == LoadConfigExitStatus.PERMISSION) {
                             settings.setVisibility(View.VISIBLE);
-                            manageStoragePermission();
+                            requireStoragePermission();
                         } else {
                             settings.setVisibility(View.GONE);
                         }
                     }
+                    loading = false;
                 }
             }.execute();
         }
     }
 
-    private void manageStoragePermission() {
-        if (!MercuryApplication.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, LOAD_CONFIG_FILES_PREQ);
-        } else {
-            loadConfigFiles();
-        }
+    private void requireStoragePermission() {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, LOAD_CONFIG_FILES_PREQ);
     }
 
     private void startAppInfoIntent() {
         Intent i = new Intent();
         i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         i.addCategory(Intent.CATEGORY_DEFAULT);
-        i.setData(Uri.parse("package:" + MainActivity.this.getPackageName()));
+        i.setData(Uri.parse("package:" + this.getPackageName()));
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-        MainActivity.this.startActivity(i);
+        this.startActivity(i);
     }
 }
