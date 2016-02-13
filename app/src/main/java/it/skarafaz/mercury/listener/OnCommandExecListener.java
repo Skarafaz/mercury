@@ -9,8 +9,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.Toast;
 
+import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.enums.SendCommandExitStatus;
-import it.skarafaz.mercury.fragment.SendingCommandDialogFragment;
+import it.skarafaz.mercury.fragment.ProgressDialogFragment;
 import it.skarafaz.mercury.model.Command;
 import it.skarafaz.mercury.ssh.SshCommand;
 
@@ -56,14 +57,14 @@ public class OnCommandExecListener implements View.OnClickListener {
 
     private void showProgressDialog() {
         FragmentTransaction ft = ((FragmentActivity) context).getSupportFragmentManager().beginTransaction();
-        ft.add(SendingCommandDialogFragment.newInstance(), SendingCommandDialogFragment.TAG);
+        ft.add(ProgressDialogFragment.newInstance(context.getString(R.string.sending_command)), ProgressDialogFragment.TAG);
         ft.commitAllowingStateLoss();
     }
 
     private void dismissProgressDialog() {
         FragmentManager fm = ((FragmentActivity) context).getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        Fragment frag = fm.findFragmentByTag(SendingCommandDialogFragment.TAG);
+        Fragment frag = fm.findFragmentByTag(ProgressDialogFragment.TAG);
         if (frag != null) {
             ft.remove(frag);
         }
