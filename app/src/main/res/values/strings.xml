@@ -14,7 +14,7 @@
     <string name="empty_log">Log file is empty</string>
     <string name="errors_found">One or more config files did not pass the validity check, please see log for details</string>
     <string name="no_commands">No commands defined\nfor this server</string>
-    <string name="permission">Mercury-SSH require external storage access to read config files!</string>
+    <string name="permission">Mercury-SSH requires STORAGE permission to read config files</string>
     <string name="sending_command">Sending command&#8230;</string>
     <string name="server">Server</string>
     <string name="title_activity_log">Log</string>
