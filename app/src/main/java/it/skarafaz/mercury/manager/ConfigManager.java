@@ -3,8 +3,6 @@ package it.skarafaz.mercury.manager;
 import android.os.Environment;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOCase;
-import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,8 +13,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import it.skarafaz.mercury.MercuryApplication;
-import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.enums.LoadConfigTaskResult;
 import it.skarafaz.mercury.jackson.ServerMapper;
 import it.skarafaz.mercury.jackson.ValidationException;
@@ -25,10 +21,12 @@ import it.skarafaz.mercury.model.Server;
 public class ConfigManager {
     private static final Logger logger = LoggerFactory.getLogger(ConfigManager.class);
     private static ConfigManager instance;
+    private File configDir;
     private ServerMapper mapper;
     private List<Server> servers;
 
     private ConfigManager() {
+        configDir = new File(Environment.getExternalStorageDirectory(), "Mercury-SSH");
         mapper = new ServerMapper();
         servers = new ArrayList<>();
     }
@@ -40,13 +38,24 @@ public class ConfigManager {
         return instance;
     }
 
+    public File getConfigDir() {
+        return configDir;
+    }
+
+    public List<Server> getServers() {
+        return servers;
+    }
+
+    public boolean createConfigDir() {
+        return isExternalStorageWritable() && configDir.mkdirs();
+    }
+
     public LoadConfigTaskResult load() {
         servers.clear();
         LoadConfigTaskResult result = LoadConfigTaskResult.SUCCESS;
         if (isExternalStorageReadable()) {
-            File configDir = getConfigDir();
             if (configDir.exists() && configDir.isDirectory()) {
-                Collection<File> files = getConfigFiles(configDir);
+                Collection<File> files = listConfigFiles();
                 for (File file : files) {
                     try {
                         servers.add(mapper.readValue(file));
@@ -57,7 +66,7 @@ public class ConfigManager {
                 }
                 Collections.sort(servers);
             } else {
-                if (!createConfigDir(configDir)) {
+                if (!createConfigDir()) {
                     result = LoadConfigTaskResult.CANNOT_CREATE_CONFIG_DIR;
                 }
             }
@@ -67,22 +76,8 @@ public class ConfigManager {
         return result;
     }
 
-    public List<Server> getServers() {
-        return servers;
-    }
-
-    public File getConfigDir() {
-        String appName = MercuryApplication.getContext().getString(R.string.app_name);
-        return new File(Environment.getExternalStorageDirectory(), appName);
-    }
-
-    private boolean createConfigDir(File configDir) {
-        return isExternalStorageWritable() && configDir.mkdirs();
-    }
-
-    private Collection<File> getConfigFiles(File configDir) {
-        SuffixFileFilter filter = new SuffixFileFilter(new String[]{ "json" }, IOCase.INSENSITIVE);
-        return FileUtils.listFiles(configDir, filter, null);
+    private Collection<File> listConfigFiles() {
+        return FileUtils.listFiles(configDir, new String[] { "json", "JSON" }, false);
     }
 
     private boolean isExternalStorageReadable() {
