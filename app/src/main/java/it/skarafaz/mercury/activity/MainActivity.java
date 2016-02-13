@@ -3,8 +3,10 @@ package it.skarafaz.mercury.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
@@ -32,6 +34,8 @@ public class MainActivity extends MercuryActivity {
     protected LinearLayout empty;
     @Bind(R.id.message)
     protected TextView message;
+    @Bind(R.id.settings)
+    protected TextView settings;
     @Bind(R.id.pager)
     protected ViewPager pager;
     private ServerPagerAdapter adapter;
@@ -44,6 +48,12 @@ public class MainActivity extends MercuryActivity {
         ButterKnife.bind(this);
         adapter = new ServerPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(adapter);
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startAppInfoIntent();
+            }
+        });
 
         loadConfigFiles();
     }
@@ -108,7 +118,10 @@ public class MainActivity extends MercuryActivity {
                         message.setText(String.format(getString(status.msg()), ConfigManager.getInstance().getConfigDir()));
                         empty.setVisibility(View.VISIBLE);
                         if (status == LoadConfigExitStatus.PERMISSION) {
+                            settings.setVisibility(View.VISIBLE);
                             manageStoragePermission();
+                        } else {
+                            settings.setVisibility(View.GONE);
                         }
                     }
                 }
@@ -122,5 +135,16 @@ public class MainActivity extends MercuryActivity {
         } else {
             loadConfigFiles();
         }
+    }
+
+    private void startAppInfoIntent() {
+        Intent i = new Intent();
+        i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        i.addCategory(Intent.CATEGORY_DEFAULT);
+        i.setData(Uri.parse("package:" + MainActivity.this.getPackageName()));
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        MainActivity.this.startActivity(i);
     }
 }

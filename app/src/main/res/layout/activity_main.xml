@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:animateLayoutChanges="true">
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:animateLayoutChanges="true">
 
     <ProgressBar
         android:id="@+id/progress"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"/>
 
     <LinearLayout
         android:id="@+id/empty"
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:alpha="0.3"
-            android:src="@drawable/ic_empty" />
+            android:src="@drawable/ic_empty"/>
 
         <TextView
             android:id="@+id/message"
@@ -35,7 +35,22 @@
             android:gravity="center"
             android:lineSpacingExtra="3dp"
             android:textColor="@color/text_disabled"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/settings"
+            android:textAllCaps="true"
+            android:textColor="@color/accent_material_dark"
+            android:textSize="18sp"/>
     </LinearLayout>
 
     <android.support.v4.view.ViewPager
@@ -50,6 +65,6 @@
             android:layout_height="48dp"
             android:layout_gravity="top"
             android:background="@color/primary"
-            android:textAppearance="@style/TabTextAppearance" />
+            android:textAppearance="@style/TabTextAppearance"/>
     </android.support.v4.view.ViewPager>
 </FrameLayout>

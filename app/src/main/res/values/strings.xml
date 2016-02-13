@@ -22,4 +22,5 @@
     <string name="validation_missing">is missing</string>
     <string name="validation_invalid">is invalid</string>
     <string name="validation_file">Failed to validate [%s]: </string>
+    <string name="settings">Settings</string>
 </resources>
