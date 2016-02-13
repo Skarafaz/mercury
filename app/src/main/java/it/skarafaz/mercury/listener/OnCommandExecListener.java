@@ -9,8 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.Toast;
 
-import it.skarafaz.mercury.R;
-import it.skarafaz.mercury.enums.ExecCommandTaskResult;
+import it.skarafaz.mercury.enums.SendCommandExitStatus;
 import it.skarafaz.mercury.fragment.SendingCommandDialogFragment;
 import it.skarafaz.mercury.model.Command;
 import it.skarafaz.mercury.ssh.SshCommand;
@@ -26,44 +25,33 @@ public class OnCommandExecListener implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        new AsyncTask<Void, Void, ExecCommandTaskResult>() {
+        new AsyncTask<Void, Void, SendCommandExitStatus>() {
             @Override
             protected void onPreExecute() {
                 showProgressDialog();
             }
 
             @Override
-            protected ExecCommandTaskResult doInBackground(Void... params) {
-                ExecCommandTaskResult result = ExecCommandTaskResult.COMMAND_SENT;
+            protected SendCommandExitStatus doInBackground(Void... params) {
+                SendCommandExitStatus status = SendCommandExitStatus.COMMAND_SENT;
                 SshCommand sshCommand = new SshCommand(command);
                 if (sshCommand.connect()) {
                     if (!sshCommand.send()) {
-                        result = ExecCommandTaskResult.CONNECTION_FAILED;
+                        status = SendCommandExitStatus.CONNECTION_FAILED;
                     }
                     sshCommand.disconnect();
                 } else {
-                    result = ExecCommandTaskResult.CONNECTION_FAILED;
+                    status = SendCommandExitStatus.CONNECTION_FAILED;
                 }
-                return result;
+                return status;
             }
 
             @Override
-            protected void onPostExecute(ExecCommandTaskResult result) {
-                showToaster(result);
+            protected void onPostExecute(SendCommandExitStatus status) {
+                Toast.makeText(context, context.getString(status.msg()), Toast.LENGTH_SHORT).show();
                 dismissProgressDialog();
             }
         }.execute();
-    }
-
-    private void showToaster(ExecCommandTaskResult result) {
-        String message = "";
-        if (result == ExecCommandTaskResult.COMMAND_SENT) {
-            message = context.getResources().getString(R.string.command_sent);
-        } else if (result == ExecCommandTaskResult.CONNECTION_FAILED) {
-            message = context.getResources().getString(R.string.connection_failed);
-        }
-        Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
-        toast.show();
     }
 
     private void showProgressDialog() {
