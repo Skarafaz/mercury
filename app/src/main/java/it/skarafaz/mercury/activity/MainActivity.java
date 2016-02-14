@@ -26,7 +26,8 @@ import it.skarafaz.mercury.enums.LoadConfigExitStatus;
 import it.skarafaz.mercury.manager.ConfigManager;
 
 public class MainActivity extends MercuryActivity {
-    public static final int LOAD_CONFIG_FILES_PREQ = 1;
+    private static final int LOAD_CONFIG_FILES_PREQ = 1;
+    private static final int APP_INFO_REQ = 1;
     @Bind(R.id.progress)
     protected ProgressBar progress;
     @Bind(R.id.empty)
@@ -50,7 +51,7 @@ public class MainActivity extends MercuryActivity {
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startAppInfoIntent();
+                startAppInfo();
             }
         });
 
@@ -83,6 +84,13 @@ public class MainActivity extends MercuryActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         if (requestCode == LOAD_CONFIG_FILES_PREQ && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            loadConfigFiles();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == APP_INFO_REQ) {
             loadConfigFiles();
         }
     }
@@ -132,14 +140,12 @@ public class MainActivity extends MercuryActivity {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, LOAD_CONFIG_FILES_PREQ);
     }
 
-    private void startAppInfoIntent() {
+    private void startAppInfo() {
         Intent i = new Intent();
         i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        i.addCategory(Intent.CATEGORY_DEFAULT);
         i.setData(Uri.parse("package:" + this.getPackageName()));
-        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-        this.startActivity(i);
+        this.startActivityForResult(i, APP_INFO_REQ);
     }
 }
