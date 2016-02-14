@@ -1,8 +1,10 @@
 package it.skarafaz.mercury;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.ViewConfiguration;
 
@@ -21,6 +23,10 @@ public class MercuryApplication extends Application {
 
     public static boolean checkPermission(String permission) {
         return ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static void requirePermissions(Activity activity, int requestCode, String... permissions) {
+        ActivityCompat.requestPermissions(activity, permissions, requestCode);
     }
 
     @Override

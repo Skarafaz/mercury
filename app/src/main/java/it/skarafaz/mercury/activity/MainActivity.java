@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +19,7 @@ import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import it.skarafaz.mercury.MercuryApplication;
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.adapter.ServerPagerAdapter;
 import it.skarafaz.mercury.enums.LoadConfigExitStatus;
@@ -125,7 +125,7 @@ public class MainActivity extends MercuryActivity {
                         empty.setVisibility(View.VISIBLE);
                         if (status == LoadConfigExitStatus.PERMISSION) {
                             settings.setVisibility(View.VISIBLE);
-                            requireStoragePermission();
+                            MercuryApplication.requirePermissions(MainActivity.this, LOAD_CONFIG_FILES_PREQ, Manifest.permission.WRITE_EXTERNAL_STORAGE);
                         } else {
                             settings.setVisibility(View.GONE);
                         }
@@ -134,10 +134,6 @@ public class MainActivity extends MercuryActivity {
                 }
             }.execute();
         }
-    }
-
-    private void requireStoragePermission() {
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, LOAD_CONFIG_FILES_PREQ);
     }
 
     private void startAppInfo() {
