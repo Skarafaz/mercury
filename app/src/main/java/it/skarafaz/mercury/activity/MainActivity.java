@@ -26,7 +26,7 @@ import it.skarafaz.mercury.enums.LoadConfigExitStatus;
 import it.skarafaz.mercury.manager.ConfigManager;
 
 public class MainActivity extends MercuryActivity {
-    private static final int LOAD_CONFIG_FILES_PREQ = 1;
+    private static final int STORAGE_PERMISSION_REQ = 1;
     private static final int APP_INFO_REQ = 1;
     @Bind(R.id.progress)
     protected ProgressBar progress;
@@ -83,7 +83,7 @@ public class MainActivity extends MercuryActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        if (requestCode == LOAD_CONFIG_FILES_PREQ && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == STORAGE_PERMISSION_REQ && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             loadConfigFiles();
         }
     }
@@ -125,7 +125,7 @@ public class MainActivity extends MercuryActivity {
                         empty.setVisibility(View.VISIBLE);
                         if (status == LoadConfigExitStatus.PERMISSION) {
                             settings.setVisibility(View.VISIBLE);
-                            MercuryApplication.requirePermissions(MainActivity.this, LOAD_CONFIG_FILES_PREQ, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                            MercuryApplication.requirePermissions(MainActivity.this, STORAGE_PERMISSION_REQ, Manifest.permission.WRITE_EXTERNAL_STORAGE);
                         } else {
                             settings.setVisibility(View.GONE);
                         }
