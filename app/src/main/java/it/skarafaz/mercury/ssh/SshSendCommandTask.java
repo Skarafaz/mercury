@@ -9,11 +9,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.widget.Toast;
 
 import it.skarafaz.mercury.R;
-import it.skarafaz.mercury.enums.SendCommandExitStatus;
+import it.skarafaz.mercury.enums.SshSendCommandExitStatus;
 import it.skarafaz.mercury.fragment.ProgressDialogFragment;
 import it.skarafaz.mercury.model.Command;
 
-public class SshSendCommandTask extends AsyncTask<Command, Void, SendCommandExitStatus> {
+public class SshSendCommandTask extends AsyncTask<Command, Void, SshSendCommandExitStatus> {
     private Context context;
 
     public SshSendCommandTask(Context context) {
@@ -26,22 +26,22 @@ public class SshSendCommandTask extends AsyncTask<Command, Void, SendCommandExit
     }
 
     @Override
-    protected SendCommandExitStatus doInBackground(Command... params) {
-        SendCommandExitStatus status = SendCommandExitStatus.COMMAND_SENT;
+    protected SshSendCommandExitStatus doInBackground(Command... params) {
+        SshSendCommandExitStatus status = SshSendCommandExitStatus.COMMAND_SENT;
         SshCommand sshCommand = new SshCommand(params[0]);
         if (sshCommand.connect()) {
             if (!sshCommand.send()) {
-                status = SendCommandExitStatus.CONNECTION_FAILED;
+                status = SshSendCommandExitStatus.CONNECTION_FAILED;
             }
             sshCommand.disconnect();
         } else {
-            status = SendCommandExitStatus.CONNECTION_FAILED;
+            status = SshSendCommandExitStatus.CONNECTION_FAILED;
         }
         return status;
     }
 
     @Override
-    protected void onPostExecute(SendCommandExitStatus status) {
+    protected void onPostExecute(SshSendCommandExitStatus status) {
         Toast.makeText(context, context.getString(status.msg()), Toast.LENGTH_SHORT).show();
         dismissProgressDialog();
     }
