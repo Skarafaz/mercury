@@ -9,14 +9,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.skarafaz.mercury.R;
-import it.skarafaz.mercury.listener.OnCommandDetailsListener;
-import it.skarafaz.mercury.listener.OnCommandExecListener;
 import it.skarafaz.mercury.model.Command;
+import it.skarafaz.mercury.ssh.SshSendCommandTask;
 
 public class CommandListAdapter extends ArrayAdapter<Command> {
 
@@ -35,10 +36,23 @@ public class CommandListAdapter extends ArrayAdapter<Command> {
         } else {
             holder = (ViewHolder) view.getTag();
         }
-        Command command = getItem(position);
+        final Command command = getItem(position);
         holder.name.setText(command.getName());
-        holder.info.setOnClickListener(new OnCommandDetailsListener(getContext(), command));
-        holder.row.setOnClickListener(new OnCommandExecListener(getContext(), command));
+        holder.info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new MaterialDialog.Builder(getContext())
+                    .title(command.getName())
+                    .content(command.getCmd())
+                    .show();
+            }
+        });
+        holder.row.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new SshSendCommandTask(getContext()).execute(command);
+            }
+        });
         return view;
     }
 
