@@ -121,7 +121,7 @@ public class MainActivity extends MercuryActivity {
                             Toast.makeText(MainActivity.this, getString(R.string.errors_found), Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        message.setText(String.format(getString(status.msg()), ConfigManager.getInstance().getConfigDir()));
+                        message.setText(getString(status.msg(), ConfigManager.getInstance().getConfigDir()));
                         empty.setVisibility(View.VISIBLE);
                         if (status == LoadConfigExitStatus.PERMISSION) {
                             settings.setVisibility(View.VISIBLE);
