@@ -1,7 +1,10 @@
 package it.skarafaz.mercury.manager;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Environment;
+import android.support.v4.content.ContextCompat;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -51,7 +54,7 @@ public class ConfigManager {
         servers.clear();
         LoadConfigExitStatus result = LoadConfigExitStatus.SUCCESS;
         if (isExternalStorageReadable()) {
-            if (MercuryApplication.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            if (storagePermissionGranted()) {
                 if (configDir.exists() && configDir.isDirectory()) {
                     for (File file : FileUtils.listFiles(configDir, new String[]{"json", "JSON"}, false)) {
                         try {
@@ -74,6 +77,12 @@ public class ConfigManager {
             result = LoadConfigExitStatus.CANNOT_READ_EXT_STORAGE;
         }
         return result;
+    }
+
+    private boolean storagePermissionGranted() {
+        Context context = MercuryApplication.getContext();
+        String permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+        return ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED;
     }
 
     private boolean isExternalStorageReadable() {
