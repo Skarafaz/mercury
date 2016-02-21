@@ -51,7 +51,7 @@ public class SshCommand {
         boolean success = true;
         try {
             ChannelExec channel = (ChannelExec) session.openChannel("exec");
-            channel.setCommand(sudo ? String.format("echo %s | sudo -S -p '' %s", password, command) : command);
+            channel.setCommand(prepareCommand());
             channel.connect(TIMEOUT);
             channel.disconnect();
         } catch (JSchException e) {
@@ -59,6 +59,17 @@ public class SshCommand {
             success = false;
         }
         return success;
+    }
+
+    private String prepareCommand() {
+        String toReturn = null;
+        if (sudo) {
+            toReturn =  String.format("echo %s | sudo -S -p '' nohup %s > /dev/null 2>&1", password, command);
+        } else {
+            toReturn = String.format("nohup %s > /dev/null 2>&1", command);
+        }
+        logger.debug(toReturn);
+        return toReturn;
     }
 
     public void disconnect() {
