@@ -50,6 +50,12 @@ public class ServerMapper {
         if (StringUtils.isBlank(server.getPassword())) {
             errors.put("password", getString(R.string.validation_missing));
         }
+        if (StringUtils.isBlank(server.getSudoPath())) {
+            server.setSudoPath("sudo");
+        }
+        if (StringUtils.isBlank(server.getNohupPath())) {
+            server.setNohupPath("nohup");
+        }
         if (server.getCommands() == null) {
             server.setCommands(new ArrayList<Command>());
         } else {

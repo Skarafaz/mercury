@@ -19,6 +19,8 @@ public class SshCommand {
     private Integer port;
     private String user;
     private String password;
+    private String sudoPath;
+    private String nohupPath;
     private String command;
     private Boolean sudo;
 
@@ -29,6 +31,8 @@ public class SshCommand {
         port = command.getServer().getPort();
         user = command.getServer().getUser();
         password = command.getServer().getPassword();
+        sudoPath = command.getServer().getSudoPath();
+        nohupPath = command.getServer().getNohupPath();
         this.command = command.getCmd();
         sudo = command.getSudo();
     }
@@ -64,9 +68,9 @@ public class SshCommand {
     private String prepareCommand() {
         String toReturn = null;
         if (sudo) {
-            toReturn =  String.format("echo %s | sudo -S -p '' nohup %s > /dev/null 2>&1", password, command);
+            toReturn =  String.format("echo %s | %s -S -p '' %s %s > /dev/null 2>&1", password, sudoPath, nohupPath, command);
         } else {
-            toReturn = String.format("nohup %s > /dev/null 2>&1", command);
+            toReturn = String.format("%s %s > /dev/null 2>&1", nohupPath, command);
         }
         logger.debug(toReturn);
         return toReturn;

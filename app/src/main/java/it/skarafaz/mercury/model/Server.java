@@ -15,6 +15,8 @@ public class Server implements Serializable, Comparable<Server> {
     private Integer port;
     private String user;
     private String password;
+    private String sudoPath;
+    private String nohupPath;
     private List<Command> commands;
 
     public String getName() {
@@ -55,6 +57,22 @@ public class Server implements Serializable, Comparable<Server> {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getSudoPath() {
+        return sudoPath;
+    }
+
+    public void setSudoPath(String sudoPath) {
+        this.sudoPath = sudoPath;
+    }
+
+    public String getNohupPath() {
+        return nohupPath;
+    }
+
+    public void setNohupPath(String nohupPath) {
+        this.nohupPath = nohupPath;
     }
 
     @JsonManagedReference
