@@ -14,6 +14,8 @@
         <div class="col-xs-12">
             <h3>Usage</h3>
             <p>Mercury-SSH reads configuration data from standard JSON files saved on the device's external storage. Simply put your configuration files into the folder named Mercury-SSH on the device's external storage and you are ready to go.</p>
+            <h3>Requirements</h3>
+            <p>Mercury-SSH needs <i>nohup</i> and <i>sudo</i> to be installed on the target server to work properly. If these binaries are located in some exotic places outside of the execution PATH, you can specify their path using <code>nohupPath</code> and <code>sudoPath</code> optional server properties (see next section for details).</p>
             <h3>Writing a configuration file</h3>
             <p>Few lines of code are better than thousand words, so let's start with a sample configuration file:</p>
             <pre>
@@ -23,6 +25,7 @@
   "port" : 22,
   "user" : "user",
   "password" : "12345678",
+  "nohupPath" : "/opt/bin/nohup",
   "commands" : [ {
     "name" : "Restart apache",
     "sudo" : true,
@@ -69,6 +72,16 @@
                     <td><code>password</code></td>
                     <td>string</td>
                     <td>Login password. Mandatory.</td>
+                </tr>
+                <tr>
+                    <td><code>nohupPath</code></td>
+                    <td>string</td>
+                    <td><i>nohup</i> binary path. Optional, defaults to <code>nohup</code>.</td>
+                </tr>
+                <tr>
+                    <td><code>sudoPath</code></td>
+                    <td>string</td>
+                    <td><i>sudo</i> binary path. Optional, defaults to <code>sudo</code>.</td>
                 </tr>
                 <tr>
                     <td><code>commands</code></td>
