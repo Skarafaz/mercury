@@ -77,6 +77,9 @@ public class ServerMapper {
         if (StringUtils.isBlank(command.getCmd())) {
             errors.put(String.format("commands[%d].cmd", index), getString(R.string.validation_missing));
         }
+        if (command.getConfirm() == null) {
+            command.setConfirm(Boolean.FALSE);
+        }
         return errors;
     }
 

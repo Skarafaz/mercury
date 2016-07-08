@@ -12,6 +12,7 @@ public class Command implements Serializable, Comparable<Command> {
     private String name;
     private Boolean sudo;
     private String cmd;
+    private Boolean confirm;
     private Server server;
 
     public String getName() {
@@ -36,6 +37,14 @@ public class Command implements Serializable, Comparable<Command> {
 
     public void setCmd(String cmd) {
         this.cmd = cmd;
+    }
+
+    public Boolean getConfirm() {
+        return confirm;
+    }
+
+    public void setConfirm(Boolean confirm) {
+        this.confirm = confirm;
     }
 
     @JsonBackReference
