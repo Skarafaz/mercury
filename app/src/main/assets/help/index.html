@@ -29,7 +29,8 @@
   "commands" : [ {
     "name" : "Restart apache",
     "sudo" : true,
-    "cmd" : "service apache2 restart"
+    "cmd" : "service apache2 restart",
+    "confirm" : true
   }, {
     "name" : "Rsync",
     "sudo" : true,
@@ -118,7 +119,7 @@
                 <tr>
                     <td><code>confirm</code></td>
                     <td>boolean</td>
-                    <td>Ask for confirm before command execution. Optional, defaults to <code>false</code>.</td>
+                    <td>Ask for confirmation before sending command. Optional, defaults to <code>false</code>.</td>
                 </tr>
                 </tbody>
             </table>
