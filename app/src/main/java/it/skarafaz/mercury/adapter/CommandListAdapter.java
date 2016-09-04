@@ -38,15 +38,16 @@ public class CommandListAdapter extends ArrayAdapter<Command> {
         } else {
             holder = (ViewHolder) view.getTag();
         }
+
         final Command command = getItem(position);
         holder.name.setText(command.getName());
         holder.info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new MaterialDialog.Builder(getContext())
-                    .title(command.getName())
-                    .content(command.getCmd())
-                    .show();
+                        .title(command.getName())
+                        .content(command.getCmd())
+                        .show();
             }
         });
         holder.row.setOnClickListener(new View.OnClickListener() {

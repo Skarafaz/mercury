@@ -12,11 +12,11 @@ import butterknife.ButterKnife;
 import it.skarafaz.mercury.R;
 
 public class ProgressDialogFragment extends DialogFragment {
-    public static final String TAG = "SENDING_COMMAND_DIALOG";
-    public static final String CONTENT_ARG = "CONTENT_ARG";
+    public static final String TAG = "PROGRESS_DIALOG";
+    private static final String CONTENT_ARG = "CONTENT_ARG";
     @Bind(R.id.message)
     protected TextView message;
-    public String content;
+    private String content;
 
     public static ProgressDialogFragment newInstance(String message) {
         ProgressDialogFragment fragment = new ProgressDialogFragment();
@@ -29,16 +29,20 @@ public class ProgressDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        content = getArguments() != null ? getArguments().getString(CONTENT_ARG) : null;
+
         setStyle(STYLE_NO_FRAME, R.style.DialogTransparent);
         setCancelable(false);
+
+        content = getArguments() != null ? getArguments().getString(CONTENT_ARG) : null;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_fragment_progress, container, false);
         ButterKnife.bind(this, view);
+
         message.setText(content);
+
         return view;
     }
 }

@@ -25,6 +25,7 @@ public class ServerFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         server = getArguments() != null ? (Server) getArguments().getSerializable(SERVER_ARG) : null;
     }
 
@@ -36,6 +37,7 @@ public class ServerFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         setListAdapter(new CommandListAdapter(getActivity(), server.getCommands()));
     }
 }

@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Field;
 
 public class MercuryApplication extends Application {
+    private static final String S_HAS_PERMANENT_MENU_KEY = "sHasPermanentMenuKey";
     private static final Logger logger = LoggerFactory.getLogger(MercuryApplication.class);
     private static Context context;
 
@@ -20,11 +21,13 @@ public class MercuryApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
         context = this;
+
         // hack for devices with hw options button
         try {
             ViewConfiguration config = ViewConfiguration.get(this);
-            Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
+            Field menuKeyField = ViewConfiguration.class.getDeclaredField(S_HAS_PERMANENT_MENU_KEY);
             if (menuKeyField != null) {
                 menuKeyField.setAccessible(true);
                 menuKeyField.setBoolean(config, false);

@@ -10,16 +10,19 @@ import butterknife.ButterKnife;
 import it.skarafaz.mercury.R;
 
 public class HelpActivity extends MercuryActivity {
+    private static final String INDEX_URL = "file:///android_asset/help/index.html";
     @Bind(R.id.webview)
     protected WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_help);
         ButterKnife.bind(this);
+
         webView.setBackgroundColor(Color.TRANSPARENT);
         webView.setWebViewClient(new WebViewClient());
-        webView.loadUrl("file:///android_asset/help/index.html");
+        webView.loadUrl(INDEX_URL);
     }
 }

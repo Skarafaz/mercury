@@ -15,6 +15,7 @@ public class ServerPagerAdapter extends FragmentStatePagerAdapter {
 
     public ServerPagerAdapter(FragmentManager fm) {
         super(fm);
+
         servers = new ArrayList<>();
     }
 

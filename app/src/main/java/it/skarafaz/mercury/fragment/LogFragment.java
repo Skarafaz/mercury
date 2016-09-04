@@ -17,18 +17,21 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.adapter.LogListAdapter;
 
 public class LogFragment extends ListFragment {
+    private static final String LOG_DIR = "log";
+    private static final String LOG_FILE = "mercury.log";
+    private static final String OLD_EXT = "old";
     private static final Logger logger = LoggerFactory.getLogger(LogFragment.class);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setHasOptionsMenu(true);
     }
 
@@ -40,6 +43,7 @@ public class LogFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         reload();
     }
 
@@ -64,10 +68,9 @@ public class LogFragment extends ListFragment {
     }
 
     private List<String> readLog() {
-        File file = getLogFile();
         List<String> lines = new ArrayList<>();
         try {
-            lines = FileUtils.readLines(file, "UTF-8");
+            lines = FileUtils.readLines(getLogFile(), "UTF-8");
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -76,24 +79,22 @@ public class LogFragment extends ListFragment {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private void clearLog() {
-        File logFile = getLogFile();
         try {
-            FileUtils.write(logFile, "");
+            FileUtils.write(getLogFile(), "");
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
-        Collection<File> oldFiles = FileUtils.listFiles(getLogDir(), new String[]{ "old" }, false);
-        for (File file : oldFiles) {
+        for (File file : FileUtils.listFiles(getLogDir(), new String[] { OLD_EXT }, false)) {
             file.delete();
         }
         reload();
     }
 
     private File getLogFile() {
-        return new File(getLogDir(), "mercury.log");
+        return new File(getLogDir(), LOG_FILE);
     }
 
     private File getLogDir() {
-        return getActivity().getDir("log", Context.MODE_PRIVATE);
+        return getActivity().getDir(LOG_DIR, Context.MODE_PRIVATE);
     }
 }
