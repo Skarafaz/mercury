@@ -26,7 +26,7 @@ import it.skarafaz.mercury.model.Server;
 public class ConfigManager {
     private static final Logger logger = LoggerFactory.getLogger(ConfigManager.class);
     private static final String CONFIG_DIR = "Mercury-SSH";
-    public static final String JSON_EXT = "json";
+    private static final String JSON_EXT = "json";
     private static ConfigManager instance;
     private File configDir;
     private ServerMapper mapper;
