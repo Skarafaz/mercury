@@ -39,4 +39,5 @@ dependencies {
     compile 'com.github.tony19:logback-android-classic:1.1.1-6'
     compile 'org.slf4j:slf4j-api:1.7.21'
     compile 'com.afollestad.material-dialogs:core:0.8.6.2'
+    compile 'org.greenrobot:eventbus:3.0.0'
 }

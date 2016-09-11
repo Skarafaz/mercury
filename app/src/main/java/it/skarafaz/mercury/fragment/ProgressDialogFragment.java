@@ -18,10 +18,10 @@ public class ProgressDialogFragment extends DialogFragment {
     protected TextView message;
     private String content;
 
-    public static ProgressDialogFragment newInstance(String message) {
+    public static ProgressDialogFragment newInstance(String content) {
         ProgressDialogFragment fragment = new ProgressDialogFragment();
         Bundle args = new Bundle();
-        args.putString(CONTENT_ARG, message);
+        args.putString(CONTENT_ARG, content);
         fragment.setArguments(args);
         return fragment;
     }

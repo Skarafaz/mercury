@@ -72,7 +72,7 @@ public class LogFragment extends ListFragment {
         try {
             lines = FileUtils.readLines(getLogFile(), "UTF-8");
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage().replace("\n", " "));
         }
         return lines;
     }
@@ -82,7 +82,7 @@ public class LogFragment extends ListFragment {
         try {
             FileUtils.write(getLogFile(), "");
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage().replace("\n", " "));
         }
         for (File file : FileUtils.listFiles(getLogDir(), new String[] { OLD_EXT }, false)) {
             file.delete();

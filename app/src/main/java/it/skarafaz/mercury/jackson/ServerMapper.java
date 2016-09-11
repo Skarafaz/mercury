@@ -47,8 +47,8 @@ public class ServerMapper {
         if (StringUtils.isBlank(server.getUser())) {
             errors.put("user", getString(R.string.validation_missing));
         }
-        if (StringUtils.isBlank(server.getPassword())) {
-            errors.put("password", getString(R.string.validation_missing));
+        if (StringUtils.isEmpty(server.getPassword())) {
+            server.setPassword(null);
         }
         if (StringUtils.isBlank(server.getSudoPath())) {
             server.setSudoPath("sudo");
@@ -87,7 +87,7 @@ public class ServerMapper {
         StringBuilder sb = new StringBuilder(getString(R.string.validation_file, src));
         int i = 1;
         for (Map.Entry<String, String> entry : errors.entrySet()) {
-            sb.append(String.format("%s %s", entry.getKey(), entry.getValue()));
+            sb.append(String.format(" %s %s", entry.getKey(), entry.getValue()));
             if (i != errors.entrySet().size()) {
                 sb.append(", ");
             }

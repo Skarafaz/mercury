@@ -1,7 +1,6 @@
 package it.skarafaz.mercury.adapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.List;
@@ -19,7 +17,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.model.Command;
-import it.skarafaz.mercury.ssh.SshSendCommandTask;
+import it.skarafaz.mercury.ssh.SshCommand;
 
 public class CommandListAdapter extends ArrayAdapter<Command> {
 
@@ -53,23 +51,7 @@ public class CommandListAdapter extends ArrayAdapter<Command> {
         holder.row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (command.getConfirm()) {
-                    new MaterialDialog.Builder(getContext())
-                            .title(R.string.confirm)
-                            .content(command.getCmd())
-                            .positiveText(R.string.ok)
-                            .negativeText(R.string.cancel)
-                            .cancelable(false)
-                            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    new SshSendCommandTask(getContext()).execute(command);
-                                }
-                            })
-                            .show();
-                } else {
-                    new SshSendCommandTask(getContext()).execute(command);
-                }
+                new SshCommand(command).start();
             }
         });
         return view;

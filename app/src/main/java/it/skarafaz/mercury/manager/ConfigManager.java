@@ -18,7 +18,6 @@ import java.util.Collections;
 import java.util.List;
 
 import it.skarafaz.mercury.MercuryApplication;
-import it.skarafaz.mercury.enums.LoadConfigExitStatus;
 import it.skarafaz.mercury.jackson.ServerMapper;
 import it.skarafaz.mercury.jackson.ValidationException;
 import it.skarafaz.mercury.model.Server;
@@ -53,9 +52,9 @@ public class ConfigManager {
         return servers;
     }
 
-    public LoadConfigExitStatus loadConfigFiles() {
+    public ConfigStatus loadConfigFiles() {
         servers.clear();
-        LoadConfigExitStatus result = LoadConfigExitStatus.SUCCESS;
+        ConfigStatus status = ConfigStatus.SUCCESS;
         if (isExternalStorageReadable()) {
             if (storagePermissionGranted()) {
                 if (configDir.exists() && configDir.isDirectory()) {
@@ -63,23 +62,23 @@ public class ConfigManager {
                         try {
                             servers.add(mapper.readValue(file));
                         } catch (IOException | ValidationException e) {
-                            result = LoadConfigExitStatus.ERRORS_FOUND;
+                            status = ConfigStatus.ERRORS_FOUND;
                             logger.error(e.getMessage().replace("\n", " "));
                         }
                     }
                     Collections.sort(servers);
                 } else {
                     if (!(isExternalStorageWritable() && configDir.mkdirs())) {
-                        result = LoadConfigExitStatus.CANNOT_CREATE_CONFIG_DIR;
+                        status = ConfigStatus.CANNOT_CREATE_CONFIG_DIR;
                     }
                 }
             } else {
-                result = LoadConfigExitStatus.PERMISSION;
+                status = ConfigStatus.PERMISSION;
             }
         } else {
-            result = LoadConfigExitStatus.CANNOT_READ_EXT_STORAGE;
+            status = ConfigStatus.CANNOT_READ_EXT_STORAGE;
         }
-        return result;
+        return status;
     }
 
     private Collection<File> listConfigFiles() {

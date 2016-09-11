@@ -1,21 +1,21 @@
-package it.skarafaz.mercury.enums;
+package it.skarafaz.mercury.manager;
 
 import it.skarafaz.mercury.R;
 
-public enum LoadConfigExitStatus {
+public enum ConfigStatus {
     SUCCESS(R.string.empty_config_dir),
     ERRORS_FOUND(R.string.errors_found),
     CANNOT_READ_EXT_STORAGE(R.string.cannot_read_ext_storage),
     CANNOT_CREATE_CONFIG_DIR(R.string.cannot_create_config_dir),
     PERMISSION(R.string.permission);
 
-    private int msg;
+    private int message;
 
-    LoadConfigExitStatus(int msg) {
-        this.msg = msg;
+    ConfigStatus(int message) {
+        this.message = message;
     }
 
-    public int msg() {
-        return msg;
+    public int message() {
+        return message;
     }
 }

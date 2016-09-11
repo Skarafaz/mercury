@@ -9,7 +9,11 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,12 +22,26 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.adapter.ServerPagerAdapter;
-import it.skarafaz.mercury.enums.LoadConfigExitStatus;
+import it.skarafaz.mercury.event.SshCommandConfirm;
+import it.skarafaz.mercury.event.SshCommandEnd;
+import it.skarafaz.mercury.event.SshCommandMessage;
+import it.skarafaz.mercury.event.SshCommandPassword;
+import it.skarafaz.mercury.event.SshCommandStart;
+import it.skarafaz.mercury.event.SshCommandYesNo;
+import it.skarafaz.mercury.fragment.ProgressDialogFragment;
 import it.skarafaz.mercury.manager.ConfigManager;
+import it.skarafaz.mercury.manager.ConfigStatus;
 
 public class MainActivity extends MercuryActivity {
     private static final int STORAGE_PERMISSION_REQ = 1;
@@ -59,6 +77,20 @@ public class MainActivity extends MercuryActivity {
         });
 
         loadConfigFiles();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        EventBus.getDefault().unregister(this);
+
+        super.onStop();
     }
 
     @Override
@@ -98,9 +130,109 @@ public class MainActivity extends MercuryActivity {
         }
     }
 
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onSshCommandConfirm(final SshCommandConfirm event) {
+        new MaterialDialog.Builder(this)
+                .title(R.string.confirm_exec)
+                .content(event.getCmd())
+                .positiveText(R.string.ok)
+                .negativeText(R.string.cancel)
+                .cancelable(false)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        event.getDrop().put(true);
+                    }
+
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        event.getDrop().put(false);
+                    }
+                })
+                .show();
+
+        EventBus.getDefault().removeStickyEvent(event);
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onSshCommandStart(SshCommandStart event) {
+        showProgressDialog(this.getString(R.string.sending_command));
+
+        EventBus.getDefault().removeStickyEvent(event);
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onSshCommandEnd(SshCommandEnd event) {
+        Toast.makeText(this, this.getString(event.getStatus().message()), Toast.LENGTH_SHORT).show();
+        dismissProgressDialog();
+
+        EventBus.getDefault().removeStickyEvent(event);
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onSshCommandPassword(final SshCommandPassword event) {
+        new MaterialDialog.Builder(this)
+                .title(R.string.password)
+                .content(event.getMessage())
+                .positiveText(R.string.submit)
+                .negativeText(R.string.cancel)
+                .cancelable(false)
+                .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)
+                .input(null, null, false, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                        event.getDrop().put(input.toString());
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        event.getDrop().put(null);
+                    }
+                })
+                .show();
+
+        EventBus.getDefault().removeStickyEvent(event);
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onSshCommandYesNo(final SshCommandYesNo event) {
+        new MaterialDialog.Builder(this)
+                .content(event.getMessage())
+                .positiveText(R.string.yes)
+                .negativeText(R.string.no)
+                .cancelable(false)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        event.getDrop().put(true);
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        event.getDrop().put(false);
+                    }
+                })
+                .show();
+
+        EventBus.getDefault().removeStickyEvent(event);
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onSshCommandMessage(SshCommandMessage event) {
+        new MaterialDialog.Builder(this)
+                .content(event.getMessage())
+                .show();
+
+        EventBus.getDefault().removeStickyEvent(event);
+    }
+
     private void loadConfigFiles() {
         if (!loading) {
-            new AsyncTask<Void, Void, LoadConfigExitStatus>() {
+            new AsyncTask<Void, Void, ConfigStatus>() {
                 @Override
                 protected void onPreExecute() {
                     loading = true;
@@ -110,23 +242,23 @@ public class MainActivity extends MercuryActivity {
                 }
 
                 @Override
-                protected LoadConfigExitStatus doInBackground(Void... params) {
+                protected ConfigStatus doInBackground(Void... params) {
                     return ConfigManager.getInstance().loadConfigFiles();
                 }
 
                 @Override
-                protected void onPostExecute(LoadConfigExitStatus status) {
+                protected void onPostExecute(ConfigStatus status) {
                     progress.setVisibility(View.INVISIBLE);
                     if (ConfigManager.getInstance().getServers().size() > 0) {
                         adapter.updateServers(ConfigManager.getInstance().getServers());
                         pager.setVisibility(View.VISIBLE);
-                        if (status == LoadConfigExitStatus.ERRORS_FOUND) {
+                        if (status == ConfigStatus.ERRORS_FOUND) {
                             Toast.makeText(MainActivity.this, getString(R.string.errors_found), Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        message.setText(getString(status.msg(), ConfigManager.getInstance().getConfigDir()));
+                        message.setText(getString(status.message(), ConfigManager.getInstance().getConfigDir()));
                         empty.setVisibility(View.VISIBLE);
-                        if (status == LoadConfigExitStatus.PERMISSION) {
+                        if (status == ConfigStatus.PERMISSION) {
                             settings.setVisibility(View.VISIBLE);
                             requestStoragePermission();
                         } else {
@@ -152,5 +284,21 @@ public class MainActivity extends MercuryActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         startActivityForResult(intent, APP_INFO_REQ);
+    }
+
+    private void showProgressDialog(String content) {
+        FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
+        ft.add(ProgressDialogFragment.newInstance(content), ProgressDialogFragment.TAG);
+        ft.commitAllowingStateLoss();
+    }
+
+    private void dismissProgressDialog() {
+        FragmentManager fm = this.getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        Fragment frag = fm.findFragmentByTag(ProgressDialogFragment.TAG);
+        if (frag != null) {
+            ft.remove(frag);
+        }
+        ft.commitAllowingStateLoss();
     }
 }
