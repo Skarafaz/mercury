@@ -48,10 +48,10 @@ public class ConfigManager {
         return servers;
     }
 
-    public ConfigStatus loadConfigFiles() {
+    public LoadConfigFilesStatus loadConfigFiles() {
         servers.clear();
 
-        ConfigStatus status = ConfigStatus.SUCCESS;
+        LoadConfigFilesStatus status = LoadConfigFilesStatus.SUCCESS;
         if (MercuryApplication.isExternalStorageReadable()) {
             if (MercuryApplication.storagePermissionGranted()) {
                 if (configDir.exists() && configDir.isDirectory()) {
@@ -59,21 +59,21 @@ public class ConfigManager {
                         try {
                             servers.add(mapper.readValue(file));
                         } catch (IOException | ValidationException e) {
-                            status = ConfigStatus.ERRORS_FOUND;
+                            status = LoadConfigFilesStatus.ERROR;
                             logger.error(e.getMessage().replace("\n", " "));
                         }
                     }
                     Collections.sort(servers);
                 } else {
                     if (!(MercuryApplication.isExternalStorageWritable() && configDir.mkdirs())) {
-                        status = ConfigStatus.CANNOT_CREATE_CONFIG_DIR;
+                        status = LoadConfigFilesStatus.CANNOT_CREATE_CONFIG_DIR;
                     }
                 }
             } else {
-                status = ConfigStatus.PERMISSION;
+                status = LoadConfigFilesStatus.PERMISSION;
             }
         } else {
-            status = ConfigStatus.CANNOT_READ_EXT_STORAGE;
+            status = LoadConfigFilesStatus.CANNOT_READ_EXT_STORAGE;
         }
         return status;
     }

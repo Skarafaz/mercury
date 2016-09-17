@@ -63,10 +63,10 @@ public class SshManager {
                     logger.error(e.getMessage().replace("\n", " "));
                 }
             } else {
-                status = ExportPublicKeyStatus.PERMISSIONS;
+                status = ExportPublicKeyStatus.PERMISSION;
             }
         } else {
-            status = ExportPublicKeyStatus.CANNOT_WRITE;
+            status = ExportPublicKeyStatus.CANNOT_WRITE_EXT_STORAGE;
         }
         return status;
     }

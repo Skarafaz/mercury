@@ -29,8 +29,8 @@ import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.adapter.ServerPagerAdapter;
 import it.skarafaz.mercury.fragment.ProgressDialogFragment;
 import it.skarafaz.mercury.manager.ConfigManager;
-import it.skarafaz.mercury.manager.ConfigStatus;
 import it.skarafaz.mercury.manager.ExportPublicKeyStatus;
+import it.skarafaz.mercury.manager.LoadConfigFilesStatus;
 import it.skarafaz.mercury.manager.SshManager;
 
 public class MainActivity extends MercuryActivity {
@@ -101,7 +101,7 @@ public class MainActivity extends MercuryActivity {
             case R.id.action_reload:
                 loadConfigFiles();
                 return true;
-            case R.id.action_export_pub_key:
+            case R.id.action_export_public_key:
                 exportPublicKey();
                 return true;
             case R.id.action_log:
@@ -138,7 +138,7 @@ public class MainActivity extends MercuryActivity {
 
     private void loadConfigFiles() {
         if (!busy) {
-            new AsyncTask<Void, Void, ConfigStatus>() {
+            new AsyncTask<Void, Void, LoadConfigFilesStatus>() {
                 @Override
                 protected void onPreExecute() {
                     busy = true;
@@ -148,23 +148,23 @@ public class MainActivity extends MercuryActivity {
                 }
 
                 @Override
-                protected ConfigStatus doInBackground(Void... params) {
+                protected LoadConfigFilesStatus doInBackground(Void... params) {
                     return ConfigManager.getInstance().loadConfigFiles();
                 }
 
                 @Override
-                protected void onPostExecute(ConfigStatus status) {
+                protected void onPostExecute(LoadConfigFilesStatus status) {
                     progress.setVisibility(View.INVISIBLE);
                     if (ConfigManager.getInstance().getServers().size() > 0) {
                         adapter.updateServers(ConfigManager.getInstance().getServers());
                         pager.setVisibility(View.VISIBLE);
-                        if (status == ConfigStatus.ERRORS_FOUND) {
+                        if (status == LoadConfigFilesStatus.ERROR) {
                             Toast.makeText(MainActivity.this, getString(status.message()), Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         message.setText(getString(status.message(), ConfigManager.getInstance().getConfigDir()));
                         empty.setVisibility(View.VISIBLE);
-                        if (status == ConfigStatus.PERMISSION) {
+                        if (status == LoadConfigFilesStatus.PERMISSION) {
                             settings.setVisibility(View.VISIBLE);
                             requestStoragePermission(STORAGE_PERMISSION_CONFIG_REQ);
                         } else {
@@ -195,7 +195,7 @@ public class MainActivity extends MercuryActivity {
                     dismissProgressDialog();
 
                     boolean toast = true;
-                    if (status == ExportPublicKeyStatus.PERMISSIONS) {
+                    if (status == ExportPublicKeyStatus.PERMISSION) {
                         toast = !requestStoragePermission(STORAGE_PERMISSION_PUB_REQ);
                     }
                     if (toast) {
