@@ -15,15 +15,7 @@ public class SshCommandYesNo {
         return message;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
     public SshCommandDrop<Boolean> getDrop() {
         return drop;
-    }
-
-    public void setDrop(SshCommandDrop<Boolean> drop) {
-        this.drop = drop;
     }
 }

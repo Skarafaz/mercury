@@ -37,6 +37,7 @@
     <string name="no_commands">No commands defined\nfor this server</string>
     <string name="password">Password</string>
     <string name="sending_command">Sending command&#8230;</string>
+    <string name="settings">Settings</string>
     <string name="type_login_password">Login %s</string>
     <string name="type_sudo_password">Sudo password for %s</string>
     <string name="validation_missing">is missing</string>

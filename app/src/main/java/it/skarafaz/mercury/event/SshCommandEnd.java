@@ -12,8 +12,4 @@ public class SshCommandEnd {
     public SshCommandStatus getStatus() {
         return status;
     }
-
-    public void setStatus(SshCommandStatus status) {
-        this.status = status;
-    }
 }

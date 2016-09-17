@@ -15,15 +15,7 @@ public class SshCommandConfirm {
         return cmd;
     }
 
-    public void setCmd(String cmd) {
-        this.cmd = cmd;
-    }
-
     public SshCommandDrop<Boolean> getDrop() {
         return drop;
-    }
-
-    public void setDrop(SshCommandDrop<Boolean> drop) {
-        this.drop = drop;
     }
 }

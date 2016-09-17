@@ -15,15 +15,7 @@ public class SshCommandPassword {
         return drop;
     }
 
-    public void setDrop(SshCommandDrop<String> drop) {
-        this.drop = drop;
-    }
-
     public String getMessage() {
         return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 }
