@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="it.skarafaz.mercury.fragment.ServerFragment">
+    tools:activity="it.skarafaz.mercury.fragment.ServerFragment">
 
     <ListView
         android:id="@android:id/list"

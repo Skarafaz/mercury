@@ -1,10 +1,6 @@
 package it.skarafaz.mercury.manager;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Environment;
-import android.support.v4.content.ContextCompat;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -54,9 +50,10 @@ public class ConfigManager {
 
     public ConfigStatus loadConfigFiles() {
         servers.clear();
+
         ConfigStatus status = ConfigStatus.SUCCESS;
-        if (isExternalStorageReadable()) {
-            if (storagePermissionGranted()) {
+        if (MercuryApplication.isExternalStorageReadable()) {
+            if (MercuryApplication.storagePermissionGranted()) {
                 if (configDir.exists() && configDir.isDirectory()) {
                     for (File file : listConfigFiles()) {
                         try {
@@ -68,7 +65,7 @@ public class ConfigManager {
                     }
                     Collections.sort(servers);
                 } else {
-                    if (!(isExternalStorageWritable() && configDir.mkdirs())) {
+                    if (!(MercuryApplication.isExternalStorageWritable() && configDir.mkdirs())) {
                         status = ConfigStatus.CANNOT_CREATE_CONFIG_DIR;
                     }
                 }
@@ -83,21 +80,5 @@ public class ConfigManager {
 
     private Collection<File> listConfigFiles() {
         return FileUtils.listFiles(configDir, new String[] { JSON_EXT, JSON_EXT.toUpperCase() }, false);
-    }
-
-    private boolean storagePermissionGranted() {
-        Context context = MercuryApplication.getContext();
-        String permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-        return ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private boolean isExternalStorageReadable() {
-        String state = Environment.getExternalStorageState();
-        return Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
-    }
-
-    private boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        return Environment.MEDIA_MOUNTED.equals(state);
     }
 }

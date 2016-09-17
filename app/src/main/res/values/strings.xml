@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="action_clear">Clear</string>
+    <string name="action_export_pub_key">Export public key</string>
     <string name="action_help">Help</string>
     <string name="action_log">Log</string>
     <string name="action_reload">Reload</string>
@@ -8,12 +9,17 @@
     <string name="cancel">Cancel</string>
     <string name="cannot_create_config_dir">Cannot create\n%s</string>
     <string name="cannot_read_ext_storage">Cannot read external storage</string>
+    <string name="cannot_write_ext_storage">Cannot write to external storage</string>
     <string name="command">Command</string>
     <string name="command_sent">Command sent!</string>
     <string name="confirm_exec">Confirm execution?</string>
     <string name="connection_failed">Failed to connect to server, please see log for details</string>
     <string name="empty_config_dir">No config files found in\n%s</string>
     <string name="empty_log">Log file is empty</string>
+    <string name="export_public_key_error">Cannot export public key, plesase see log for details</string>
+    <string name="export_public_key_permissions">Mercury-SSH requires STORAGE permission to export the public key to sdcard</string>
+    <string name="export_public_key_success">Public key exported to\n%s</string>
+    <string name="exporting_public_key">Exporting public key</string>
     <string name="errors_found">One or more config files did not pass the validity check, please see log for details</string>
     <string name="no">NO</string>
     <string name="no_commands">No commands defined\nfor this server</string>

@@ -7,6 +7,10 @@
         android:icon="@drawable/ic_refresh"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/action_export_pub_key"
+        android:title="@string/action_export_pub_key"
+        app:showAsAction="collapseActionView" />
+    <item
         android:id="@+id/action_log"
         android:title="@string/action_log"
         app:showAsAction="collapseActionView" />

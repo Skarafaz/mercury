@@ -1,7 +1,5 @@
 package it.skarafaz.mercury.ssh;
 
-import android.content.Context;
-
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
@@ -11,7 +9,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 
 import it.skarafaz.mercury.MercuryApplication;
@@ -20,12 +17,11 @@ import it.skarafaz.mercury.event.SshCommandConfirm;
 import it.skarafaz.mercury.event.SshCommandEnd;
 import it.skarafaz.mercury.event.SshCommandPassword;
 import it.skarafaz.mercury.event.SshCommandStart;
+import it.skarafaz.mercury.manager.SshManager;
 import it.skarafaz.mercury.model.Command;
 
 public class SshCommand extends Thread {
     private static final int TIMEOUT = 10000;
-    private static final String SSH_DIR = "ssh";
-    private static final String KNOWN_HOSTS_FILE = "known_hosts";
     private static final Logger logger = LoggerFactory.getLogger(SshCommand.class);
     private JSch jsch;
     private Session session;
@@ -65,7 +61,7 @@ public class SshCommand extends Thread {
 
         if (sudo && password == null) {
             SshCommandDrop<String> drop = new SshCommandDrop<>();
-            String message = MercuryApplication.getContext().getString(R.string.type_sudo_password, prepareServerLabel());
+            String message = MercuryApplication.getContext().getString(R.string.type_sudo_password, formatServerLabel());
             EventBus.getDefault().postSticky(new SshCommandPassword(message, drop));
 
             password = drop.take();
@@ -82,7 +78,7 @@ public class SshCommand extends Thread {
 
         SshCommandStatus status = SshCommandStatus.COMMAND_SENT;
         if (connect()) {
-            if (!send(prepareCmd())) {
+            if (!send(formatCmd())) {
                 status = SshCommandStatus.CONNECTION_FAILED;
             }
             disconnect();
@@ -96,14 +92,15 @@ public class SshCommand extends Thread {
     private boolean connect() {
         boolean success = true;
         try {
-            jsch.setKnownHosts(getKnownHostsFile().getAbsolutePath());
+            jsch.setKnownHosts(getKnownHostsPath());
+            jsch.addIdentity(getPrivateKeyPath());
             session = jsch.getSession(user, host, port);
-            session.setConfig("PreferredAuthentications", "password");
-            session.setConfig("MaxAuthTries", "1");
+            session.setConfig("PreferredAuthentications", "publickey,password");
+            session.setConfig("MaxAuthTries", "2");
             session.setUserInfo(new SshCommandUserInfo());
             session.setPassword(password);
             session.connect(TIMEOUT);
-        } catch (JSchException e) {
+        } catch (IOException | JSchException e) {
             logger.error(e.getMessage().replace("\n", " "));
             success = false;
         }
@@ -111,7 +108,7 @@ public class SshCommand extends Thread {
     }
 
     private boolean send(String cmd) {
-        logger.debug("sending commnad: {}", cmd);
+        logger.debug("sending command: {}", cmd);
 
         boolean success = true;
         try {
@@ -130,7 +127,7 @@ public class SshCommand extends Thread {
         session.disconnect();
     }
 
-    private String prepareCmd() {
+    private String formatCmd() {
         if (sudo) {
             return String.format("echo %s | %s -S -p '' %s %s > /dev/null 2>&1", password, sudoPath, nohupPath, cmd);
         } else {
@@ -138,7 +135,7 @@ public class SshCommand extends Thread {
         }
     }
 
-    private String prepareServerLabel() {
+    private String formatServerLabel() {
         StringBuilder sb = new StringBuilder(String.format("%s@%s", user, host));
         if (port != 22) {
             sb.append(String.format(":%d", port));
@@ -146,18 +143,11 @@ public class SshCommand extends Thread {
         return sb.toString();
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    private File getKnownHostsFile() {
-        File file = new File(getSshDir(), KNOWN_HOSTS_FILE);
-        try {
-            file.createNewFile();
-        } catch (IOException e) {
-            logger.error(e.getMessage().replace("\n", " "));
-        }
-        return file;
+    private String getKnownHostsPath() throws IOException {
+        return SshManager.getInstance().getKnownHosts().getAbsolutePath();
     }
 
-    private File getSshDir() {
-        return MercuryApplication.getContext().getDir(SSH_DIR, Context.MODE_PRIVATE);
+    private String getPrivateKeyPath() throws IOException, JSchException {
+        return SshManager.getInstance().getPrivateKey().getAbsolutePath();
     }
 }

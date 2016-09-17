@@ -1,7 +1,11 @@
 package it.skarafaz.mercury;
 
+import android.Manifest;
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Environment;
+import android.support.v4.content.ContextCompat;
 import android.view.ViewConfiguration;
 
 import org.slf4j.Logger;
@@ -35,5 +39,20 @@ public class MercuryApplication extends Application {
         } catch (Exception e) {
             logger.error(e.getMessage().replace("\n", " "));
         }
+    }
+
+    public static boolean storagePermissionGranted() {
+        String permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+        return ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
+    }
+
+    public static boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(state);
     }
 }
