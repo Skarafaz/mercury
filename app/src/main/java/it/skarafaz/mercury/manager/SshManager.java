@@ -7,6 +7,7 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.KeyPair;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,12 +53,24 @@ public class SshManager {
         return file;
     }
 
+    public File getPublicKey() throws IOException, JSchException {
+        File file = getPublicKeyFile();
+        if (!file.exists()) {
+            generatePublicKey(file);
+        }
+        return file;
+    }
+
+    public File getPublicKeyExportedFile() {
+        return new File(Environment.getExternalStorageDirectory(), PUBLIC_KEY_FILE);
+    }
+
     public ExportPublicKeyStatus exportPublicKey() {
         ExportPublicKeyStatus status = ExportPublicKeyStatus.SUCCESS;
         if (MercuryApplication.isExternalStorageWritable()) {
             if (MercuryApplication.storagePermissionGranted()) {
                 try {
-                    generatePublicKey(getPrivateKey(), getPublicKeyFile());
+                    FileUtils.copyFile(getPublicKey(), getPublicKeyExportedFile());
                 } catch (JSchException | IOException e) {
                     status = ExportPublicKeyStatus.ERROR;
                     logger.error(e.getMessage().replace("\n", " "));
@@ -71,19 +84,19 @@ public class SshManager {
         return status;
     }
 
-    public File getKnownHostsFile() {
+    private File getKnownHostsFile() {
         return new File(getSshDir(), KNOWN_HOSTS_FILE);
     }
 
-    public File getPrivateKeyFile() {
+    private File getPrivateKeyFile() {
         return new File(getSshDir(), PRIVATE_KEY_FILE);
     }
 
-    public File getPublicKeyFile() {
-        return new File(Environment.getExternalStorageDirectory(), PUBLIC_KEY_FILE);
+    private File getPublicKeyFile() {
+        return new File(getSshDir(), PUBLIC_KEY_FILE);
     }
 
-    public File getSshDir() {
+    private File getSshDir() {
         return MercuryApplication.getContext().getDir(SSH_DIR, Context.MODE_PRIVATE);
     }
 
@@ -93,9 +106,9 @@ public class SshManager {
         kpair.dispose();
     }
 
-    private void generatePublicKey(File privateKeyFile, File publicKeyFile) throws IOException, JSchException {
-        KeyPair kpair = KeyPair.load(jsch, privateKeyFile.getAbsolutePath());
-        kpair.writePublicKey(publicKeyFile.getAbsolutePath(), PUBLIC_KEY_COMMENT);
+    private void generatePublicKey(File file) throws IOException, JSchException {
+        KeyPair kpair = KeyPair.load(jsch, getPrivateKey().getAbsolutePath());
+        kpair.writePublicKey(file.getAbsolutePath(), PUBLIC_KEY_COMMENT);
         kpair.dispose();
     }
 }

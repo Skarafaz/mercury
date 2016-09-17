@@ -199,7 +199,7 @@ public class MainActivity extends MercuryActivity {
                         toast = !requestStoragePermission(STORAGE_PERMISSION_PUB_REQ);
                     }
                     if (toast) {
-                        Toast.makeText(MainActivity.this, getString(status.message(), SshManager.getInstance().getPublicKeyFile()), Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, getString(status.message(), SshManager.getInstance().getPublicKeyExportedFile()), Toast.LENGTH_LONG).show();
                     }
                 }
             }.execute();
