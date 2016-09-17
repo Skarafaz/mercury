@@ -159,7 +159,7 @@ public class MainActivity extends MercuryActivity {
                         adapter.updateServers(ConfigManager.getInstance().getServers());
                         pager.setVisibility(View.VISIBLE);
                         if (status == LoadConfigFilesStatus.ERROR) {
-                            Toast.makeText(MainActivity.this, getString(status.message()), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, getString(status.message()), Toast.LENGTH_LONG).show();
                         }
                     } else {
                         message.setText(getString(status.message(), ConfigManager.getInstance().getConfigDir()));
