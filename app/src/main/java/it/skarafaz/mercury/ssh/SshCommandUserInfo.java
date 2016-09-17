@@ -46,6 +46,8 @@ public class SshCommandUserInfo implements UserInfo {
 
     @Override
     public void showMessage(String message) {
-        EventBus.getDefault().postSticky(new SshCommandMessage(message));
+        SshCommandDrop<Boolean> drop = new SshCommandDrop<>();
+        EventBus.getDefault().postSticky(new SshCommandMessage(message, drop));
+        drop.take();
     }
 }

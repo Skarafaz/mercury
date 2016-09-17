@@ -118,9 +118,17 @@ public class MainEventSubscriber {
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void onSshCommandMessage(SshCommandMessage event) {
+    public void onSshCommandMessage(final SshCommandMessage event) {
         new MaterialDialog.Builder(activity)
                 .content(event.getMessage())
+                .positiveText(R.string.ok)
+                .cancelable(false)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        event.getDrop().put(true);
+                    }
+                })
                 .show();
 
         EventBus.getDefault().removeStickyEvent(event);
