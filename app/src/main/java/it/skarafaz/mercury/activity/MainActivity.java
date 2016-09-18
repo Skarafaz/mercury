@@ -32,6 +32,7 @@ import it.skarafaz.mercury.manager.ConfigManager;
 import it.skarafaz.mercury.manager.ExportPublicKeyStatus;
 import it.skarafaz.mercury.manager.LoadConfigFilesStatus;
 import it.skarafaz.mercury.manager.SshManager;
+import it.skarafaz.mercury.ssh.SshCommandPubKey;
 
 public class MainActivity extends MercuryActivity {
     private static final int STORAGE_PERMISSION_CONFIG_REQ = 1;
@@ -103,6 +104,9 @@ public class MainActivity extends MercuryActivity {
                 return true;
             case R.id.action_export_public_key:
                 exportPublicKey();
+                return true;
+            case R.id.action_send_public_key:
+                new SshCommandPubKey().start();
                 return true;
             case R.id.action_log:
                 startActivity(new Intent(this, LogActivity.class));

@@ -11,6 +11,10 @@
         android:title="@string/action_export_public_key"
         app:showAsAction="collapseActionView" />
     <item
+        android:id="@+id/action_send_public_key"
+        android:title="@string/action_send_public_key"
+        app:showAsAction="collapseActionView" />
+    <item
         android:id="@+id/action_log"
         android:title="@string/action_log"
         app:showAsAction="collapseActionView" />

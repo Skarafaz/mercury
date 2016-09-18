@@ -17,7 +17,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.model.Command;
-import it.skarafaz.mercury.ssh.SshCommand;
+import it.skarafaz.mercury.ssh.SshCommandRegular;
 
 public class CommandListAdapter extends ArrayAdapter<Command> {
 
@@ -51,7 +51,7 @@ public class CommandListAdapter extends ArrayAdapter<Command> {
         holder.row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new SshCommand(command).start();
+                new SshCommandRegular(command).start();
             }
         });
         return view;

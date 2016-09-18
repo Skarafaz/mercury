@@ -4,118 +4,88 @@ import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
+import com.jcraft.jsch.UserInfo;
 
 import org.greenrobot.eventbus.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
-import it.skarafaz.mercury.MercuryApplication;
-import it.skarafaz.mercury.R;
-import it.skarafaz.mercury.event.SshCommandConfirm;
 import it.skarafaz.mercury.event.SshCommandEnd;
-import it.skarafaz.mercury.event.SshCommandPassword;
 import it.skarafaz.mercury.event.SshCommandStart;
-import it.skarafaz.mercury.manager.SshManager;
-import it.skarafaz.mercury.model.Command;
 
-public class SshCommand extends Thread {
-    private static final int TIMEOUT = 10000;
+public abstract class SshCommand extends Thread {
+    protected static final int TIMEOUT = 10000;
     private static final Logger logger = LoggerFactory.getLogger(SshCommand.class);
-    private JSch jsch;
-    private Session session;
-    private String host;
-    private Integer port;
-    private String user;
-    private String password;
-    private String sudoPath;
-    private String nohupPath;
-    private Boolean sudo;
-    private String cmd;
-    private Boolean confirm;
+    protected JSch jsch;
+    protected Session session;
+    protected String host;
+    protected Integer port;
+    protected String user;
+    protected String password;
+    protected String sudoPath;
+    protected String nohupPath;
+    protected Boolean sudo;
+    protected String cmd;
+    protected Boolean confirm;
 
-    public SshCommand(Command command) {
+    public SshCommand() {
         this.jsch = new JSch();
-        this.host = command.getServer().getHost();
-        this.port = command.getServer().getPort();
-        this.user = command.getServer().getUser();
-        this.password = command.getServer().getPassword();
-        this.sudoPath = command.getServer().getSudoPath();
-        this.nohupPath = command.getServer().getNohupPath();
-        this.sudo = command.getSudo();
-        this.cmd = command.getCmd();
-        this.confirm = command.getConfirm();
     }
 
     @Override
     public void run() {
-        if (confirm) {
-            SshCommandDrop<Boolean> drop = new SshCommandDrop<>();
-            EventBus.getDefault().postSticky(new SshCommandConfirm(cmd, drop));
-
-            if (!drop.take()) {
-                return;
-            }
+        if(beforeExecute()) {
+            SshCommandStatus status = execute();
+            afterExecute(status);
         }
-
-        if (sudo && password == null) {
-            SshCommandDrop<String> drop = new SshCommandDrop<>();
-            String message = MercuryApplication.getContext().getString(R.string.type_sudo_password, formatServerLabel());
-            EventBus.getDefault().postSticky(new SshCommandPassword(message, drop));
-
-            password = drop.take();
-            if (password == null) {
-                return;
-            }
-        }
-
-        execute();
     }
 
-    private void execute() {
+    protected boolean beforeExecute() {
         EventBus.getDefault().postSticky(new SshCommandStart());
+        return true;
+    }
 
+    private SshCommandStatus execute() {
         SshCommandStatus status = SshCommandStatus.COMMAND_SENT;
-        if (connect()) {
-            if (!send(formatCmd())) {
+
+        if (initConnection()) {
+            if (connect()) {
+                if (!send(formatCmd(cmd))) {
+                    status = SshCommandStatus.EXECUTION_FAILED;
+                }
+                disconnect();
+            } else {
                 status = SshCommandStatus.CONNECTION_FAILED;
             }
-            disconnect();
         } else {
-            status = SshCommandStatus.CONNECTION_FAILED;
+            status = SshCommandStatus.CONNECTION_INIT_ERROR;
         }
 
+        return status;
+    }
+
+    protected void afterExecute(SshCommandStatus status) {
         EventBus.getDefault().postSticky(new SshCommandEnd(status));
     }
 
-    private boolean connect() {
-        boolean success = true;
-        try {
-            jsch.setKnownHosts(getKnownHostsPath());
-            jsch.addIdentity(getPrivateKeyPath());
-            session = jsch.getSession(user, host, port);
-            session.setConfig("PreferredAuthentications", "publickey,password");
-            session.setConfig("MaxAuthTries", "2");
-            session.setUserInfo(new SshCommandUserInfo());
-            session.setPassword(password);
-            session.connect(TIMEOUT);
-        } catch (IOException | JSchException e) {
-            logger.error(e.getMessage().replace("\n", " "));
-            success = false;
-        }
-        return success;
+    protected boolean initConnection() {
+        return true;
     }
 
-    private boolean send(String cmd) {
-        logger.debug("sending command: {}", cmd);
-
+    protected boolean connect() {
         boolean success = true;
         try {
-            ChannelExec channel = (ChannelExec) session.openChannel("exec");
-            channel.setCommand(cmd);
-            channel.connect(TIMEOUT);
-            channel.disconnect();
+            session = jsch.getSession(user, host, port);
+
+            session.setUserInfo(getUserInfo());
+            session.setConfig(getSessionConfig());
+            session.setPassword(password);
+
+            session.connect(TIMEOUT);
         } catch (JSchException e) {
             logger.error(e.getMessage().replace("\n", " "));
             success = false;
@@ -123,31 +93,50 @@ public class SshCommand extends Thread {
         return success;
     }
 
-    private void disconnect() {
+    protected boolean send(String cmd) {
+        logger.debug("sending command: {}", cmd);
+
+        ChannelExec channel = null;
+
+        boolean success = true;
+        try {
+            channel = (ChannelExec) session.openChannel("exec");
+            channel.setCommand(cmd);
+            channel.setInputStream(null);
+
+            InputStream stdout = channel.getInputStream();
+            InputStream stderr = channel.getErrStream();
+
+            channel.connect(TIMEOUT);
+            success = waitForChannelClosed(channel, stdout, stderr);
+        } catch (IOException | JSchException e) {
+            logger.error(e.getMessage().replace("\n", " "));
+            success = false;
+        } finally {
+            if (channel != null) {
+                channel.disconnect();
+            }
+        }
+        return success;
+    }
+
+    protected boolean waitForChannelClosed(ChannelExec channel, InputStream stdout, InputStream stderr) {
+        return true;
+    }
+
+    protected void disconnect() {
         session.disconnect();
     }
 
-    private String formatCmd() {
-        if (sudo) {
-            return String.format("echo %s | %s -S -p '' %s %s > /dev/null 2>&1", password, sudoPath, nohupPath, cmd);
-        } else {
-            return String.format("%s %s > /dev/null 2>&1", nohupPath, cmd);
-        }
+    protected UserInfo getUserInfo() {
+        return null;
     }
 
-    private String formatServerLabel() {
-        StringBuilder sb = new StringBuilder(String.format("%s@%s", user, host));
-        if (port != 22) {
-            sb.append(String.format(":%d", port));
-        }
-        return sb.toString();
+    protected Properties getSessionConfig() {
+        return new Properties();
     }
 
-    private String getKnownHostsPath() throws IOException {
-        return SshManager.getInstance().getKnownHosts().getAbsolutePath();
-    }
-
-    private String getPrivateKeyPath() throws IOException, JSchException {
-        return SshManager.getInstance().getPrivateKey().getAbsolutePath();
+    protected String formatCmd(String cmd) {
+        return cmd;
     }
 }

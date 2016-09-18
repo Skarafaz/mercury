@@ -15,7 +15,7 @@ import java.io.File;
 import java.io.IOException;
 
 import it.skarafaz.mercury.MercuryApplication;
-import it.skarafaz.mercury.ssh.SshCommand;
+import it.skarafaz.mercury.ssh.SshCommandRegular;
 
 public class SshManager {
     private static final String SSH_DIR = "ssh";
@@ -24,7 +24,7 @@ public class SshManager {
     private static final String PRIVATE_KEY_FILE = "id_rsa";
     private static final String PUBLIC_KEY_FILE = "id_rsa.pub";
     private static final String PUBLIC_KEY_COMMENT = "mercuryssh";
-    private static final Logger logger = LoggerFactory.getLogger(SshCommand.class);
+    private static final Logger logger = LoggerFactory.getLogger(SshCommandRegular.class);
     private static SshManager instance;
     private JSch jsch;
 
@@ -59,6 +59,10 @@ public class SshManager {
             generatePublicKey(file);
         }
         return file;
+    }
+
+    public String getPublicKeyContent() throws IOException, JSchException {
+        return FileUtils.readFileToString(getPublicKey()).replace("\n", "");
     }
 
     public File getPublicKeyExportedFile() {

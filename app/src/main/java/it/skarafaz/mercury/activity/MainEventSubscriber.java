@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -16,6 +17,7 @@ import it.skarafaz.mercury.event.SshCommandConfirm;
 import it.skarafaz.mercury.event.SshCommandEnd;
 import it.skarafaz.mercury.event.SshCommandMessage;
 import it.skarafaz.mercury.event.SshCommandPassword;
+import it.skarafaz.mercury.event.SshCommandPubKeyInput;
 import it.skarafaz.mercury.event.SshCommandStart;
 import it.skarafaz.mercury.event.SshCommandYesNo;
 
@@ -132,5 +134,49 @@ public class MainEventSubscriber {
                 .show();
 
         EventBus.getDefault().removeStickyEvent(event);
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onSshCommandPubKeyInput(final SshCommandPubKeyInput event) {
+        new MaterialDialog.Builder(activity)
+                .title(R.string.send_publick_key)
+                .content(R.string.connection_string_message)
+                .positiveText(R.string.submit)
+                .negativeText(R.string.cancel)
+                .cancelable(false)
+                .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS)
+                .alwaysCallInputCallback()
+                .input(R.string.connection_string_hint, 0, false, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                        if (isConnectionStringValid(input.toString())) {
+                            dialog.getActionButton(DialogAction.POSITIVE).setEnabled(true);
+                        } else {
+                            dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
+                        }
+                    }
+                })
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        if (dialog.getInputEditText() != null) {
+                            String input = StringUtils.trimToNull(dialog.getInputEditText().getText().toString());
+                            event.getDrop().put(input);
+                        }
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        event.getDrop().put(null);
+                    }
+                })
+                .show();
+
+        EventBus.getDefault().removeStickyEvent(event);
+    }
+
+    private boolean isConnectionStringValid(String input) {
+        return input.matches("^.+@.+$");
     }
 }

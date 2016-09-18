@@ -26,8 +26,10 @@
     <string name="command_sent">Command sent!</string>
     <string name="confirm_exec">Confirm execution?</string>
     <string name="connection_failed">Failed to connect to server, please see log for details</string>
+    <string name="connection_init_error">An error occurred during connection initialization, please see log for details</string>
     <string name="empty_config_dir">No config files found in\n%s</string>
     <string name="empty_log">Log file is empty</string>
+    <string name="execution_failed">Command execution failed, please see log for details</string>
     <string name="export_public_key_error">Cannot export public key, plesase see log for details</string>
     <string name="export_public_key_permission">Mercury-SSH requires STORAGE permission to export the public key to sdcard</string>
     <string name="export_public_key_success">Public key exported to\n%s</string>
@@ -43,4 +45,8 @@
     <string name="validation_missing">is missing</string>
     <string name="validation_invalid">is invalid</string>
     <string name="validation_file">Failed to validate [%s]:</string>
+    <string name="action_send_public_key">Send public key</string>
+    <string name="send_publick_key">Send public key</string>
+    <string name="connection_string_message">Type connection string for target server</string>
+    <string name="connection_string_hint">user@host:port</string>
 </resources>
