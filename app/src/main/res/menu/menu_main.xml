@@ -7,6 +7,11 @@
         android:icon="@drawable/ic_refresh"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/action_help"
+        android:title="@string/action_help"
+        android:icon="@drawable/ic_help"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/action_export_public_key"
         android:title="@string/action_export_public_key"
         app:showAsAction="collapseActionView" />
@@ -17,9 +22,5 @@
     <item
         android:id="@+id/action_log"
         android:title="@string/action_log"
-        app:showAsAction="collapseActionView" />
-    <item
-        android:id="@+id/action_help"
-        android:title="@string/action_help"
         app:showAsAction="collapseActionView" />
 </menu>
