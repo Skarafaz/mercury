@@ -11,7 +11,7 @@ import it.skarafaz.mercury.fragment.ServerFragment;
 import it.skarafaz.mercury.model.Server;
 
 public class ServerPagerAdapter extends FragmentStatePagerAdapter {
-    List<Server> servers;
+    private List<Server> servers;
 
     public ServerPagerAdapter(FragmentManager fm) {
         super(fm);
