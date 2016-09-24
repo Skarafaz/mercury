@@ -13,9 +13,25 @@
     <div class="row">
         <div class="col-xs-12">
             <h3>Usage</h3>
-            <p>Mercury-SSH reads configuration data from standard JSON files saved on the device's external storage. Simply put your configuration files into the folder named Mercury-SSH on the device's external storage and you are ready to go.</p>
+            <p>Mercury-SSH reads configuration data from standard JSON files saved on the device's external storage.
+                Simply put your configuration files into the folder named Mercury-SSH on the device's external storage
+                and you are ready to go.</p>
             <h3>Requirements</h3>
-            <p>Mercury-SSH needs <i>nohup</i> and <i>sudo</i> to be installed on the target server to work properly. If these binaries are located in some exotic places outside of the execution PATH, you can specify their path using <code>nohupPath</code> and <code>sudoPath</code> optional server properties (see next section for details).</p>
+            <p>Mercury-SSH needs <i>nohup</i> and <i>sudo</i> to be installed on the target server to work properly. If
+                these binaries are located in some exotic places outside of the execution PATH, you can specify their
+                path using <code>nohupPath</code> and <code>sudoPath</code> optional server properties.</p>
+            <h3>Authentication</h3>
+            <p>Public key authentication is the preferred authentication method used by Mercury-SSH. If
+                public key authentication fails then a password will be prompted. You are free to embed the password in
+                the configuration file or type it each time you send a command (note that sudo commands will always
+                require
+                password in
+                order to be executed, even with public key authentication).</p>
+            <p>Mercury-SSH uses a self generated 2048
+                bit RSA key. You can <i>export the public key</i> to sdcard and manually copy it to your
+                server or let Mercury-SSH do this for you using the <i>send public key</i> feature (you still need
+                password
+                access to the target server to do this).</p>
             <h3>Writing a configuration file</h3>
             <p>Few lines of code are better than thousand words, so let's start with a sample configuration file:</p>
             <pre>
@@ -38,7 +54,9 @@
   } ]
 }
             </pre>
-            <p>As you can see, a configuration file wrapps all the information you need to connect to a remote server and all the commands you want to send to it into a JSON object. The structure of this object is quite simple and is summarized below.</p>
+            <p>As you can see, a configuration file wrapps all the information you need to connect to a remote server
+                and all the commands you want to send to it into a JSON object. The structure of this object is quite
+                simple and is summarized below.</p>
             <h4>Server property summary</h4>
             <table class="table">
                 <thead>
@@ -72,7 +90,7 @@
                 <tr>
                     <td><code>password</code></td>
                     <td>string</td>
-                    <td>Login password. Mandatory.</td>
+                    <td>Login password. Optional.</td>
                 </tr>
                 <tr>
                     <td><code>nohupPath</code></td>
@@ -109,7 +127,8 @@
                 <tr>
                     <td><code>sudo</code></td>
                     <td>boolean</td>
-                    <td>State if the command needs to be executed as root. Optional, defaults to <code>false</code>.</td>
+                    <td>State if the command needs to be executed as root. Optional, defaults to <code>false</code>.
+                    </td>
                 </tr>
                 <tr>
                     <td><code>cmd</code></td>
