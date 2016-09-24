@@ -81,7 +81,7 @@ public class SshCommandRegular extends SshCommand {
     protected Properties getSessionConfig() {
         Properties config = super.getSessionConfig();
         config.put("PreferredAuthentications", "publickey,password");
-        config.put("MaxAuthTries", "2");
+        config.put("MaxAuthTries", "1");
         return config;
     }
 
