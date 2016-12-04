@@ -12,6 +12,7 @@ import java.util.Map;
 
 import it.skarafaz.mercury.MercuryApplication;
 import it.skarafaz.mercury.R;
+import it.skarafaz.mercury.manager.ConfigManager;
 import it.skarafaz.mercury.model.Command;
 import it.skarafaz.mercury.model.Server;
 
@@ -68,6 +69,10 @@ public class ServerMapper {
 
     private Map<String, String> validateCommand(Command command, int index) {
         Map<String, String> errors = new LinkedHashMap<>();
+        if (command.getIcon() != null) {
+            command.setIcon(new File(ConfigManager.getInstance().getConfigDir(), command.getIcon())
+                    .getAbsolutePath());
+        }
         if (StringUtils.isBlank(command.getName())) {
             command.setName(getString(R.string.command));
         }

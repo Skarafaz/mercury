@@ -1,6 +1,7 @@
 package it.skarafaz.mercury.adapter;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,13 @@ public class CommandListAdapter extends ArrayAdapter<Command> {
         }
 
         final Command command = getItem(position);
+        if (command.getIcon() == null) {
+            holder.icon.setVisibility(View.INVISIBLE);
+        } else {
+            holder.icon.setVisibility(View.VISIBLE);
+            holder.icon.setImageBitmap(BitmapFactory.decodeFile(command.getIcon()));
+        }
+
         holder.name.setText(command.getName());
         holder.info.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,6 +68,8 @@ public class CommandListAdapter extends ArrayAdapter<Command> {
     static class ViewHolder {
         @Bind(R.id.row)
         RelativeLayout row;
+        @Bind(R.id.icon)
+        ImageView icon;
         @Bind(R.id.name)
         TextView name;
         @Bind(R.id.info)
