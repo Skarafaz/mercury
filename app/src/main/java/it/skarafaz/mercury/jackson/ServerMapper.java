@@ -85,6 +85,9 @@ public class ServerMapper {
         if (command.getConfirm() == null) {
             command.setConfirm(Boolean.FALSE);
         }
+        if (command.getWait() == null) {
+            command.setWait(Boolean.FALSE);
+        }
         return errors;
     }
 

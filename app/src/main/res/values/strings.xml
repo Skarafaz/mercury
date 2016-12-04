@@ -25,6 +25,9 @@
     <string name="cannot_read_ext_storage">Cannot read external storage</string>
     <string name="cannot_write_ext_storage">Cannot write to external storage</string>
     <string name="command_sent">Command sent!</string>
+    <string name="command_successful">Command executed successfully!</string>
+    <string name="command_timeout">Command timed out</string>
+    <string name="communication_error">Communication error</string>
     <string name="confirm_exec">Confirm execution?</string>
     <string name="connection_failed">Failed to connect to server, please see log for details</string>
     <string name="connection_init_error">An error occurred during connection initialization, please see log for details</string>

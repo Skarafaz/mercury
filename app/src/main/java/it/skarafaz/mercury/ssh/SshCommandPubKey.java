@@ -1,21 +1,12 @@
 package it.skarafaz.mercury.ssh;
 
-import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSchException;
-import com.jcraft.jsch.UserInfo;
 
-import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
 
 import it.skarafaz.mercury.event.SshCommandPubKeyInput;
 import it.skarafaz.mercury.manager.SshManager;
@@ -25,11 +16,20 @@ public class SshCommandPubKey extends SshCommand {
     private String pubKey;
 
     public SshCommandPubKey() {
-        super();
+        super(new SshServer());
+        sudo = false;
+        confirm = false;
+        wait = true;
     }
 
     @Override
     protected boolean beforeExecute() {
+        try {
+            pubKey = SshManager.getInstance().getPublicKeyContent();
+        } catch (IOException | JSchException e) {
+            logger.error(e.getMessage().replace("\n", " "));
+            return false;
+        }
         SshCommandDrop<String> drop = new SshCommandDrop<>();
         EventBus.getDefault().postSticky(new SshCommandPubKeyInput(drop));
 
@@ -49,77 +49,9 @@ public class SshCommandPubKey extends SshCommand {
 
         String[] sRight = right.split(":");
 
-        this.host = sRight[0];
-        this.port = sRight.length > 1 ? Integer.valueOf(sRight[1]) : 22;
-        this.user = left;
-    }
-
-    @Override
-    protected boolean initConnection() {
-        boolean success = true;
-        try {
-            jsch.setKnownHosts(SshManager.getInstance().getKnownHosts().getAbsolutePath());
-            pubKey = SshManager.getInstance().getPublicKeyContent();
-        } catch (IOException | JSchException e) {
-            logger.error(e.getMessage().replace("\n", " "));
-            success = false;
-        }
-        return success;
-    }
-
-    @Override
-    protected boolean waitForChannelClosed(ChannelExec channel, InputStream stdout, InputStream stderr) {
-        boolean success = true;
-        try {
-            byte[] tmp = new byte[1024];
-            while (true) {
-                while (stdout.available() > 0) {
-                    int i = stdout.read(tmp, 0, 1024);
-                    if (i < 0) {
-                        break;
-                    }
-                }
-                if (channel.isClosed()) {
-                    if (stdout.available() > 0) {
-                        continue;
-                    }
-                    break;
-                }
-                try {
-                    Thread.sleep(1000);
-                } catch (Exception ee) {
-                    // ignore
-                }
-            }
-            if (channel.getExitStatus() != 0) {
-                BufferedReader reader = null;
-                try {
-                    reader = new BufferedReader(new InputStreamReader(stderr));
-                    logger.error(String.format("exit-status: %d - %s", channel.getExitStatus(), read(reader)));
-                } finally {
-                    if (reader != null) {
-                        reader.close();
-                    }
-                }
-                success = false;
-            }
-        } catch (IOException e) {
-            logger.error(e.getMessage().replace("\n", " "));
-        }
-        return success;
-    }
-
-    @Override
-    protected UserInfo getUserInfo() {
-        return new SshCommandUserInfo();
-    }
-
-    @Override
-    protected Properties getSessionConfig() {
-        Properties config = super.getSessionConfig();
-        config.put("PreferredAuthentications", "password");
-        config.put("MaxAuthTries", "1");
-        return config;
+        server.host = sRight[0];
+        server.port = sRight.length > 1 ? Integer.valueOf(sRight[1]) : 22;
+        server.user = left;
     }
 
     @Override
@@ -130,14 +62,5 @@ public class SshCommandPubKey extends SshCommand {
         sb.append("chmod 700 ~/.ssh && ");
         sb.append("chmod 600 ~/.ssh/authorized_keys");
         return sb.toString();
-    }
-
-    private String read(BufferedReader reader) throws IOException {
-        String aux;
-        List<String> lines = new ArrayList<>();
-        while ((aux = reader.readLine()) != null) {
-            lines.add(aux);
-        }
-        return StringUtils.join(lines, " ");
     }
 }

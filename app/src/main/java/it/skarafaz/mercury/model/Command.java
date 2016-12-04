@@ -14,6 +14,7 @@ public class Command implements Serializable, Comparable<Command> {
     private Boolean sudo;
     private String cmd;
     private Boolean confirm;
+    private Boolean wait;
     private Server server;
 
     public String getIcon() {
@@ -54,6 +55,14 @@ public class Command implements Serializable, Comparable<Command> {
 
     public void setConfirm(Boolean confirm) {
         this.confirm = confirm;
+    }
+
+    public Boolean getWait() {
+        return wait;
+    }
+
+    public void setWait(Boolean wait) {
+        this.wait = wait;
     }
 
     @JsonBackReference
