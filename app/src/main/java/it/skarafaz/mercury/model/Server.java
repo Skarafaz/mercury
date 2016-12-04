@@ -3,6 +3,7 @@ package it.skarafaz.mercury.model;
 import android.support.annotation.NonNull;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.util.List;
@@ -13,6 +14,10 @@ public class Server implements Serializable, Comparable<Server> {
     private String name;
     private String host;
     private Integer port;
+    @JsonProperty("mdnsname")
+    private String mDnsName;
+    @JsonProperty("mdnstype")
+    private String mDnsType;
     private String user;
     private String password;
     private String sudoPath;
@@ -41,6 +46,22 @@ public class Server implements Serializable, Comparable<Server> {
 
     public void setPort(Integer port) {
         this.port = port;
+    }
+
+    public String getMDnsName() {
+        return mDnsName;
+    }
+
+    public void setMDnsName(String mDnsName) {
+        this.mDnsName = mDnsName;
+    }
+
+    public String getMDnsType() {
+        return mDnsType;
+    }
+
+    public void setMDnsType(String mDnsType) {
+        this.mDnsType = mDnsType;
     }
 
     public String getUser() {

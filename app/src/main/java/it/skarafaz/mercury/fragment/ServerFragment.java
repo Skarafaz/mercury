@@ -29,7 +29,7 @@ public class ServerFragment extends ListFragment {
         super.onCreate(savedInstanceState);
 
         server = getArguments() != null ? (Server) getArguments().getSerializable(SERVER_ARG) : null;
-        sshServer = new SshServer(server);
+        sshServer = new SshServer(server, getContext());
     }
 
     @Override

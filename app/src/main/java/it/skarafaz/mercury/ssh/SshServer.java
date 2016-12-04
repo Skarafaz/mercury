@@ -1,5 +1,10 @@
 package it.skarafaz.mercury.ssh;
 
+import android.content.Context;
+import android.net.nsd.NsdManager;
+import android.net.nsd.NsdServiceInfo;
+import android.net.wifi.WifiManager;
+
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
@@ -17,12 +22,25 @@ import it.skarafaz.mercury.model.Server;
 public class SshServer extends Thread {
     protected static final int TIMEOUT = 10000;
     private static final Logger logger = LoggerFactory.getLogger(SshServer.class);
+    protected static final int NOT_RESOLVED = 0;
+    protected static final int RESOLVING = 1;
+    protected static final int RESOLVED = 2;
+    protected static final int RESOLVING_FAILED = 3;
 
     protected JSch jsch;
     protected Session session;
+    protected WifiManager wifiManager;
+    protected WifiManager.MulticastLock multicastLock;
+    protected NsdManager nsdManager;
+    protected NsdServiceInfo serviceInfo;
+    protected NsdManager.ResolveListener resolveListener;
+    protected int resolving;
+    protected final Object lock;
 
     protected String host;
     protected Integer port;
+    protected String mDnsName;
+    protected String mDnsType;
     protected String user;
     protected String password;
     protected String sudoPath;
@@ -31,17 +49,55 @@ public class SshServer extends Thread {
 
     public SshServer() {
         this.jsch = new JSch();
+        resolving = NOT_RESOLVED;
+        lock = new Object();
     }
 
-    public SshServer(Server server) {
+    public SshServer(Server server, Context context) {
         this();
 
         host = server.getHost();
         port = server.getPort();
+        mDnsName = server.getMDnsName();
+        mDnsType = server.getMDnsType();
         user = server.getUser();
         password = server.getPassword();
         sudoPath = server.getSudoPath();
         nohupPath = server.getNohupPath();
+
+        if (mDnsName != null && mDnsType != null) {
+            wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+            multicastLock = wifiManager.createMulticastLock(getClass().getName());
+            nsdManager = (NsdManager) context.getSystemService(Context.NSD_SERVICE);
+            serviceInfo = new NsdServiceInfo();
+            serviceInfo.setServiceType(mDnsType);
+            serviceInfo.setServiceName(mDnsName);
+            resolveListener = new NsdManager.ResolveListener() {
+                @Override
+                public void onResolveFailed(NsdServiceInfo serviceInfo, int errorCode) {
+                    logger.debug(String.format("mDNS resolve failed for service name %s (type " +
+                            "%s) : %d", serviceInfo.getServiceName(), serviceInfo.getServiceType(),
+                            errorCode));
+                    synchronized (lock) {
+                        if (resolving == RESOLVING) {
+                            resolving = RESOLVING_FAILED;
+                            lock.notifyAll();
+                        }
+                    }
+                }
+
+                @Override
+                public void onServiceResolved(NsdServiceInfo serviceInfo) {
+                    logger.debug("mDNS resolve succeeded: " + serviceInfo);
+                    host = serviceInfo.getHost().getHostAddress();
+                    port = serviceInfo.getPort();
+                    synchronized (lock) {
+                        resolving = RESOLVED;
+                        lock.notifyAll();
+                    }
+                }
+            };
+        }
     }
 
     synchronized public SshCommandStatus connect() {
@@ -70,6 +126,32 @@ public class SshServer extends Thread {
     protected boolean initConnection() {
         boolean success = true;
         try {
+            if (mDnsName != null && (resolving == NOT_RESOLVED || resolving == RESOLVING_FAILED)) {
+                logger.debug("mDNS resolve: " + serviceInfo);
+                resolving = RESOLVING;
+                multicastLock.acquire();
+                nsdManager.resolveService(serviceInfo, resolveListener);
+                /* Wait TIMEOUT milliseconds, otherwise try host/port (classic dns) if specified */
+                synchronized (lock) {
+                    long time = System.currentTimeMillis() + TIMEOUT;
+                    while (resolving == RESOLVING && time > System.currentTimeMillis()) {
+                        try {
+                            lock.wait(time - System.currentTimeMillis());
+                        } catch (InterruptedException ee) {
+                            logger.debug(ee.getMessage());
+                        }
+                    }
+                    logger.debug(String.format("mDNS resolve: cleanup after %d ms", System
+                            .currentTimeMillis() - time + TIMEOUT));
+                }
+                multicastLock.release();
+            }
+            if (host == null || port == null) {
+                logger.error(String.format("Resolving service name % (type %s) with mDNS " +
+                        "failed. No host/port specified.", serviceInfo.getServiceName(),
+                        serviceInfo.getServiceType()));
+                return false;
+            }
             jsch.setKnownHosts(SshManager.getInstance().getKnownHosts().getAbsolutePath());
             jsch.addIdentity(SshManager.getInstance().getPrivateKey().getAbsolutePath());
             jsch.setLogger(new com.jcraft.jsch.Logger() {

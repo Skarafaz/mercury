@@ -37,13 +37,16 @@ public class ServerMapper {
         if (StringUtils.isBlank(server.getName())) {
             server.setName(getString(R.string.server));
         }
-        if (StringUtils.isBlank(server.getHost())) {
-            errors.put("host", getString(R.string.validation_missing));
+        if (StringUtils.isBlank(server.getHost()) && StringUtils.isBlank(server.getMDnsName())) {
+            errors.put("host/mdnsname", getString(R.string.validation_missing));
         }
         if (server.getPort() == null) {
             server.setPort(22);
         } else if (server.getPort() < 1 || server.getPort() > 65535) {
             errors.put("port", getString(R.string.validation_invalid));
+        }
+        if (server.getMDnsType() == null) {
+            server.setMDnsType("_ssh._tcp");
         }
         if (StringUtils.isBlank(server.getUser())) {
             errors.put("user", getString(R.string.validation_missing));
