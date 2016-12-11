@@ -20,6 +20,7 @@ import it.skarafaz.mercury.event.SshCommandPassword;
 import it.skarafaz.mercury.event.SshCommandPubKeyInput;
 import it.skarafaz.mercury.event.SshCommandStart;
 import it.skarafaz.mercury.event.SshCommandYesNo;
+import it.skarafaz.mercury.ssh.SshCommandStatus;
 
 public class MainEventSubscriber {
     private MainActivity activity;
@@ -56,15 +57,27 @@ public class MainEventSubscriber {
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onSshCommandStart(SshCommandStart event) {
-        activity.showProgressDialog(activity.getString(R.string.sending_command));
+        if (event.getBackground()) {
+            activity.onCommandListChanged();
+        } else {
+            activity.showProgressDialog(activity.getString(R.string.sending_command));
+        }
 
         EventBus.getDefault().removeStickyEvent(event);
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onSshCommandEnd(SshCommandEnd event) {
-        Toast.makeText(activity, activity.getString(event.getStatus().message()), Toast.LENGTH_SHORT).show();
-        activity.dismissProgressDialog();
+        if (!event.getSilent() || (event.getStatus() != SshCommandStatus.COMMAND_SUCCESSFUL &&
+                event.getStatus() != SshCommandStatus.COMMAND_SENT)) {
+            Toast.makeText(activity, activity.getString(event.getStatus().message()), Toast
+                    .LENGTH_SHORT).show();
+        }
+        if (event.getBackground()) {
+            activity.onCommandListChanged();
+        } else {
+            activity.dismissProgressDialog();
+        }
 
         EventBus.getDefault().removeStickyEvent(event);
     }

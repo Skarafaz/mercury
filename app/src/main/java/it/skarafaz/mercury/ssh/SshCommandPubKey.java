@@ -10,16 +10,20 @@ import java.io.IOException;
 
 import it.skarafaz.mercury.event.SshCommandPubKeyInput;
 import it.skarafaz.mercury.manager.SshManager;
+import it.skarafaz.mercury.model.Command;
 
 public class SshCommandPubKey extends SshCommand {
     private static final Logger logger = LoggerFactory.getLogger(SshCommandPubKey.class);
     private String pubKey;
 
     public SshCommandPubKey(SshServer server) {
-        super(server);
+        super(server, new Command());
         sudo = false;
         confirm = false;
         wait = true;
+        background = false;
+        multiple = false;
+        silent = false;
     }
 
     @Override

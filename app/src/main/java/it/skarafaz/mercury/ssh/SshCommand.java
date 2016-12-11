@@ -12,20 +12,26 @@ import java.io.InputStream;
 
 import it.skarafaz.mercury.event.SshCommandEnd;
 import it.skarafaz.mercury.event.SshCommandStart;
+import it.skarafaz.mercury.model.Command;
 
 public abstract class SshCommand extends Thread {
     protected static final int TIMEOUT = 10000;
     private static final Logger logger = LoggerFactory.getLogger(SshCommand.class);
     protected SshServer server;
+    protected Command command;
     protected Boolean sudo;
     protected String cmd;
     protected Boolean confirm;
     protected Boolean wait;
+    protected Boolean background;
+    protected Boolean multiple;
+    protected Boolean silent;
     protected String output;
     protected String error;
 
-    public SshCommand(SshServer server) {
+    public SshCommand(SshServer server, Command command) {
         this.server = server;
+        this.command = command;
     }
 
     @Override
@@ -38,7 +44,8 @@ public abstract class SshCommand extends Thread {
     }
 
     protected boolean beforeExecute() {
-        EventBus.getDefault().postSticky(new SshCommandStart());
+        command.increaseRunning();
+        EventBus.getDefault().postSticky(new SshCommandStart(background));
         return true;
     }
 
@@ -51,7 +58,8 @@ public abstract class SshCommand extends Thread {
     }
 
     protected void afterExecute(SshCommandStatus status) {
-        EventBus.getDefault().postSticky(new SshCommandEnd(status));
+        command.decreaseRunning();
+        EventBus.getDefault().postSticky(new SshCommandEnd(background, silent, status));
     }
 
     protected SshCommandStatus send(String cmd) {

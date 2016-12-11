@@ -28,6 +28,15 @@
         android:textColor="?android:attr/textColorPrimary"
         android:textSize="16sp" />
 
+    <it.skarafaz.mercury.view.TextProgressBar
+        style="?android:attr/progressBarStyleSmall"
+        android:id="@+id/progress"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_toLeftOf="@+id/info"
+        android:layout_toStartOf="@+id/info"
+        android:visibility="invisible" />
+
     <ImageView
         android:id="@+id/info"
         android:layout_width="48dp"

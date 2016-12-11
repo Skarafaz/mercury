@@ -26,6 +26,7 @@ import org.greenrobot.eventbus.EventBus;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.skarafaz.mercury.R;
+import it.skarafaz.mercury.adapter.CommandListAdapter;
 import it.skarafaz.mercury.adapter.ServerPagerAdapter;
 import it.skarafaz.mercury.fragment.ProgressDialogFragment;
 import it.skarafaz.mercury.manager.ConfigManager;
@@ -249,5 +250,9 @@ public class MainActivity extends MercuryActivity {
             ft.remove(frag);
         }
         ft.commitAllowingStateLoss();
+    }
+
+    protected void onCommandListChanged() {
+        ((CommandListAdapter) adapter.getCurrentFragment().getListAdapter()).notifyDataSetInvalidated();
     }
 }

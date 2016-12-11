@@ -100,6 +100,15 @@ public class ServerMapper {
         if (command.getWait() == null) {
             command.setWait(Boolean.FALSE);
         }
+        if (command.getBackground() == null) {
+            command.setBackground(Boolean.FALSE);
+        }
+        if (command.getMultiple() == null) {
+            command.setMultiple(Boolean.FALSE);
+        }
+        if (command.getSilent() == null) {
+            command.setSilent(Boolean.FALSE);
+        }
         return errors;
     }
 

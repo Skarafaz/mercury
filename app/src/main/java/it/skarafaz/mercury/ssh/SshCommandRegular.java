@@ -14,12 +14,15 @@ public class SshCommandRegular extends SshCommand {
     private static final Logger logger = LoggerFactory.getLogger(SshCommandRegular.class);
 
     public SshCommandRegular(SshServer server, Command command) {
-        super(server);
+        super(server, command);
 
         this.sudo = command.getSudo();
         this.cmd = command.getCmd();
         this.confirm = command.getConfirm();
         this.wait = command.getWait();
+        this.background = command.getBackground();
+        this.multiple = command.getMultiple();
+        this.silent = command.getSilent();
     }
 
     @Override

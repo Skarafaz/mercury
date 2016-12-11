@@ -3,6 +3,7 @@ package it.skarafaz.mercury.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import it.skarafaz.mercury.model.Server;
 
 public class ServerPagerAdapter extends FragmentStatePagerAdapter {
     private List<Server> servers;
+    private ServerFragment currentFragment;
 
     public ServerPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -31,6 +33,16 @@ public class ServerPagerAdapter extends FragmentStatePagerAdapter {
 
     public Server getServer(int i) {
         return servers.get(i);
+    }
+
+    public ServerFragment getCurrentFragment() {
+        return currentFragment;
+    }
+
+    @Override
+    public void setPrimaryItem(ViewGroup container, int position, Object object) {
+        super.setPrimaryItem(container, position, object);
+        currentFragment = (ServerFragment) object;
     }
 
     @Override
