@@ -24,14 +24,10 @@
             <p>Public key authentication is the preferred authentication method used by Mercury-SSH. If
                 public key authentication fails then a password will be prompted. You are free to embed the password in
                 the configuration file or type it each time you send a command (note that sudo commands will always
-                require
-                password in
-                order to be executed, even with public key authentication).</p>
-            <p>Mercury-SSH uses a self generated 2048
-                bit RSA key. You can <i>export the public key</i> to sdcard and manually copy it to your
-                server or let Mercury-SSH do this for you using the <i>send public key</i> feature (you still need
-                password
-                access to the target server to do this).</p>
+                require password in order to be executed, even with public key authentication).</p>
+            <p>Mercury-SSH uses a self generated 2048 bit RSA key by default. You can <i>export the public key</i> to
+                sdcard and manually copy it to your server or let Mercury-SSH do this for you using the <i>send public
+                key</i> feature (you still need password access to the target server to do this).</p>
             <h3>Writing a configuration file</h3>
             <p>Few lines of code are better than thousand words, so let's start with a sample configuration file:</p>
             <pre>
@@ -39,18 +35,27 @@
   "name" : "Server",
   "host" : "192.168.0.1",
   "port" : 22,
+  "mdnsname" : "server",
+  "mdnstype" : "_ssh._tcp",
   "user" : "user",
   "password" : "12345678",
+  "authtype" : "rsa4096",
   "nohupPath" : "/opt/bin/nohup",
   "commands" : [ {
+    "icon" : "apache.png",
     "name" : "Restart apache",
     "sudo" : true,
     "cmd" : "service apache2 restart",
     "confirm" : true
   }, {
+    "icon" : "rsync.png",
     "name" : "Rsync",
     "sudo" : true,
     "cmd" : "rsync -a /src/ /dst/"
+    "wait" : true,
+    "background" : true,
+    "multiple" : false,
+    "silent" : true
   } ]
 }
             </pre>
@@ -75,12 +80,24 @@
                 <tr>
                     <td><code>host</code></td>
                     <td>string</td>
-                    <td>Target hostname or IP address. Mandatory.</td>
+                    <td>Target hostname or IP address. Mandatory unless <code>mdnsname</code> is provided.</td>
                 </tr>
                 <tr>
                     <td><code>port</code></td>
                     <td>integer</td>
                     <td>Target port (1-65535). Optional, defaults to <code>22</code>.</td>
+                </tr>
+                <tr>
+                    <td><code>mdnsname</code></td>
+                    <td>string</td>
+                    <td>Target multicast dns service name. Mandatory unless <code>host</code>code> is provided. Use
+                        <code>avahi-browse -rt _ssh._tcp</code> for checking service names and their corresponding
+                        addresses and ports.</td>
+                </tr>
+                <tr>
+                    <td><code>mdnstype</code></td>
+                    <td>string</td>
+                    <td>Target multicast dns service type. Optional, defaults to <code>_ssh._tcp</code></td>
                 </tr>
                 <tr>
                     <td><code>user</code></td>
@@ -91,6 +108,18 @@
                     <td><code>password</code></td>
                     <td>string</td>
                     <td>Login password. Optional.</td>
+                </tr>
+                <tr>
+                    <td><code>authtype</code></td>
+                    <td>string</td>
+                    <td>Type of SSH key used for authentication. Supported values: <code>dsa512</code>,
+                        <code>dsa1024</code>, <code>dsa2048</code>, <code>dsa4096</code>, <code>dsa8192</code>,
+                        <code>ecdsa128</code>, <code>ecdsa256</code>, <code>ecdsa521</code>, <code>rsa512</code>,
+                        <code>rsa1024</code>, <code>rsa2048</code>, <code>rsa4096</code>, <code>rsa8192</code>.
+                        <code>dsa</code> is equivalent to <code>dsa2048</code>, <code>rsa</code> to <code>rsa2048
+                        </code>, and <code>ecdsa</code> to <code>ecdsa512</code>. Optional,
+                        defaults to <code>rsa2048</code>.
+                    </td>
                 </tr>
                 <tr>
                     <td><code>nohupPath</code></td>
@@ -120,6 +149,11 @@
                 </thead>
                 <tbody>
                 <tr>
+                    <td><code>icon</code></td>
+                    <td>string</td>
+                    <td>Name of icon file in folder MercurySSH (shown before label). Optional.</td>
+                </tr>
+                <tr>
                     <td><code>name</code></td>
                     <td>string</td>
                     <td>Friendly name (used as label). Optional, defaults to <code>"Command"</code>.</td>
@@ -139,6 +173,33 @@
                     <td><code>confirm</code></td>
                     <td>boolean</td>
                     <td>Ask for confirmation before sending command. Optional, defaults to <code>false</code>.</td>
+                </tr>
+                <tr>
+                    <td><code>wait</code></td>
+                    <td>boolean</td>
+                    <td>Ask for confirmation before sending command. Optional, defaults to <code>false</code>.</td>
+                </tr>
+                <tr>
+                    <td><code>background</code></td>
+                    <td>boolean</td>
+                    <td>If true, command runs in background and progress bar is shown inside command list. Thus other
+                        commands may be started while this command is running. Otherwise progress bar is shown in
+                        dialog. Optional, defaults to <code>false</code>.
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>multiple</code></td>
+                    <td>boolean</td>
+                    <td>If true, the same command may be executed several times in parallel. The number of running
+                        commands is shown in the progress bar. Otherwise the command only may be started when no
+                        other instance of the same command is running. Requires <code>background : true</code>.
+                        Optional, defaults to <code>false</code>.
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>silent</code></td>
+                    <td>boolean</td>
+                    <td>Show toast message only on error. Optional, defaults to <code>false</code>.</td>
                 </tr>
                 </tbody>
             </table>

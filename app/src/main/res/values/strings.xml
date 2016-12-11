@@ -36,7 +36,7 @@
     <string name="empty_config_dir">No config files found in\n%s</string>
     <string name="empty_log">Log file is empty</string>
     <string name="execution_failed">Command execution failed, please see log for details</string>
-    <string name="export_public_key_error">Cannot export public key, plesase see log for details</string>
+    <string name="export_public_key_error">Cannot export public key, please see log for details</string>
     <string name="export_public_key_permission">Mercury-SSH requires STORAGE permission to export the public key to sdcard</string>
     <string name="export_public_key_success">Public key exported to\n%s</string>
     <string name="exporting_public_key">Exporting public key&#8230;</string>
