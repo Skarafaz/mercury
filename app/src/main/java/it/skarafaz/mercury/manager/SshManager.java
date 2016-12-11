@@ -30,6 +30,7 @@ public class SshManager {
 
     private SshManager() {
         this.jsch = new JSch();
+        migrateSshKeys();
     }
 
     public static synchronized SshManager getInstance() {
@@ -37,6 +38,32 @@ public class SshManager {
             instance = new SshManager();
         }
         return instance;
+    }
+
+    private void migrateSshKeys() {
+        /* Migrate old keys to new naming scheme */
+        File oldPrivateKeyFile = new File(getSshDir(), "id_rsa");
+        if (oldPrivateKeyFile.exists()) {
+            try {
+                FileUtils.moveFile(oldPrivateKeyFile, getPrivateKeyFile(ServerAuthType.RSA2048));
+                logger.info(String.format("Migrated old key %s to %s", oldPrivateKeyFile,
+                        getPrivateKeyFile(ServerAuthType.RSA2048)));
+            } catch (IOException e) {
+                logger.error(String.format("Could not migrate old key %s to %s: %s",
+                        oldPrivateKeyFile, getPrivateKeyFile(ServerAuthType.RSA2048), e));
+            }
+        }
+        File oldPublicKeyFile = new File(getSshDir(), "id_rsa.pub");
+        if (oldPublicKeyFile.exists()) {
+            try {
+                FileUtils.moveFile(oldPublicKeyFile, getPublicKeyFile(ServerAuthType.RSA2048));
+                logger.info(String.format("Migrated old key %s to %s", oldPrivateKeyFile,
+                        getPublicKeyFile(ServerAuthType.RSA2048)));
+            } catch (IOException e) {
+                logger.error(String.format("Could not migrate old key %s to %s: %s",
+                        oldPrivateKeyFile, getPublicKeyFile(ServerAuthType.RSA2048), e));
+            }
+        }
     }
 
     public File getKnownHosts() throws IOException {
