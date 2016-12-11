@@ -15,6 +15,7 @@ import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.manager.ConfigManager;
 import it.skarafaz.mercury.model.Command;
 import it.skarafaz.mercury.model.Server;
+import it.skarafaz.mercury.model.ServerAuthType;
 
 public class ServerMapper {
     private ObjectMapper mapper;
@@ -53,6 +54,14 @@ public class ServerMapper {
         }
         if (StringUtils.isEmpty(server.getPassword())) {
             server.setPassword(null);
+        }
+        if (StringUtils.isEmpty(server.getAuthType())) {
+            server.setAuthType(ServerAuthType.RSA2048.toString());
+        }
+        try {
+            ServerAuthType.valueOf(ServerAuthType.appendDefaultLength(server.getAuthType()));
+        } catch (IllegalArgumentException e) {
+            errors.put("authtype", getString(R.string.validation_invalid));
         }
         if (StringUtils.isBlank(server.getSudoPath())) {
             server.setSudoPath("sudo");

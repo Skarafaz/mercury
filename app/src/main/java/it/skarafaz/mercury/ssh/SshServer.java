@@ -14,10 +14,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.security.Security;
 import java.util.Properties;
 
 import it.skarafaz.mercury.manager.SshManager;
 import it.skarafaz.mercury.model.Server;
+import it.skarafaz.mercury.model.ServerAuthType;
 
 public class SshServer extends Thread {
     protected static final int TIMEOUT = 10000;
@@ -43,9 +45,14 @@ public class SshServer extends Thread {
     protected String mDnsType;
     protected String user;
     protected String password;
+    protected ServerAuthType authType;
     protected String sudoPath;
     protected String nohupPath;
 
+    static {
+        logger.debug("Configure spongy castle security");
+        Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 1);
+    }
 
     public SshServer() {
         this.jsch = new JSch();
@@ -62,6 +69,7 @@ public class SshServer extends Thread {
         mDnsType = server.getMDnsType();
         user = server.getUser();
         password = server.getPassword();
+        authType =  ServerAuthType.valueOf(ServerAuthType.appendDefaultLength(server.getAuthType()));
         sudoPath = server.getSudoPath();
         nohupPath = server.getNohupPath();
 
@@ -153,7 +161,7 @@ public class SshServer extends Thread {
                 return false;
             }
             jsch.setKnownHosts(SshManager.getInstance().getKnownHosts().getAbsolutePath());
-            jsch.addIdentity(SshManager.getInstance().getPrivateKey().getAbsolutePath());
+            jsch.addIdentity(SshManager.getInstance().getPrivateKey(authType).getAbsolutePath());
             jsch.setLogger(new com.jcraft.jsch.Logger() {
                 @Override
                 public boolean isEnabled(int level) {

@@ -20,6 +20,8 @@ public class Server implements Serializable, Comparable<Server> {
     private String mDnsType;
     private String user;
     private String password;
+    @JsonProperty("authtype")
+    private String authType;
     private String sudoPath;
     private String nohupPath;
     private List<Command> commands;
@@ -78,6 +80,14 @@ public class Server implements Serializable, Comparable<Server> {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getAuthType() {
+        return authType;
+    }
+
+    public void setAuthType(String authType) {
+        this.authType = authType;
     }
 
     public String getSudoPath() {

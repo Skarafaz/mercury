@@ -32,7 +32,10 @@ import it.skarafaz.mercury.manager.ConfigManager;
 import it.skarafaz.mercury.manager.ExportPublicKeyStatus;
 import it.skarafaz.mercury.manager.LoadConfigFilesStatus;
 import it.skarafaz.mercury.manager.SshManager;
+import it.skarafaz.mercury.model.Server;
+import it.skarafaz.mercury.model.ServerAuthType;
 import it.skarafaz.mercury.ssh.SshCommandPubKey;
+import it.skarafaz.mercury.ssh.SshServer;
 
 public class MainActivity extends MercuryActivity {
     private static final int STORAGE_PERMISSION_CONFIG_REQ = 1;
@@ -98,15 +101,17 @@ public class MainActivity extends MercuryActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Server server = adapter.getServer(pager.getCurrentItem());
         switch (item.getItemId()) {
             case R.id.action_reload:
                 loadConfigFiles();
                 return true;
             case R.id.action_export_public_key:
-                exportPublicKey();
+                exportPublicKey(ServerAuthType.valueOf(ServerAuthType.appendDefaultLength(server
+                        .getAuthType())));
                 return true;
             case R.id.action_send_public_key:
-                new SshCommandPubKey().start();
+                new SshCommandPubKey(new SshServer(server, this)).start();
                 return true;
             case R.id.action_log:
                 startActivity(new Intent(this, LogActivity.class));
@@ -127,7 +132,9 @@ public class MainActivity extends MercuryActivity {
                     loadConfigFiles();
                     break;
                 case STORAGE_PERMISSION_PUB_REQ:
-                    exportPublicKey();
+                    Server server = adapter.getServer(pager.getCurrentItem());
+                    exportPublicKey(ServerAuthType.valueOf(ServerAuthType.appendDefaultLength
+                            (server.getAuthType())));
                     break;
             }
         }
@@ -181,7 +188,7 @@ public class MainActivity extends MercuryActivity {
         }
     }
 
-    private void exportPublicKey() {
+    private void exportPublicKey(final ServerAuthType authType) {
         if (!busy) {
             new AsyncTask<Void, Void, ExportPublicKeyStatus>() {
                 @Override
@@ -191,7 +198,7 @@ public class MainActivity extends MercuryActivity {
 
                 @Override
                 protected ExportPublicKeyStatus doInBackground(Void... params) {
-                    return SshManager.getInstance().exportPublicKey();
+                    return SshManager.getInstance().exportPublicKey(authType);
                 }
 
                 @Override
@@ -203,7 +210,7 @@ public class MainActivity extends MercuryActivity {
                         toast = !requestStoragePermission(STORAGE_PERMISSION_PUB_REQ);
                     }
                     if (toast) {
-                        Toast.makeText(MainActivity.this, getString(status.message(), SshManager.getInstance().getPublicKeyExportedFile()), Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, getString(status.message(), SshManager.getInstance().getPublicKeyExportedFile(authType)), Toast.LENGTH_LONG).show();
                     }
                 }
             }.execute();

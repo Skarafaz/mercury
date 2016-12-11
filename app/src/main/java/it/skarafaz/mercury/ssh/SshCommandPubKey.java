@@ -15,8 +15,8 @@ public class SshCommandPubKey extends SshCommand {
     private static final Logger logger = LoggerFactory.getLogger(SshCommandPubKey.class);
     private String pubKey;
 
-    public SshCommandPubKey() {
-        super(new SshServer());
+    public SshCommandPubKey(SshServer server) {
+        super(server);
         sudo = false;
         confirm = false;
         wait = true;
@@ -25,19 +25,20 @@ public class SshCommandPubKey extends SshCommand {
     @Override
     protected boolean beforeExecute() {
         try {
-            pubKey = SshManager.getInstance().getPublicKeyContent();
+            pubKey = SshManager.getInstance().getPublicKeyContent(server.authType);
         } catch (IOException | JSchException e) {
             logger.error(e.getMessage().replace("\n", " "));
             return false;
         }
-        SshCommandDrop<String> drop = new SshCommandDrop<>();
+        // Use user@host:port from server
+        /*SshCommandDrop<String> drop = new SshCommandDrop<>();
         EventBus.getDefault().postSticky(new SshCommandPubKeyInput(drop));
 
         String input = drop.take();
         if (input == null) {
             return false;
         }
-        setHostPortUser(input);
+        setHostPortUser(input);*/
 
         return super.beforeExecute();
     }

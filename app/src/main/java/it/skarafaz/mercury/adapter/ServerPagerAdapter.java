@@ -29,6 +29,10 @@ public class ServerPagerAdapter extends FragmentStatePagerAdapter {
         return ServerFragment.newInstance(servers.get(i));
     }
 
+    public Server getServer(int i) {
+        return servers.get(i);
+    }
+
     @Override
     public CharSequence getPageTitle(int position) {
         return servers.get(position).getName();
