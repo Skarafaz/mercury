@@ -14,11 +14,13 @@ public class Command implements Serializable, Comparable<Command> {
     private String name;
     private Boolean sudo;
     private String cmd;
+    private String download;
     private Boolean confirm;
     private Boolean wait;
     private Boolean background;
     private Boolean multiple;
     private Boolean silent;
+    private Boolean view;
     private Server server;
 
     @JsonIgnore
@@ -54,6 +56,14 @@ public class Command implements Serializable, Comparable<Command> {
 
     public void setCmd(String cmd) {
         this.cmd = cmd;
+    }
+
+    public String getDownload() {
+        return download;
+    }
+
+    public void setDownload(String download) {
+        this.download = download;
     }
 
     public Boolean getConfirm() {
@@ -96,6 +106,13 @@ public class Command implements Serializable, Comparable<Command> {
         this.silent = silent;
     }
 
+    public Boolean getView() {
+        return view;
+    }
+
+    public void setView(Boolean view) {
+        this.view = view;
+    }
     public int getRunning() {
         return running;
     }

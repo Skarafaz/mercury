@@ -56,6 +56,16 @@
     "background" : true,
     "multiple" : false,
     "silent" : true
+  }, {
+    "name" : "Webcam",
+    "icon" : "webcam.png",
+    "cmd" : "ffmpeg -f video4linux2 -s 640x480 -i /dev/video0 -ss 0:0:2 -frames 1 -loglevel 24 -y /tmp/webcam.png",
+    "wait" : true,
+    "background" : true,
+    "multiple" : false,
+    "silent" : true
+    "download" : "/tmp/webcam.png",
+    "view" : true
   } ]
 }
             </pre>
@@ -170,6 +180,12 @@
                     <td>The command itself. Mandatory.</td>
                 </tr>
                 <tr>
+                    <td><code>download</code></td>
+                    <td>string</td>
+                    <td>Path of file to download from server after sending (<code>wait : false</code>) respectively
+                        executing (<code>wait : true</code>)command. Optional.</td>
+                </tr>
+                <tr>
                     <td><code>confirm</code></td>
                     <td>boolean</td>
                     <td>Ask for confirmation before sending command. Optional, defaults to <code>false</code>.</td>
@@ -177,7 +193,8 @@
                 <tr>
                     <td><code>wait</code></td>
                     <td>boolean</td>
-                    <td>Ask for confirmation before sending command. Optional, defaults to <code>false</code>.</td>
+                    <td>Wait for termination after sending command and display error, if result code is nonzero.
+                        Optional, defaults to <code>false</code>.</td>
                 </tr>
                 <tr>
                     <td><code>background</code></td>
@@ -200,6 +217,12 @@
                     <td><code>silent</code></td>
                     <td>boolean</td>
                     <td>Show toast message only on error. Optional, defaults to <code>false</code>.</td>
+                </tr>
+                <tr>
+                    <td><code>view</code></td>
+                    <td>boolean</td>
+                    <td>Display downloaded file using default application. Requires <code>download</code>. Optional,
+                        defaults to <code>false</code>.</td>
                 </tr>
                 </tbody>
             </table>

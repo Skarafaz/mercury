@@ -24,7 +24,6 @@ public abstract class SshCommand extends Thread {
     protected Boolean confirm;
     protected Boolean wait;
     protected Boolean background;
-    protected Boolean multiple;
     protected Boolean silent;
     protected String output;
     protected String error;

@@ -109,6 +109,9 @@ public class ServerMapper {
         if (command.getSilent() == null) {
             command.setSilent(Boolean.FALSE);
         }
+        if (command.getView() == null) {
+            command.setView(Boolean.FALSE);
+        }
         return errors;
     }
 

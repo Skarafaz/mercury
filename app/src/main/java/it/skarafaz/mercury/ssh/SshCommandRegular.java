@@ -13,16 +13,20 @@ import it.skarafaz.mercury.model.Command;
 public class SshCommandRegular extends SshCommand {
     private static final Logger logger = LoggerFactory.getLogger(SshCommandRegular.class);
 
+    private String download;
+    private Boolean view;
+
     public SshCommandRegular(SshServer server, Command command) {
         super(server, command);
 
         this.sudo = command.getSudo();
         this.cmd = command.getCmd();
+        this.download = command.getDownload();
         this.confirm = command.getConfirm();
         this.wait = command.getWait();
         this.background = command.getBackground();
-        this.multiple = command.getMultiple();
         this.silent = command.getSilent();
+        this.view = command.getView();
     }
 
     @Override
@@ -49,6 +53,15 @@ public class SshCommandRegular extends SshCommand {
         }
 
         return super.beforeExecute();
+    }
+
+    @Override
+    protected void afterExecute(SshCommandStatus status) {
+        super.afterExecute(status);
+        if (download != null && (status == SshCommandStatus.COMMAND_SENT || status == SshCommandStatus
+                .COMMAND_SUCCESSFUL)) {
+            (new SftpDownload(server, command)).start();
+        }
     }
 
     @Override

@@ -22,7 +22,6 @@ public class SshCommandPubKey extends SshCommand {
         confirm = false;
         wait = true;
         background = false;
-        multiple = false;
         silent = false;
     }
 
