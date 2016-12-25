@@ -24,7 +24,8 @@ public class Server implements Serializable, Comparable<Server> {
     private String authType;
     private String sudoPath;
     private String nohupPath;
-    private List<Command> commands;
+    @JsonProperty("commands")
+    private List<Entry> entries;
 
     public String getName() {
         return name;
@@ -106,13 +107,12 @@ public class Server implements Serializable, Comparable<Server> {
         this.nohupPath = nohupPath;
     }
 
-    @JsonManagedReference
-    public List<Command> getCommands() {
-        return commands;
+    public List<Entry> getEntries() {
+        return entries;
     }
 
-    public void setCommands(List<Command> commands) {
-        this.commands = commands;
+    public void setEntries(List<Entry> entries) {
+        this.entries = entries;
     }
 
     @Override

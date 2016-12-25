@@ -1,46 +1,12 @@
 package it.skarafaz.mercury.model;
 
-import android.support.annotation.NonNull;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import java.io.Serializable;
-
 @SuppressWarnings("unused")
-public class Command implements Serializable, Comparable<Command> {
-    private static final long serialVersionUID = -1107949489549383265L;
-    private String icon;
-    private String name;
+public abstract class Command extends Entry {
     private Boolean sudo;
-    private String cmd;
-    private String download;
     private Boolean confirm;
     private Boolean wait;
     private Boolean background;
-    private Boolean multiple;
     private Boolean silent;
-    private Boolean view;
-    private Server server;
-
-    @JsonIgnore
-    private int running = 0;
-
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public Boolean getSudo() {
         return sudo;
@@ -48,22 +14,6 @@ public class Command implements Serializable, Comparable<Command> {
 
     public void setSudo(Boolean sudo) {
         this.sudo = sudo;
-    }
-
-    public String getCmd() {
-        return cmd;
-    }
-
-    public void setCmd(String cmd) {
-        this.cmd = cmd;
-    }
-
-    public String getDownload() {
-        return download;
-    }
-
-    public void setDownload(String download) {
-        this.download = download;
     }
 
     public Boolean getConfirm() {
@@ -90,52 +40,11 @@ public class Command implements Serializable, Comparable<Command> {
         this.background = background;
     }
 
-    public Boolean getMultiple() {
-        return multiple;
-    }
-
-    public void setMultiple(Boolean multiple) {
-        this.multiple = multiple;
-    }
-
     public Boolean getSilent() {
         return silent;
     }
 
     public void setSilent(Boolean silent) {
         this.silent = silent;
-    }
-
-    public Boolean getView() {
-        return view;
-    }
-
-    public void setView(Boolean view) {
-        this.view = view;
-    }
-    public int getRunning() {
-        return running;
-    }
-
-    public int increaseRunning() {
-        return ++this.running;
-    }
-
-    public int decreaseRunning() {
-        return --this.running;
-    }
-
-    @JsonBackReference
-    public Server getServer() {
-        return server;
-    }
-
-    public void setServer(Server server) {
-        this.server = server;
-    }
-
-    @Override
-    public int compareTo(@NonNull Command another) {
-        return name.toLowerCase().compareTo(another.getName().toLowerCase());
     }
 }

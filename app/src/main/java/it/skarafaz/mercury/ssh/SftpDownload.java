@@ -17,6 +17,7 @@ import it.skarafaz.mercury.event.SftpDownloadEnd;
 import it.skarafaz.mercury.event.SftpDownloadProgress;
 import it.skarafaz.mercury.event.SftpDownloadStart;
 import it.skarafaz.mercury.model.Command;
+import it.skarafaz.mercury.model.RegularCommand;
 
 public class SftpDownload extends Thread {
     private static final Logger logger = LoggerFactory.getLogger(SftpDownload.class);
@@ -24,11 +25,11 @@ public class SftpDownload extends Thread {
     protected static int nextId = 0;
     protected int id;
     protected SshServer server;
-    protected Command command;
+    protected RegularCommand command;
 
     protected File target;
 
-    public SftpDownload(SshServer server, Command command) {
+    public SftpDownload(SshServer server, RegularCommand command) {
         this.id = nextId++;
         this.server = server;
         this.command = command;

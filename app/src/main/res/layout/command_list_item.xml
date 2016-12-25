@@ -27,6 +27,16 @@
         android:maxLines="1"
         android:textColor="?android:attr/textColorPrimary"
         android:textSize="16sp" />
+    <SeekBar
+        android:id="@+id/ruler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="56dp"
+        android:layout_toRightOf="@+id/icon"
+        android:layout_toEndOf="@+id/icon"
+        android:visibility="invisible" />
 
     <it.skarafaz.mercury.view.TextProgressBar
         style="?android:attr/progressBarStyleSmall"

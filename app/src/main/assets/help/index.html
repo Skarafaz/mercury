@@ -66,6 +66,17 @@
     "silent" : true
     "download" : "/tmp/webcam.png",
     "view" : true
+  }, {
+    "name" : "Brightness",
+    "icon" : "display-brightness-symbolic.png",
+    "getcmd" : "dbus-send --print-reply=literal --session --dest=org.gnome.SettingsDaemon /org/gnome/SettingsDaemon/Power org.freedesktop.DBus.Properties.Get string:org.gnome.SettingsDaemon.Power.Screen string:Brightness | awk '{ print $3; }'",
+    "setcmd" : "dbus-send --print-reply --session --dest=org.gnome.SettingsDaemon.Power /org/gnome/SettingsDaemon/Power org.freedesktop.DBus.Properties.Set string:org.gnome.SettingsDaemon.Power.Screen string:Brightness variant:int32:${VALUE}",
+    "min" : 0,
+    "max" : 100,
+    "step" : 1,
+    "wait" : true,
+    "background" : true,
+    "silent" : true
   } ]
 }
             </pre>
@@ -144,7 +155,7 @@
                 <tr>
                     <td><code>commands</code></td>
                     <td>array</td>
-                    <td>An array of objects defining available commands for the server. Optional.</td>
+                    <td>An array of objects defining available commands and rulers for the server. Optional.</td>
                 </tr>
                 </tbody>
             </table>
@@ -223,6 +234,85 @@
                     <td>boolean</td>
                     <td>Display downloaded file using default application. Requires <code>download</code>. Optional,
                         defaults to <code>false</code>.</td>
+                </tr>
+                </tbody>
+            </table>
+            <h4>Ruler property summary</h4>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Property</th>
+                    <th>Type</th>
+                    <th>Notes</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>icon</code></td>
+                    <td>string</td>
+                    <td>Name of icon file in folder MercurySSH (shown before label). Optional.</td>
+                </tr>
+                <tr>
+                    <td><code>name</code></td>
+                    <td>string</td>
+                    <td>Friendly name (used as label). Optional, defaults to <code>"Command"</code>.</td>
+                </tr>
+                <tr>
+                    <td><code>sudo</code></td>
+                    <td>boolean</td>
+                    <td>State if the command needs to be executed as root. Optional, defaults to <code>false</code>.
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>getcmd</code></td>
+                    <td>string</td>
+                    <td>The command for retrieving the ruler value. The command must print the value, an integer from
+                        <code>min</code> to <code>max</code>, on the first line of <code>stdout</code>. Mandatory.</td>
+                </tr>
+                <tr>
+                    <td><code>setcmd</code></td>
+                    <td>string</td>
+                    <td>The command for setting the ruler value. The value will be stored in the environment variable
+                        <code>VALUE</code> before executing <code>setcmd</code>. Mandatory.</td>
+                </tr>
+                <tr>
+                    <td><code>min</code></td>
+                    <td>integer</td>
+                    <td>The minimum ruler value. Optional, defaults to <code>0</code>.</td>
+                </tr>
+                <tr>
+                    <td><code>max</code></td>
+                    <td>integer</td>
+                    <td>The maximum ruler value. Optional, defaults to <code>100</code>.</td>
+                </tr>
+                <tr>
+                    <td><code>step</code></td>
+                    <td>integer</td>
+                    <td>The step between ruler two allowed ruler values. Optional, defaults to <code>1</code>.</td>
+                </tr>
+                <tr>
+                    <td><code>confirm</code></td>
+                    <td>boolean</td>
+                    <td>Ask for confirmation before sending command. Optional, defaults to <code>false</code>.</td>
+                </tr>
+                <tr>
+                    <td><code>wait</code></td>
+                    <td>boolean</td>
+                    <td>Wait for termination after sending command and display error, if result code is nonzero.
+                        Optional, defaults to <code>false</code>.</td>
+                </tr>
+                <tr>
+                    <td><code>background</code></td>
+                    <td>boolean</td>
+                    <td>If true, command runs in background and progress bar is shown inside command list. Thus other
+                        commands may be started while this command is running. Otherwise progress bar is shown in
+                        dialog. Optional, defaults to <code>false</code>.
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>silent</code></td>
+                    <td>boolean</td>
+                    <td>Show toast message only on error. Optional, defaults to <code>false</code>.</td>
                 </tr>
                 </tbody>
             </table>

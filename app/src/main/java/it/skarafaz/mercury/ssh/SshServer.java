@@ -190,7 +190,7 @@ public class SshServer extends Thread {
                     }
                 }
             });
-        } catch (IOException | JSchException e) {
+        } catch (IOException | JSchException | RuntimeException e) {
             logger.error(e.getMessage().replace("\n", " "));
             success = false;
         }
@@ -208,7 +208,7 @@ public class SshServer extends Thread {
             session.setPassword(password);
 
             session.connect(TIMEOUT);
-        } catch (JSchException e) {
+        } catch (JSchException | RuntimeException e) {
             logger.error(e.getMessage().replace("\n", " "));
             success = false;
         }

@@ -2,22 +2,19 @@ package it.skarafaz.mercury.ssh;
 
 import com.jcraft.jsch.JSchException;
 
-import org.greenrobot.eventbus.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-import it.skarafaz.mercury.event.SshCommandPubKeyInput;
 import it.skarafaz.mercury.manager.SshManager;
-import it.skarafaz.mercury.model.Command;
 
 public class SshCommandPubKey extends SshCommand {
     private static final Logger logger = LoggerFactory.getLogger(SshCommandPubKey.class);
     private String pubKey;
 
     public SshCommandPubKey(SshServer server) {
-        super(server, new Command());
+        super(server, null);
         sudo = false;
         confirm = false;
         wait = true;
@@ -33,29 +30,7 @@ public class SshCommandPubKey extends SshCommand {
             logger.error(e.getMessage().replace("\n", " "));
             return false;
         }
-        // Use user@host:port from server
-        /*SshCommandDrop<String> drop = new SshCommandDrop<>();
-        EventBus.getDefault().postSticky(new SshCommandPubKeyInput(drop));
-
-        String input = drop.take();
-        if (input == null) {
-            return false;
-        }
-        setHostPortUser(input);*/
-
         return super.beforeExecute();
-    }
-
-    private void setHostPortUser(String input) {
-        String[] sInput = input.split("@");
-        String left = sInput[0];
-        String right = sInput[1];
-
-        String[] sRight = right.split(":");
-
-        server.host = sRight[0];
-        server.port = sRight.length > 1 ? Integer.valueOf(sRight[1]) : 22;
-        server.user = left;
     }
 
     @Override

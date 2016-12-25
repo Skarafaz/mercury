@@ -9,8 +9,13 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 
+import it.skarafaz.mercury.MercuryApplication;
+import it.skarafaz.mercury.R;
+import it.skarafaz.mercury.event.SshCommandConfirm;
 import it.skarafaz.mercury.event.SshCommandEnd;
+import it.skarafaz.mercury.event.SshCommandPassword;
 import it.skarafaz.mercury.event.SshCommandStart;
 import it.skarafaz.mercury.model.Command;
 
@@ -21,6 +26,7 @@ public abstract class SshCommand extends Thread {
     protected Command command;
     protected Boolean sudo;
     protected String cmd;
+    protected HashMap<String, String> env;
     protected Boolean confirm;
     protected Boolean wait;
     protected Boolean background;
@@ -31,19 +37,48 @@ public abstract class SshCommand extends Thread {
     public SshCommand(SshServer server, Command command) {
         this.server = server;
         this.command = command;
+        this.env = new HashMap<String, String>();
+    }
+
+    public void setEnv(String variable, String value) {
+        env.put(variable, value);
     }
 
     @Override
     public void run() {
         output = error = null;
-        if(beforeExecute()) {
+        if (beforeExecute()) {
             SshCommandStatus status = execute();
             afterExecute(status);
         }
     }
 
     protected boolean beforeExecute() {
-        command.increaseRunning();
+        if (command != null) {
+            command.increaseRunning();
+        }
+
+        if (confirm) {
+            SshCommandDrop<Boolean> drop = new SshCommandDrop<>();
+            EventBus.getDefault().postSticky(new SshCommandConfirm(cmd, drop));
+
+            if (!drop.take()) {
+                return false;
+            }
+        }
+
+        if (sudo && server.password == null) {
+            SshCommandDrop<String> drop = new SshCommandDrop<>();
+            String message = MercuryApplication.getContext().getString(R.string.type_sudo_password,
+                    server.formatServerLabel());
+            EventBus.getDefault().postSticky(new SshCommandPassword(message, drop));
+
+            server.password = drop.take();
+            if (server.password == null) {
+                return false;
+            }
+        }
+
         EventBus.getDefault().postSticky(new SshCommandStart(background));
         return true;
     }
@@ -57,7 +92,9 @@ public abstract class SshCommand extends Thread {
     }
 
     protected void afterExecute(SshCommandStatus status) {
-        command.decreaseRunning();
+        if (command != null) {
+            command.decreaseRunning();
+        }
         EventBus.getDefault().postSticky(new SshCommandEnd(background, silent, status));
     }
 
@@ -76,7 +113,7 @@ public abstract class SshCommand extends Thread {
 
             channel.connect(TIMEOUT);
             return waitForChannelClosed(channel, stdout, stderr);
-        } catch (IOException | JSchException e) {
+        } catch (IOException | JSchException | RuntimeException e) {
             logger.error(e.getMessage().replace("\n", " "));
             return SshCommandStatus.COMMUNICATION_ERROR;
         } finally {
@@ -101,15 +138,15 @@ public abstract class SshCommand extends Thread {
                 len = stdout.read(buf, 0, 1024);
                 if (len < 0) throw new IOException("stdout");
                 sbout.append(new String(buf, 0, len, "UTF-8"));
-                logger.trace(String.format("[%d] stdout available = %d / read %d",
-                        getId(), stdout.available(), sbout.length()));
+                logger.trace(String.format("[%d] stdout available = %d / read %d", getId(), stdout.available(),
+                        sbout.length()));
             }
             if (stderr.available() > 0) {
                 len = stderr.read(buf, 0, 1024);
                 if (len < 0) throw new IOException("stderr");
                 sberr.append(new String(buf, 0, len, "UTF-8"));
-                logger.trace(String.format("[%d] stderr available = %d / read %d",
-                        getId(), stderr.available(), sberr.length()));
+                logger.trace(String.format("[%d] stderr available = %d / read %d", getId(), stderr.available(),
+                        sberr.length()));
             }
             if (channel.isClosed()) {
                 if (stdout.available() > 0 || stderr.available() > 0) continue;
@@ -138,6 +175,17 @@ public abstract class SshCommand extends Thread {
     }
 
     protected String formatCmd(String cmd) {
-        return cmd;
+        /* Can't use setEnv because it is prabably blocked by server (see AcceptEnv) */
+        StringBuilder sb = new StringBuilder();
+        for (java.util.Map.Entry<String, String> entry : env.entrySet()) {
+            sb.append(String.format("export %s='%s';", entry.getKey(), entry.getValue().replaceAll("'", "'\"'\"'")));
+        }
+        if (sudo) {
+            sb.append(String.format("echo '%s' | '%s' -S -p '' ",server.password.replaceAll("'", "'\"'\"'"),
+                    server.sudoPath.replaceAll("'", "'\"'\"'")));
+        }
+        sb.append(String.format("'%s' \"${SHELL}\" -c '%s'", server.nohupPath.replaceAll("'", "'\"'\"'"),
+                cmd.replaceAll("'", "'\"'\"'")));
+        return sb.toString();
     }
 }

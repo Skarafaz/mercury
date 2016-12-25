@@ -41,7 +41,7 @@ public class ServerFragment extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        setListAdapter(new CommandListAdapter(getActivity(), sshServer, server.getCommands()));
+        setListAdapter(new CommandListAdapter(getActivity(), sshServer, server.getEntries()));
     }
 
     @Override

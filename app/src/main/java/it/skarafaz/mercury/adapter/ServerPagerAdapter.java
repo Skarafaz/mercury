@@ -28,10 +28,12 @@ public class ServerPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int i) {
+        if (i >= servers.size()) return null;
         return ServerFragment.newInstance(servers.get(i));
     }
 
     public Server getServer(int i) {
+        if (i >= servers.size()) return null;
         return servers.get(i);
     }
 

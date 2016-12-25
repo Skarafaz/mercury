@@ -108,10 +108,12 @@ public class MainActivity extends MercuryActivity {
                 loadConfigFiles();
                 return true;
             case R.id.action_export_public_key:
+                if (server == null) return true;
                 exportPublicKey(ServerAuthType.valueOf(ServerAuthType.appendDefaultLength(server
                         .getAuthType())));
                 return true;
             case R.id.action_send_public_key:
+                if (server == null) return true;
                 new SshCommandPubKey(new SshServer(server, this)).start();
                 return true;
             case R.id.action_log:

@@ -34,6 +34,7 @@ import it.skarafaz.mercury.event.SshCommandEnd;
 import it.skarafaz.mercury.event.SshCommandMessage;
 import it.skarafaz.mercury.event.SshCommandPassword;
 import it.skarafaz.mercury.event.SshCommandPubKeyInput;
+import it.skarafaz.mercury.event.SshCommandRulerUpdate;
 import it.skarafaz.mercury.event.SshCommandStart;
 import it.skarafaz.mercury.event.SshCommandYesNo;
 import it.skarafaz.mercury.ssh.SshCommandStatus;
@@ -308,6 +309,13 @@ public class MainEventSubscriber {
                     }
                 })
                 .show();
+
+        EventBus.getDefault().removeStickyEvent(event);
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onSshCommandRulerUpdate(SshCommandRulerUpdate event) {
+        activity.onCommandListChanged();
 
         EventBus.getDefault().removeStickyEvent(event);
     }
