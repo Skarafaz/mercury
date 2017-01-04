@@ -18,6 +18,9 @@ local.properties
 # Windows thumbnail db
 Thumbs.db
 
+# macOS
+.DS_Store
+
 # Android Studio
 .idea
 *.iml
