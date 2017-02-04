@@ -11,3 +11,5 @@ Take a look at the [wiki](https://github.com/Skarafaz/mercury/wiki) to learn how
 ## Limitations
 
 This app is intended to be used as a simple remote so interactive commands and output handling are not supported.
+
+*This software is released under GPLv2 License, please refer to the attached LICENSE file for details.*
