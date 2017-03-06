@@ -25,6 +25,15 @@
     android:layout_height="56dp"
     android:background="?android:attr/selectableItemBackground">
 
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_centerVertical="true"
+        android:background="@drawable/ripple"
+        android:scaleType="center"
+        android:visibility="invisible" />
+
     <TextView
         android:id="@+id/name"
         android:layout_width="match_parent"
@@ -32,15 +41,37 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="56dp"
+        android:layout_toRightOf="@+id/icon"
+        android:layout_toEndOf="@+id/icon"
         android:ellipsize="end"
-        android:singleLine="true"
+        android:maxLines="1"
         android:textColor="?android:attr/textColorPrimary"
         android:textSize="16sp" />
+    <SeekBar
+        android:id="@+id/ruler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="56dp"
+        android:layout_toRightOf="@+id/icon"
+        android:layout_toEndOf="@+id/icon"
+        android:visibility="invisible" />
+
+    <it.skarafaz.mercury.view.TextProgressBar
+        style="?android:attr/progressBarStyleSmall"
+        android:id="@+id/progress"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_toLeftOf="@+id/info"
+        android:layout_toStartOf="@+id/info"
+        android:visibility="invisible" />
 
     <ImageView
         android:id="@+id/info"
         android:layout_width="48dp"
         android:layout_height="48dp"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="4dp"

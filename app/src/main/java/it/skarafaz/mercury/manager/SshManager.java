@@ -35,14 +35,14 @@ import java.io.File;
 import java.io.IOException;
 
 import it.skarafaz.mercury.MercuryApplication;
+import it.skarafaz.mercury.model.ServerAuthType;
 import it.skarafaz.mercury.ssh.SshCommandRegular;
 
 public class SshManager {
     private static final String SSH_DIR = "ssh";
     private static final String KNOWN_HOSTS_FILE = "known_hosts";
-    private static final int PRIVATE_KEY_LENGTH = 2048;
-    private static final String PRIVATE_KEY_FILE = "id_rsa";
-    private static final String PUBLIC_KEY_FILE = "id_rsa.pub";
+    private static final String PRIVATE_KEY_FILE = "id_%s";
+    private static final String PUBLIC_KEY_FILE = "id_%s.pub";
     private static final String PUBLIC_KEY_COMMENT = "mercuryssh";
     private static final Logger logger = LoggerFactory.getLogger(SshCommandRegular.class);
     private static SshManager instance;
@@ -50,6 +50,7 @@ public class SshManager {
 
     private SshManager() {
         this.jsch = new JSch();
+        migrateSshKeys();
     }
 
     public static synchronized SshManager getInstance() {
@@ -59,42 +60,69 @@ public class SshManager {
         return instance;
     }
 
+    private void migrateSshKeys() {
+        /* Migrate old keys to new naming scheme */
+        File oldPrivateKeyFile = new File(getSshDir(), "id_rsa");
+        if (oldPrivateKeyFile.exists()) {
+            try {
+                FileUtils.moveFile(oldPrivateKeyFile, getPrivateKeyFile(ServerAuthType.RSA2048));
+                logger.info(String.format("Migrated old key %s to %s", oldPrivateKeyFile,
+                        getPrivateKeyFile(ServerAuthType.RSA2048)));
+            } catch (IOException e) {
+                logger.error(String.format("Could not migrate old key %s to %s: %s",
+                        oldPrivateKeyFile, getPrivateKeyFile(ServerAuthType.RSA2048), e));
+            }
+        }
+        File oldPublicKeyFile = new File(getSshDir(), "id_rsa.pub");
+        if (oldPublicKeyFile.exists()) {
+            try {
+                FileUtils.moveFile(oldPublicKeyFile, getPublicKeyFile(ServerAuthType.RSA2048));
+                logger.info(String.format("Migrated old key %s to %s", oldPrivateKeyFile,
+                        getPublicKeyFile(ServerAuthType.RSA2048)));
+            } catch (IOException e) {
+                logger.error(String.format("Could not migrate old key %s to %s: %s",
+                        oldPrivateKeyFile, getPublicKeyFile(ServerAuthType.RSA2048), e));
+            }
+        }
+    }
+
     public File getKnownHosts() throws IOException {
         File file = getKnownHostsFile();
         file.createNewFile();
         return file;
     }
 
-    public File getPrivateKey() throws IOException, JSchException {
-        File file = getPrivateKeyFile();
+    public File getPrivateKey(ServerAuthType authType) throws IOException, JSchException {
+        File file = getPrivateKeyFile(authType);
         if (!file.exists()) {
-            generatePrivateKey(file);
+            generatePrivateKey(authType, file);
         }
         return file;
     }
 
-    public File getPublicKey() throws IOException, JSchException {
-        File file = getPublicKeyFile();
+    public File getPublicKey(ServerAuthType authType) throws IOException, JSchException {
+        File file = getPublicKeyFile(authType);
         if (!file.exists()) {
-            generatePublicKey(file);
+            generatePublicKey(authType, file);
         }
         return file;
     }
 
-    public String getPublicKeyContent() throws IOException, JSchException {
-        return FileUtils.readFileToString(getPublicKey()).replace("\n", "");
+    public String getPublicKeyContent(ServerAuthType authType) throws IOException, JSchException {
+        return FileUtils.readFileToString(getPublicKey(authType)).replace("\n", "");
     }
 
-    public File getPublicKeyExportedFile() {
-        return new File(Environment.getExternalStorageDirectory(), PUBLIC_KEY_FILE);
+    public File getPublicKeyExportedFile(ServerAuthType authType) {
+        return new File(Environment.getExternalStorageDirectory(), String.format(PUBLIC_KEY_FILE,
+                authType.toString().toLowerCase()));
     }
 
-    public ExportPublicKeyStatus exportPublicKey() {
+    public ExportPublicKeyStatus exportPublicKey(ServerAuthType authType) {
         ExportPublicKeyStatus status = ExportPublicKeyStatus.SUCCESS;
         if (MercuryApplication.isExternalStorageWritable()) {
             if (MercuryApplication.storagePermissionGranted()) {
                 try {
-                    FileUtils.copyFile(getPublicKey(), getPublicKeyExportedFile());
+                    FileUtils.copyFile(getPublicKey(authType), getPublicKeyExportedFile(authType));
                 } catch (JSchException | IOException e) {
                     status = ExportPublicKeyStatus.ERROR;
                     logger.error(e.getMessage().replace("\n", " "));
@@ -112,26 +140,30 @@ public class SshManager {
         return new File(getSshDir(), KNOWN_HOSTS_FILE);
     }
 
-    private File getPrivateKeyFile() {
-        return new File(getSshDir(), PRIVATE_KEY_FILE);
+    private File getPrivateKeyFile(ServerAuthType authType) {
+        return new File(getSshDir(), String.format(PRIVATE_KEY_FILE, authType.toString()
+                .toLowerCase()));
     }
 
-    private File getPublicKeyFile() {
-        return new File(getSshDir(), PUBLIC_KEY_FILE);
+    private File getPublicKeyFile(ServerAuthType authType) {
+        return new File(getSshDir(), String.format(PUBLIC_KEY_FILE, authType.toString()
+                .toLowerCase()));
     }
 
     private File getSshDir() {
         return MercuryApplication.getContext().getDir(SSH_DIR, Context.MODE_PRIVATE);
     }
 
-    private void generatePrivateKey(File file) throws IOException, JSchException {
-        KeyPair kpair = KeyPair.genKeyPair(jsch, KeyPair.RSA, PRIVATE_KEY_LENGTH);
+    private void generatePrivateKey(ServerAuthType authType, File file) throws IOException,
+            JSchException {
+        KeyPair kpair = KeyPair.genKeyPair(jsch, authType.getKeyType(), authType.getKeySize());
         kpair.writePrivateKey(file.getAbsolutePath());
         kpair.dispose();
     }
 
-    private void generatePublicKey(File file) throws IOException, JSchException {
-        KeyPair kpair = KeyPair.load(jsch, getPrivateKey().getAbsolutePath());
+    private void generatePublicKey(ServerAuthType authType, File file) throws IOException,
+            JSchException {
+        KeyPair kpair = KeyPair.load(jsch, getPrivateKey(authType).getAbsolutePath());
         kpair.writePublicKey(file.getAbsolutePath(), PUBLIC_KEY_COMMENT);
         kpair.dispose();
     }
