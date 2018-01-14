@@ -43,7 +43,7 @@ import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.adapter.ServerPagerAdapter;
@@ -59,15 +59,15 @@ public class MainActivity extends MercuryActivity {
     private static final int STORAGE_PERMISSION_PUB_REQ = 2;
     private static final int APP_INFO_REQ = 1;
 
-    @Bind(R.id.progress)
+    @BindView(R.id.progress)
     protected ProgressBar progress;
-    @Bind(R.id.empty)
+    @BindView(R.id.empty)
     protected LinearLayout empty;
-    @Bind(R.id.message)
+    @BindView(R.id.message)
     protected TextView message;
-    @Bind(R.id.settings)
+    @BindView(R.id.settings)
     protected TextView settings;
-    @Bind(R.id.pager)
+    @BindView(R.id.pager)
     protected ViewPager pager;
 
     private ServerPagerAdapter adapter;

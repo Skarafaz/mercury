@@ -25,13 +25,13 @@ import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import it.skarafaz.mercury.R;
 
 public class HelpActivity extends MercuryActivity {
     private static final String INDEX_URL = "file:///android_asset/help/index.html";
-    @Bind(R.id.webview)
+    @BindView(R.id.webview)
     protected WebView webView;
 
     @Override

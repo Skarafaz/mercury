@@ -1,14 +1,19 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "it.skarafaz.mercury"
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 27
         versionCode 8
         versionName "1.2.2-SNAPSHOT"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [eventBusIndex: 'it.skarafaz.mercury.EventBusIndex']
+            }
+        }
     }
     buildTypes {
         release {
@@ -26,20 +31,11 @@ android {
 
 }
 
-apply plugin: 'com.neenbedankt.android-apt'
-
-apt {
-    arguments {
-        eventBusIndex "it.skarafaz.mercury.EventBusIndex"
-    }
-}
-
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:support-v4:25.3.1'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.android.support:support-v4:27.0.2'
+    compile 'com.android.support:appcompat-v7:27.0.2'
+    compile 'com.android.support:recyclerview-v7:27.0.2'
     compile 'commons-io:commons-io:2.4'
     compile 'org.apache.commons:commons-lang3:3.3.2'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.4.2'
@@ -48,6 +44,8 @@ dependencies {
     compile 'com.github.tony19:logback-android-classic:1.1.1-6'
     compile 'org.slf4j:slf4j-api:1.7.21'
     compile 'com.afollestad.material-dialogs:core:0.8.6.2'
-    compile 'org.greenrobot:eventbus:3.0.0'
-    apt 'org.greenrobot:eventbus-annotation-processor:3.0.1'
+    compile 'org.greenrobot:eventbus:3.1.1'
+    compile 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.1.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 }

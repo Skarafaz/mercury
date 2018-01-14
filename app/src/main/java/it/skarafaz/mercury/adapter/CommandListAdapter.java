@@ -33,7 +33,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.model.Command;
@@ -78,11 +78,11 @@ public class CommandListAdapter extends ArrayAdapter<Command> {
     }
 
     static class ViewHolder {
-        @Bind(R.id.row)
+        @BindView(R.id.row)
         RelativeLayout row;
-        @Bind(R.id.name)
+        @BindView(R.id.name)
         TextView name;
-        @Bind(R.id.info)
+        @BindView(R.id.info)
         ImageView info;
 
         public ViewHolder(View view) {
