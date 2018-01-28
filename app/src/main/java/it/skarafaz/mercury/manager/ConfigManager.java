@@ -20,8 +20,12 @@
 
 package it.skarafaz.mercury.manager;
 
+import android.Manifest;
 import android.os.Environment;
-
+import it.skarafaz.mercury.MercuryApplication;
+import it.skarafaz.mercury.jackson.ServerMapper;
+import it.skarafaz.mercury.jackson.ValidationException;
+import it.skarafaz.mercury.model.Server;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,11 +36,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
-import it.skarafaz.mercury.MercuryApplication;
-import it.skarafaz.mercury.jackson.ServerMapper;
-import it.skarafaz.mercury.jackson.ValidationException;
-import it.skarafaz.mercury.model.Server;
 
 public class ConfigManager {
     private static final Logger logger = LoggerFactory.getLogger(ConfigManager.class);
@@ -73,7 +72,7 @@ public class ConfigManager {
 
         LoadConfigFilesStatus status = LoadConfigFilesStatus.SUCCESS;
         if (MercuryApplication.isExternalStorageReadable()) {
-            if (MercuryApplication.storagePermissionGranted()) {
+            if (MercuryApplication.hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 if (configDir.exists() && configDir.isDirectory()) {
                     for (File file : listConfigFiles()) {
                         try {

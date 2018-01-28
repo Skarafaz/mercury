@@ -20,12 +20,9 @@
 
 package it.skarafaz.mercury.ssh;
 
-import com.jcraft.jsch.ChannelExec;
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.JSchException;
-import com.jcraft.jsch.Session;
-import com.jcraft.jsch.UserInfo;
-
+import com.jcraft.jsch.*;
+import it.skarafaz.mercury.event.SshCommandEnd;
+import it.skarafaz.mercury.event.SshCommandStart;
 import org.greenrobot.eventbus.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,9 +30,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-
-import it.skarafaz.mercury.event.SshCommandEnd;
-import it.skarafaz.mercury.event.SshCommandStart;
 
 public abstract class SshCommand extends Thread {
     protected static final int TIMEOUT = 10000;

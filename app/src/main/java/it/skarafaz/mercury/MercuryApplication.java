@@ -20,14 +20,14 @@
 
 package it.skarafaz.mercury;
 
-import android.Manifest;
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.ViewConfiguration;
-
 import org.greenrobot.eventbus.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,9 +64,17 @@ public class MercuryApplication extends Application {
         }
     }
 
-    public static boolean storagePermissionGranted() {
-        String permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+    public static boolean hasPermission(String permission) {
         return ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static boolean requestPermission(Activity activity, int requestCode, String permission) {
+        boolean requested = false;
+        if (!ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
+            ActivityCompat.requestPermissions(activity, new String[]{permission}, requestCode);
+            requested = true;
+        }
+        return requested;
     }
 
     public static boolean isExternalStorageReadable() {

@@ -28,7 +28,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -40,11 +39,9 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.greenrobot.eventbus.EventBus;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import it.skarafaz.mercury.MercuryApplication;
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.adapter.ServerPagerAdapter;
 import it.skarafaz.mercury.fragment.ProgressDialogFragment;
@@ -53,25 +50,26 @@ import it.skarafaz.mercury.manager.ExportPublicKeyStatus;
 import it.skarafaz.mercury.manager.LoadConfigFilesStatus;
 import it.skarafaz.mercury.manager.SshManager;
 import it.skarafaz.mercury.ssh.SshCommandPubKey;
+import org.greenrobot.eventbus.EventBus;
 
 public class MainActivity extends MercuryActivity {
-    private static final int STORAGE_PERMISSION_CONFIG_REQ = 1;
-    private static final int STORAGE_PERMISSION_PUB_REQ = 2;
-    private static final int APP_INFO_REQ = 1;
+    private static final int PRC_WRITE_EXT_STORAGE_LOAD_CONFIG_FILES = 101;
+    private static final int PRC_WRITE_EXT_STORAGE_EXPORT_PUBLIC_KEY = 102;
+    private static final int RC_START_APP_INFO = 201;
 
     @BindView(R.id.progress)
-    protected ProgressBar progress;
+    protected ProgressBar progressBar;
     @BindView(R.id.empty)
-    protected LinearLayout empty;
+    protected LinearLayout emptyLayout;
     @BindView(R.id.message)
-    protected TextView message;
+    protected TextView emptyMessage;
     @BindView(R.id.settings)
-    protected TextView settings;
+    protected TextView settingsButton;
     @BindView(R.id.pager)
-    protected ViewPager pager;
+    protected ViewPager serverPager;
 
-    private ServerPagerAdapter adapter;
-    private MainEventSubscriber subscriber;
+    private ServerPagerAdapter serverPagerAdapter;
+    private MainActivityEventSubscriber mainActivityEventSubscriber;
     private boolean busy = false;
 
     @Override
@@ -81,17 +79,17 @@ public class MainActivity extends MercuryActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        adapter = new ServerPagerAdapter(getSupportFragmentManager());
-        pager.setAdapter(adapter);
+        serverPagerAdapter = new ServerPagerAdapter(getSupportFragmentManager());
+        serverPager.setAdapter(serverPagerAdapter);
 
-        settings.setOnClickListener(new View.OnClickListener() {
+        settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startAppInfo();
             }
         });
 
-        subscriber = new MainEventSubscriber(this);
+        mainActivityEventSubscriber = new MainActivityEventSubscriber(this);
 
         loadConfigFiles();
     }
@@ -100,12 +98,12 @@ public class MainActivity extends MercuryActivity {
     protected void onStart() {
         super.onStart();
 
-        EventBus.getDefault().register(subscriber);
+        EventBus.getDefault().register(mainActivityEventSubscriber);
     }
 
     @Override
     protected void onStop() {
-        EventBus.getDefault().unregister(subscriber);
+        EventBus.getDefault().unregister(mainActivityEventSubscriber);
 
         super.onStop();
     }
@@ -143,10 +141,10 @@ public class MainActivity extends MercuryActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             switch (requestCode) {
-                case STORAGE_PERMISSION_CONFIG_REQ:
+                case PRC_WRITE_EXT_STORAGE_LOAD_CONFIG_FILES:
                     loadConfigFiles();
                     break;
-                case STORAGE_PERMISSION_PUB_REQ:
+                case PRC_WRITE_EXT_STORAGE_EXPORT_PUBLIC_KEY:
                     exportPublicKey();
                     break;
             }
@@ -155,8 +153,10 @@ public class MainActivity extends MercuryActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == APP_INFO_REQ) {
-            loadConfigFiles();
+        switch (requestCode) {
+            case RC_START_APP_INFO:
+                loadConfigFiles();
+                break;
         }
     }
 
@@ -166,9 +166,9 @@ public class MainActivity extends MercuryActivity {
                 @Override
                 protected void onPreExecute() {
                     busy = true;
-                    progress.setVisibility(View.VISIBLE);
-                    empty.setVisibility(View.INVISIBLE);
-                    pager.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.VISIBLE);
+                    emptyLayout.setVisibility(View.INVISIBLE);
+                    serverPager.setVisibility(View.INVISIBLE);
                 }
 
                 @Override
@@ -178,21 +178,21 @@ public class MainActivity extends MercuryActivity {
 
                 @Override
                 protected void onPostExecute(LoadConfigFilesStatus status) {
-                    progress.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.INVISIBLE);
                     if (ConfigManager.getInstance().getServers().size() > 0) {
-                        adapter.updateServers(ConfigManager.getInstance().getServers());
-                        pager.setVisibility(View.VISIBLE);
+                        serverPagerAdapter.updateServers(ConfigManager.getInstance().getServers());
+                        serverPager.setVisibility(View.VISIBLE);
                         if (status == LoadConfigFilesStatus.ERROR) {
                             Toast.makeText(MainActivity.this, getString(status.message()), Toast.LENGTH_LONG).show();
                         }
                     } else {
-                        message.setText(getString(status.message(), ConfigManager.getInstance().getConfigDir()));
-                        empty.setVisibility(View.VISIBLE);
+                        emptyMessage.setText(getString(status.message(), ConfigManager.getInstance().getConfigDir()));
+                        emptyLayout.setVisibility(View.VISIBLE);
                         if (status == LoadConfigFilesStatus.PERMISSION) {
-                            settings.setVisibility(View.VISIBLE);
-                            requestStoragePermission(STORAGE_PERMISSION_CONFIG_REQ);
+                            settingsButton.setVisibility(View.VISIBLE);
+                            MercuryApplication.requestPermission(MainActivity.this, PRC_WRITE_EXT_STORAGE_LOAD_CONFIG_FILES, Manifest.permission.WRITE_EXTERNAL_STORAGE);
                         } else {
-                            settings.setVisibility(View.GONE);
+                            settingsButton.setVisibility(View.GONE);
                         }
                     }
                     busy = false;
@@ -220,7 +220,7 @@ public class MainActivity extends MercuryActivity {
 
                     boolean toast = true;
                     if (status == ExportPublicKeyStatus.PERMISSION) {
-                        toast = !requestStoragePermission(STORAGE_PERMISSION_PUB_REQ);
+                        toast = !MercuryApplication.requestPermission(MainActivity.this, PRC_WRITE_EXT_STORAGE_EXPORT_PUBLIC_KEY, Manifest.permission.WRITE_EXTERNAL_STORAGE);
                     }
                     if (toast) {
                         Toast.makeText(MainActivity.this, getString(status.message(), SshManager.getInstance().getPublicKeyExportedFile()), Toast.LENGTH_LONG).show();
@@ -230,22 +230,13 @@ public class MainActivity extends MercuryActivity {
         }
     }
 
-    private boolean requestStoragePermission(int req) {
-        boolean requested = false;
-        if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, req);
-            requested = true;
-        }
-        return requested;
-    }
-
     private void startAppInfo() {
         Intent intent = new Intent();
         intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         intent.setData(Uri.parse(String.format("package:%s", getPackageName())));
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-        startActivityForResult(intent, APP_INFO_REQ);
+        startActivityForResult(intent, RC_START_APP_INFO);
     }
 
     protected void showProgressDialog(String content) {

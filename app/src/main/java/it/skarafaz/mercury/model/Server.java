@@ -21,7 +21,6 @@
 package it.skarafaz.mercury.model;
 
 import android.support.annotation.NonNull;
-
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.io.Serializable;

@@ -23,7 +23,8 @@ package it.skarafaz.mercury.ssh;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.UserInfo;
-
+import it.skarafaz.mercury.event.SshCommandPubKeyInput;
+import it.skarafaz.mercury.manager.SshManager;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.slf4j.Logger;
@@ -36,9 +37,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
-import it.skarafaz.mercury.event.SshCommandPubKeyInput;
-import it.skarafaz.mercury.manager.SshManager;
 
 public class SshCommandPubKey extends SshCommand {
     private static final Logger logger = LoggerFactory.getLogger(SshCommandPubKey.class);

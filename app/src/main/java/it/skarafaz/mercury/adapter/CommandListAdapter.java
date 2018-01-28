@@ -28,16 +28,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.afollestad.materialdialogs.MaterialDialog;
-
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.afollestad.materialdialogs.MaterialDialog;
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.model.Command;
 import it.skarafaz.mercury.ssh.SshCommandRegular;
+
+import java.util.List;
 
 public class CommandListAdapter extends ArrayAdapter<Command> {
 

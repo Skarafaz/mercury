@@ -21,7 +21,10 @@
 package it.skarafaz.mercury.jackson;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import it.skarafaz.mercury.MercuryApplication;
+import it.skarafaz.mercury.R;
+import it.skarafaz.mercury.model.Command;
+import it.skarafaz.mercury.model.Server;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -29,11 +32,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import it.skarafaz.mercury.MercuryApplication;
-import it.skarafaz.mercury.R;
-import it.skarafaz.mercury.model.Command;
-import it.skarafaz.mercury.model.Server;
 
 public class ServerMapper {
     private ObjectMapper mapper;

@@ -23,12 +23,11 @@ package it.skarafaz.mercury.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import it.skarafaz.mercury.fragment.ServerFragment;
+import it.skarafaz.mercury.model.Server;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import it.skarafaz.mercury.fragment.ServerFragment;
-import it.skarafaz.mercury.model.Server;
 
 public class ServerPagerAdapter extends FragmentStatePagerAdapter {
     private List<Server> servers;

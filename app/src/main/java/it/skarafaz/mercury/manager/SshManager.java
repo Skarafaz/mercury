@@ -20,22 +20,20 @@
 
 package it.skarafaz.mercury.manager;
 
+import android.Manifest;
 import android.content.Context;
 import android.os.Environment;
-
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.KeyPair;
-
+import it.skarafaz.mercury.MercuryApplication;
+import it.skarafaz.mercury.ssh.SshCommandRegular;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-
-import it.skarafaz.mercury.MercuryApplication;
-import it.skarafaz.mercury.ssh.SshCommandRegular;
 
 public class SshManager {
     private static final String SSH_DIR = "ssh";
@@ -92,7 +90,7 @@ public class SshManager {
     public ExportPublicKeyStatus exportPublicKey() {
         ExportPublicKeyStatus status = ExportPublicKeyStatus.SUCCESS;
         if (MercuryApplication.isExternalStorageWritable()) {
-            if (MercuryApplication.storagePermissionGranted()) {
+            if (MercuryApplication.hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 try {
                     FileUtils.copyFile(getPublicKey(), getPublicKeyExportedFile());
                 } catch (JSchException | IOException e) {

@@ -23,28 +23,20 @@ package it.skarafaz.mercury.activity;
 import android.support.annotation.NonNull;
 import android.text.InputType;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-
+import it.skarafaz.mercury.R;
+import it.skarafaz.mercury.event.*;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import it.skarafaz.mercury.R;
-import it.skarafaz.mercury.event.SshCommandConfirm;
-import it.skarafaz.mercury.event.SshCommandEnd;
-import it.skarafaz.mercury.event.SshCommandMessage;
-import it.skarafaz.mercury.event.SshCommandPassword;
-import it.skarafaz.mercury.event.SshCommandPubKeyInput;
-import it.skarafaz.mercury.event.SshCommandStart;
-import it.skarafaz.mercury.event.SshCommandYesNo;
-
-public class MainEventSubscriber {
+@SuppressWarnings("unused")
+public class MainActivityEventSubscriber {
     private MainActivity activity;
 
-    public MainEventSubscriber(MainActivity activity) {
+    public MainActivityEventSubscriber(MainActivity activity) {
         this.activity = activity;
     }
 

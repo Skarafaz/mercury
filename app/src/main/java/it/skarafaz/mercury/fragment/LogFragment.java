@@ -23,13 +23,9 @@ package it.skarafaz.mercury.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-
+import android.view.*;
+import it.skarafaz.mercury.R;
+import it.skarafaz.mercury.adapter.LogListAdapter;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,9 +34,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import it.skarafaz.mercury.R;
-import it.skarafaz.mercury.adapter.LogListAdapter;
 
 public class LogFragment extends ListFragment {
     private static final String LOG_DIR = "log";

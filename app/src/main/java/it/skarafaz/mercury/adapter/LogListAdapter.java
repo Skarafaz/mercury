@@ -22,10 +22,9 @@ package it.skarafaz.mercury.adapter;
 
 import android.content.Context;
 import android.widget.ArrayAdapter;
+import it.skarafaz.mercury.R;
 
 import java.util.List;
-
-import it.skarafaz.mercury.R;
 
 public class LogListAdapter extends ArrayAdapter<String> {
 

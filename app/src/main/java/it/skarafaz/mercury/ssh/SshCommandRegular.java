@@ -22,20 +22,18 @@ package it.skarafaz.mercury.ssh;
 
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.UserInfo;
-
-import org.greenrobot.eventbus.EventBus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.util.Properties;
-
 import it.skarafaz.mercury.MercuryApplication;
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.event.SshCommandConfirm;
 import it.skarafaz.mercury.event.SshCommandPassword;
 import it.skarafaz.mercury.manager.SshManager;
 import it.skarafaz.mercury.model.Command;
+import org.greenrobot.eventbus.EventBus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.Properties;
 
 public class SshCommandRegular extends SshCommand {
     private static final Logger logger = LoggerFactory.getLogger(SshCommandRegular.class);
