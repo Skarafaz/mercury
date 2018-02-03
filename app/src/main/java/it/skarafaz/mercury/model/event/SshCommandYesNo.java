@@ -1,6 +1,6 @@
 /*
  * Mercury-SSH
- * Copyright (C) 2017 Skarafaz
+ * Copyright (C) 2018 Skarafaz
  *
  * This file is part of Mercury-SSH.
  *
@@ -18,18 +18,24 @@
  * along with Mercury-SSH.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package it.skarafaz.mercury.event;
+package it.skarafaz.mercury.model.event;
 
-import it.skarafaz.mercury.ssh.SshCommandStatus;
+import it.skarafaz.mercury.ssh.SshCommandDrop;
 
-public class SshCommandEnd {
-    private SshCommandStatus status;
+public class SshCommandYesNo {
+    private String message;
+    private SshCommandDrop<Boolean> drop;
 
-    public SshCommandEnd(SshCommandStatus status) {
-        this.status = status;
+    public SshCommandYesNo(String message, SshCommandDrop<Boolean> drop) {
+        this.message = message;
+        this.drop = drop;
     }
 
-    public SshCommandStatus getStatus() {
-        return status;
+    public String getMessage() {
+        return message;
+    }
+
+    public SshCommandDrop<Boolean> getDrop() {
+        return drop;
     }
 }

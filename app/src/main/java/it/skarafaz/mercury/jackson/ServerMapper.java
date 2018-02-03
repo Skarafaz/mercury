@@ -23,8 +23,8 @@ package it.skarafaz.mercury.jackson;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.skarafaz.mercury.MercuryApplication;
 import it.skarafaz.mercury.R;
-import it.skarafaz.mercury.model.Command;
-import it.skarafaz.mercury.model.Server;
+import it.skarafaz.mercury.model.config.Command;
+import it.skarafaz.mercury.model.config.Server;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;

@@ -28,7 +28,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import it.skarafaz.mercury.MercuryApplication;
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.activity.MercuryActivity;
-import it.skarafaz.mercury.event.*;
+import it.skarafaz.mercury.model.event.*;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

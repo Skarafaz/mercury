@@ -27,7 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.adapter.CommandListAdapter;
-import it.skarafaz.mercury.model.Server;
+import it.skarafaz.mercury.model.config.Server;
 
 public class ServerFragment extends ListFragment {
     public static final String SERVER_ARG = "SERVER_ARG";

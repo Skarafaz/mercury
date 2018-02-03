@@ -21,8 +21,8 @@
 package it.skarafaz.mercury.ssh;
 
 import com.jcraft.jsch.*;
-import it.skarafaz.mercury.event.SshCommandEnd;
-import it.skarafaz.mercury.event.SshCommandStart;
+import it.skarafaz.mercury.model.event.SshCommandEnd;
+import it.skarafaz.mercury.model.event.SshCommandStart;
 import org.greenrobot.eventbus.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

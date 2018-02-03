@@ -25,7 +25,7 @@ import android.os.Environment;
 import it.skarafaz.mercury.MercuryApplication;
 import it.skarafaz.mercury.jackson.ServerMapper;
 import it.skarafaz.mercury.jackson.ValidationException;
-import it.skarafaz.mercury.model.Server;
+import it.skarafaz.mercury.model.config.Server;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

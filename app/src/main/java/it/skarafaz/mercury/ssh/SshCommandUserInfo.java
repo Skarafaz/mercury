@@ -23,9 +23,9 @@ package it.skarafaz.mercury.ssh;
 import com.jcraft.jsch.UserInfo;
 import it.skarafaz.mercury.MercuryApplication;
 import it.skarafaz.mercury.R;
-import it.skarafaz.mercury.event.SshCommandMessage;
-import it.skarafaz.mercury.event.SshCommandPassword;
-import it.skarafaz.mercury.event.SshCommandYesNo;
+import it.skarafaz.mercury.model.event.SshCommandMessage;
+import it.skarafaz.mercury.model.event.SshCommandPassword;
+import it.skarafaz.mercury.model.event.SshCommandYesNo;
 import org.greenrobot.eventbus.EventBus;
 
 public class SshCommandUserInfo implements UserInfo {

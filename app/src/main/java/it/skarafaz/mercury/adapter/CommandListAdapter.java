@@ -32,7 +32,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.afollestad.materialdialogs.MaterialDialog;
 import it.skarafaz.mercury.R;
-import it.skarafaz.mercury.model.Command;
+import it.skarafaz.mercury.model.config.Command;
 import it.skarafaz.mercury.ssh.SshCommandRegular;
 
 import java.util.List;
