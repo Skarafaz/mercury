@@ -25,6 +25,7 @@ import android.text.InputType;
 import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import it.skarafaz.mercury.MercuryApplication;
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.event.*;
 import org.apache.commons.lang3.StringUtils;
@@ -68,7 +69,7 @@ public class MainActivityEventSubscriber {
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onSshCommandStart(SshCommandStart event) {
-        activity.showProgressDialog(activity.getString(R.string.sending_command));
+        MercuryApplication.showProgressDialog(activity.getSupportFragmentManager(), activity.getString(R.string.sending_command));
 
         EventBus.getDefault().removeStickyEvent(event);
     }
@@ -76,7 +77,7 @@ public class MainActivityEventSubscriber {
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onSshCommandEnd(SshCommandEnd event) {
         Toast.makeText(activity, activity.getString(event.getStatus().message()), Toast.LENGTH_SHORT).show();
-        activity.dismissProgressDialog();
+        MercuryApplication.dismissProgressDialog(activity.getSupportFragmentManager());
 
         EventBus.getDefault().removeStickyEvent(event);
     }

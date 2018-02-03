@@ -33,8 +33,10 @@ import it.skarafaz.mercury.R;
 public class ProgressDialogFragment extends DialogFragment {
     public static final String TAG = "PROGRESS_DIALOG";
     private static final String CONTENT_ARG = "CONTENT_ARG";
+
     @BindView(R.id.message)
     protected TextView message;
+
     private String content;
 
     public static ProgressDialogFragment newInstance(String content) {

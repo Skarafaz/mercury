@@ -206,7 +206,7 @@ public class MainActivity extends MercuryActivity {
             new AsyncTask<Void, Void, ExportPublicKeyStatus>() {
                 @Override
                 protected void onPreExecute() {
-                    showProgressDialog(getString(R.string.exporting_public_key));
+                    MercuryApplication.showProgressDialog(getSupportFragmentManager(), getString(R.string.exporting_public_key));
                 }
 
                 @Override
@@ -216,7 +216,7 @@ public class MainActivity extends MercuryActivity {
 
                 @Override
                 protected void onPostExecute(ExportPublicKeyStatus status) {
-                    dismissProgressDialog();
+                    MercuryApplication.dismissProgressDialog(getSupportFragmentManager());
 
                     boolean toast = true;
                     if (status == ExportPublicKeyStatus.PERMISSION) {
@@ -237,21 +237,5 @@ public class MainActivity extends MercuryActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         startActivityForResult(intent, RC_START_APP_INFO);
-    }
-
-    protected void showProgressDialog(String content) {
-        FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
-        ft.add(ProgressDialogFragment.newInstance(content), ProgressDialogFragment.TAG);
-        ft.commitAllowingStateLoss();
-    }
-
-    protected void dismissProgressDialog() {
-        FragmentManager fm = this.getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        Fragment frag = fm.findFragmentByTag(ProgressDialogFragment.TAG);
-        if (frag != null) {
-            ft.remove(frag);
-        }
-        ft.commitAllowingStateLoss();
     }
 }

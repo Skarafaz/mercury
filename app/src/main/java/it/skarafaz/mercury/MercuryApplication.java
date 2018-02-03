@@ -26,8 +26,12 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.view.ViewConfiguration;
+import it.skarafaz.mercury.fragment.ProgressDialogFragment;
 import org.greenrobot.eventbus.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,6 +66,21 @@ public class MercuryApplication extends Application {
         } catch (Exception e) {
             logger.error(e.getMessage().replace("\n", " "));
         }
+    }
+
+    public static void showProgressDialog(FragmentManager manager, String content) {
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.add(ProgressDialogFragment.newInstance(content), ProgressDialogFragment.TAG);
+        transaction.commitAllowingStateLoss();
+    }
+
+    public static void dismissProgressDialog(FragmentManager manager) {
+        FragmentTransaction transaction = manager.beginTransaction();
+        Fragment fragment = manager.findFragmentByTag(ProgressDialogFragment.TAG);
+        if (fragment != null) {
+            transaction.remove(fragment);
+        }
+        transaction.commitAllowingStateLoss();
     }
 
     public static boolean hasPermission(String permission) {
