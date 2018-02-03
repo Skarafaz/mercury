@@ -35,7 +35,7 @@
     <string name="action_settings">Settings</string>
 
     <string name="settings_export_public_key">Export public key</string>
-    <string name="settings_group_public_key">Chiave pubblica</string>
+    <string name="settings_group_public_key">Public key</string>
     <string name="settings_send_public_key">Send public key</string>
 
     <string name="ok">OK</string>
