@@ -1,6 +1,6 @@
 /*
  * Mercury-SSH
- * Copyright (C) 2017 Skarafaz
+ * Copyright (C) 2018 Skarafaz
  *
  * This file is part of Mercury-SSH.
  *
@@ -18,7 +18,7 @@
  * along with Mercury-SSH.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package it.skarafaz.mercury.activity;
+package it.skarafaz.mercury.ssh;
 
 import android.support.annotation.NonNull;
 import android.text.InputType;
@@ -27,6 +27,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import it.skarafaz.mercury.MercuryApplication;
 import it.skarafaz.mercury.R;
+import it.skarafaz.mercury.activity.MercuryActivity;
 import it.skarafaz.mercury.event.*;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
@@ -34,10 +35,10 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 @SuppressWarnings("unused")
-public class MainActivityEventSubscriber {
-    private MainActivity activity;
+public class SshEventSubscriber {
+    private MercuryActivity activity;
 
-    public MainActivityEventSubscriber(MainActivity activity) {
+    public SshEventSubscriber(MercuryActivity activity) {
         this.activity = activity;
     }
 

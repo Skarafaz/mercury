@@ -28,9 +28,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,17 +41,13 @@ import butterknife.ButterKnife;
 import it.skarafaz.mercury.MercuryApplication;
 import it.skarafaz.mercury.R;
 import it.skarafaz.mercury.adapter.ServerPagerAdapter;
-import it.skarafaz.mercury.fragment.ProgressDialogFragment;
 import it.skarafaz.mercury.manager.ConfigManager;
-import it.skarafaz.mercury.manager.ExportPublicKeyStatus;
 import it.skarafaz.mercury.manager.LoadConfigFilesStatus;
-import it.skarafaz.mercury.manager.SshManager;
-import it.skarafaz.mercury.ssh.SshCommandPubKey;
+import it.skarafaz.mercury.ssh.SshEventSubscriber;
 import org.greenrobot.eventbus.EventBus;
 
 public class MainActivity extends MercuryActivity {
-    private static final int PRC_WRITE_EXT_STORAGE_LOAD_CONFIG_FILES = 101;
-    private static final int PRC_WRITE_EXT_STORAGE_EXPORT_PUBLIC_KEY = 102;
+    private static final int PRC_WRITE_EXT_STORAGE = 101;
     private static final int RC_START_APP_INFO = 201;
 
     @BindView(R.id.progress)
@@ -69,7 +62,7 @@ public class MainActivity extends MercuryActivity {
     protected ViewPager serverPager;
 
     private ServerPagerAdapter serverPagerAdapter;
-    private MainActivityEventSubscriber mainActivityEventSubscriber;
+    private SshEventSubscriber sshEventSubscriber;
     private boolean busy = false;
 
     @Override
@@ -89,7 +82,7 @@ public class MainActivity extends MercuryActivity {
             }
         });
 
-        mainActivityEventSubscriber = new MainActivityEventSubscriber(this);
+        sshEventSubscriber = new SshEventSubscriber(this);
 
         loadConfigFiles();
     }
@@ -98,12 +91,12 @@ public class MainActivity extends MercuryActivity {
     protected void onStart() {
         super.onStart();
 
-        EventBus.getDefault().register(mainActivityEventSubscriber);
+        EventBus.getDefault().register(sshEventSubscriber);
     }
 
     @Override
     protected void onStop() {
-        EventBus.getDefault().unregister(mainActivityEventSubscriber);
+        EventBus.getDefault().unregister(sshEventSubscriber);
 
         super.onStop();
     }
@@ -120,17 +113,14 @@ public class MainActivity extends MercuryActivity {
             case R.id.action_reload:
                 loadConfigFiles();
                 return true;
-            case R.id.action_export_public_key:
-                exportPublicKey();
+            case R.id.action_help:
+                startActivity(new Intent(this, HelpActivity.class));
                 return true;
-            case R.id.action_send_public_key:
-                new SshCommandPubKey().start();
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             case R.id.action_log:
                 startActivity(new Intent(this, LogActivity.class));
-                return true;
-            case R.id.action_help:
-                startActivity(new Intent(this, HelpActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -141,11 +131,8 @@ public class MainActivity extends MercuryActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             switch (requestCode) {
-                case PRC_WRITE_EXT_STORAGE_LOAD_CONFIG_FILES:
+                case PRC_WRITE_EXT_STORAGE:
                     loadConfigFiles();
-                    break;
-                case PRC_WRITE_EXT_STORAGE_EXPORT_PUBLIC_KEY:
-                    exportPublicKey();
                     break;
             }
         }
@@ -190,41 +177,12 @@ public class MainActivity extends MercuryActivity {
                         emptyLayout.setVisibility(View.VISIBLE);
                         if (status == LoadConfigFilesStatus.PERMISSION) {
                             settingsButton.setVisibility(View.VISIBLE);
-                            MercuryApplication.requestPermission(MainActivity.this, PRC_WRITE_EXT_STORAGE_LOAD_CONFIG_FILES, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                            MercuryApplication.requestPermission(MainActivity.this, PRC_WRITE_EXT_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
                         } else {
                             settingsButton.setVisibility(View.GONE);
                         }
                     }
                     busy = false;
-                }
-            }.execute();
-        }
-    }
-
-    private void exportPublicKey() {
-        if (!busy) {
-            new AsyncTask<Void, Void, ExportPublicKeyStatus>() {
-                @Override
-                protected void onPreExecute() {
-                    MercuryApplication.showProgressDialog(getSupportFragmentManager(), getString(R.string.exporting_public_key));
-                }
-
-                @Override
-                protected ExportPublicKeyStatus doInBackground(Void... params) {
-                    return SshManager.getInstance().exportPublicKey();
-                }
-
-                @Override
-                protected void onPostExecute(ExportPublicKeyStatus status) {
-                    MercuryApplication.dismissProgressDialog(getSupportFragmentManager());
-
-                    boolean toast = true;
-                    if (status == ExportPublicKeyStatus.PERMISSION) {
-                        toast = !MercuryApplication.requestPermission(MainActivity.this, PRC_WRITE_EXT_STORAGE_EXPORT_PUBLIC_KEY, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                    }
-                    if (toast) {
-                        Toast.makeText(MainActivity.this, getString(status.message(), SshManager.getInstance().getPublicKeyExportedFile()), Toast.LENGTH_LONG).show();
-                    }
                 }
             }.execute();
         }
