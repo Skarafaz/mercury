@@ -32,20 +32,20 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:support-v4:28.0.0'
-    compile 'com.android.support:appcompat-v7:28.0.0'
-    compile 'com.android.support:recyclerview-v7:28.0.0'
-    compile 'commons-io:commons-io:2.4'
-    compile 'org.apache.commons:commons-lang3:3.3.2'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.4.2'
-    compile 'com.jcraft:jsch:0.1.54'
-    compile 'com.github.tony19:logback-android-core:1.1.1-6'
-    compile 'com.github.tony19:logback-android-classic:1.1.1-6'
-    compile 'org.slf4j:slf4j-api:1.7.21'
-    compile 'com.afollestad.material-dialogs:core:0.8.6.2'
-    compile 'org.greenrobot:eventbus:3.1.1'
-    compile 'com.jakewharton:butterknife:8.8.1'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    api 'commons-io:commons-io:2.4'
+    api 'org.apache.commons:commons-lang3:3.3.2'
+    api 'com.fasterxml.jackson.core:jackson-databind:2.4.2'
+    api 'com.jcraft:jsch:0.1.54'
+    api 'com.github.tony19:logback-android-core:1.1.1-6'
+    api 'com.github.tony19:logback-android-classic:1.1.1-6'
+    api 'org.slf4j:slf4j-api:1.7.21'
+    api 'com.afollestad.material-dialogs:core:0.8.6.2'
+    api 'org.greenrobot:eventbus:3.1.1'
+    api 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.1.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 }
