@@ -1,6 +1,6 @@
 /*
  * Mercury-SSH
- * Copyright (C) 2017 Skarafaz
+ * Copyright (C) 2019 Skarafaz
  *
  * This file is part of Mercury-SSH.
  *
@@ -24,10 +24,10 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.UserInfo;
 import it.skarafaz.mercury.MercuryApplication;
 import it.skarafaz.mercury.R;
-import it.skarafaz.mercury.model.event.SshCommandConfirm;
-import it.skarafaz.mercury.model.event.SshCommandPassword;
 import it.skarafaz.mercury.manager.SshManager;
 import it.skarafaz.mercury.model.config.Command;
+import it.skarafaz.mercury.model.event.SshCommandConfirm;
+import it.skarafaz.mercury.model.event.SshCommandPassword;
 import org.greenrobot.eventbus.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -106,9 +106,9 @@ public class SshCommandRegular extends SshCommand {
     @Override
     protected String formatCmd(String cmd) {
         if (sudo) {
-            return String.format("echo %s | %s -S -p '' %s %s > /dev/null 2>&1", password, sudoPath, nohupPath, cmd);
+            return String.format("echo '%s' | %s -S -- %s sh -c '%s' > /dev/null 2>&1 &", escapeQuotes(password), sudoPath, nohupPath, escapeQuotes(cmd));
         } else {
-            return String.format("%s %s > /dev/null 2>&1", nohupPath, cmd);
+            return String.format("%s sh -c '%s' > /dev/null 2>&1 &", nohupPath, escapeQuotes(cmd));
         }
     }
 
@@ -118,5 +118,9 @@ public class SshCommandRegular extends SshCommand {
             sb.append(String.format(":%d", port));
         }
         return sb.toString();
+    }
+
+    private String escapeQuotes(String str) {
+        return str.replace("'", "'\\''");
     }
 }
