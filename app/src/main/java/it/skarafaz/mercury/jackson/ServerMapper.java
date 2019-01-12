@@ -1,6 +1,6 @@
 /*
  * Mercury-SSH
- * Copyright (C) 2017 Skarafaz
+ * Copyright (C) 2019 Skarafaz
  *
  * This file is part of Mercury-SSH.
  *
@@ -67,6 +67,9 @@ public class ServerMapper {
         }
         if (StringUtils.isEmpty(server.getPassword())) {
             server.setPassword(null);
+        }
+        if (server.getSudoNoPasswd() == null) {
+            server.setSudoNoPasswd(false);
         }
         if (StringUtils.isBlank(server.getSudoPath())) {
             server.setSudoPath("sudo");

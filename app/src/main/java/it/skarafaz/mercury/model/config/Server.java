@@ -1,6 +1,6 @@
 /*
  * Mercury-SSH
- * Copyright (C) 2018 Skarafaz
+ * Copyright (C) 2019 Skarafaz
  *
  * This file is part of Mercury-SSH.
  *
@@ -34,6 +34,7 @@ public class Server implements Serializable, Comparable<Server> {
     private Integer port;
     private String user;
     private String password;
+    private Boolean sudoNoPasswd;
     private String sudoPath;
     private String nohupPath;
     private List<Command> commands;
@@ -76,6 +77,14 @@ public class Server implements Serializable, Comparable<Server> {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Boolean getSudoNoPasswd() {
+        return sudoNoPasswd;
+    }
+
+    public void setSudoNoPasswd(Boolean sudoNoPasswd) {
+        this.sudoNoPasswd = sudoNoPasswd;
     }
 
     public String getSudoPath() {

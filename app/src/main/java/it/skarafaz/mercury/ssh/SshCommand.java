@@ -1,6 +1,6 @@
 /*
  * Mercury-SSH
- * Copyright (C) 2017 Skarafaz
+ * Copyright (C) 2019 Skarafaz
  *
  * This file is part of Mercury-SSH.
  *
@@ -40,6 +40,7 @@ public abstract class SshCommand extends Thread {
     protected Integer port;
     protected String user;
     protected String password;
+    protected Boolean sudoNoPasswd;
     protected String sudoPath;
     protected String nohupPath;
     protected Boolean sudo;

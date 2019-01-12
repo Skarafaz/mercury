@@ -45,6 +45,7 @@ public class SshCommandRegular extends SshCommand {
         this.port = command.getServer().getPort();
         this.user = command.getServer().getUser();
         this.password = command.getServer().getPassword();
+        this.sudoNoPasswd = command.getServer().getSudoNoPasswd();
         this.sudoPath = command.getServer().getSudoPath();
         this.nohupPath = command.getServer().getNohupPath();
         this.sudo = command.getSudo();
@@ -63,7 +64,7 @@ public class SshCommandRegular extends SshCommand {
             }
         }
 
-        if (sudo && password == null) {
+        if (sudo && !sudoNoPasswd && password == null) {
             SshCommandDrop<String> drop = new SshCommandDrop<>();
             String message = MercuryApplication.getContext().getString(R.string.type_sudo_password, formatServerLabel());
             EventBus.getDefault().postSticky(new SshCommandPassword(message, drop));
@@ -106,7 +107,11 @@ public class SshCommandRegular extends SshCommand {
     @Override
     protected String formatCmd(String cmd) {
         if (sudo) {
-            return String.format("echo '%s' | %s -S -- %s sh -c '%s' > /dev/null 2>&1 &", escapeQuotes(password), sudoPath, nohupPath, escapeQuotes(cmd));
+            if (sudoNoPasswd) {
+                return String.format("%s -- %s sh -c '%s' > /dev/null 2>&1 &", sudoPath, nohupPath, escapeQuotes(cmd));
+            } else {
+                return String.format("echo '%s' | %s -S -- %s sh -c '%s' > /dev/null 2>&1 &", escapeQuotes(password), sudoPath, nohupPath, escapeQuotes(cmd));
+            }
         } else {
             return String.format("%s sh -c '%s' > /dev/null 2>&1 &", nohupPath, escapeQuotes(cmd));
         }
