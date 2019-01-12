@@ -32,7 +32,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public abstract class SshCommand extends Thread {
-    protected static final int TIMEOUT = 10000;
+    protected static final int TIMEOUT = 30000;
     private static final Logger logger = LoggerFactory.getLogger(SshCommand.class);
     protected JSch jsch;
     protected Session session;
