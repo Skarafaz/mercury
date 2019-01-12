@@ -41,6 +41,7 @@ public abstract class SshCommand extends Thread {
     protected String user;
     protected String password;
     protected Boolean sudoNoPasswd;
+    protected String shellPath;
     protected String sudoPath;
     protected String nohupPath;
     protected Boolean sudo;

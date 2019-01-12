@@ -71,6 +71,9 @@ public class ServerMapper {
         if (server.getSudoNoPasswd() == null) {
             server.setSudoNoPasswd(false);
         }
+        if (StringUtils.isBlank(server.getShellPath())) {
+            server.setShellPath("sh");
+        }
         if (StringUtils.isBlank(server.getSudoPath())) {
             server.setSudoPath("sudo");
         }

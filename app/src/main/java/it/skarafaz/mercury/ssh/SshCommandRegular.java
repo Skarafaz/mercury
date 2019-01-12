@@ -46,6 +46,7 @@ public class SshCommandRegular extends SshCommand {
         this.user = command.getServer().getUser();
         this.password = command.getServer().getPassword();
         this.sudoNoPasswd = command.getServer().getSudoNoPasswd();
+        this.shellPath = command.getServer().getShellPath();
         this.sudoPath = command.getServer().getSudoPath();
         this.nohupPath = command.getServer().getNohupPath();
         this.sudo = command.getSudo();
@@ -108,12 +109,12 @@ public class SshCommandRegular extends SshCommand {
     protected String formatCmd(String cmd) {
         if (sudo) {
             if (sudoNoPasswd) {
-                return String.format("%s -- %s sh -c '%s' > /dev/null 2>&1 &", sudoPath, nohupPath, escapeQuotes(cmd));
+                return String.format("%s -- %s %s -c '%s' > /dev/null 2>&1 &", sudoPath, nohupPath, shellPath, escapeQuotes(cmd));
             } else {
-                return String.format("echo '%s' | %s -S -- %s sh -c '%s' > /dev/null 2>&1 &", escapeQuotes(password), sudoPath, nohupPath, escapeQuotes(cmd));
+                return String.format("echo '%s' | %s -S -- %s %s -c '%s' > /dev/null 2>&1 &", escapeQuotes(password), sudoPath, nohupPath, shellPath, escapeQuotes(cmd));
             }
         } else {
-            return String.format("%s sh -c '%s' > /dev/null 2>&1 &", nohupPath, escapeQuotes(cmd));
+            return String.format("%s %s -c '%s' > /dev/null 2>&1 &", nohupPath, shellPath, escapeQuotes(cmd));
         }
     }
 

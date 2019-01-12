@@ -35,6 +35,7 @@ public class Server implements Serializable, Comparable<Server> {
     private String user;
     private String password;
     private Boolean sudoNoPasswd;
+    private String shellPath;
     private String sudoPath;
     private String nohupPath;
     private List<Command> commands;
@@ -85,6 +86,14 @@ public class Server implements Serializable, Comparable<Server> {
 
     public void setSudoNoPasswd(Boolean sudoNoPasswd) {
         this.sudoNoPasswd = sudoNoPasswd;
+    }
+
+    public String getShellPath() {
+        return shellPath;
+    }
+
+    public void setShellPath(String shellPath) {
+        this.shellPath = shellPath;
     }
 
     public String getSudoPath() {
