@@ -1,3 +1,23 @@
+<!--
+  ~ Mercury-SSH
+  ~ Copyright (C) 2019 Skarafaz
+  ~
+  ~ This file is part of Mercury-SSH.
+  ~
+  ~ Mercury-SSH is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 2 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Mercury-SSH is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Mercury-SSH.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -49,7 +69,7 @@
     "confirm" : true
   }, {
     "name" : "Rsync",
-    "sudo" : true,
+    "shellPath" : "dash",
     "cmd" : "rsync -a /src/ /dst/"
   } ]
 }
@@ -93,6 +113,11 @@
                     <td>Login password. Optional.</td>
                 </tr>
                 <tr>
+                    <td><code>sudoNoPasswd</code></td>
+                    <td>boolean</td>
+                    <td>Set it to <code>true</code> if <code>user</code> is allowed to call <i>sudo</i> with no password. Optional, defaults to <code>false</code>.</td>
+                </tr>
+                <tr>
                     <td><code>nohupPath</code></td>
                     <td>string</td>
                     <td><i>nohup</i> binary path. Optional, defaults to <code>nohup</code>.</td>
@@ -129,6 +154,11 @@
                     <td>boolean</td>
                     <td>State if the command needs to be executed as root. Optional, defaults to <code>false</code>.
                     </td>
+                </tr>
+                <tr>
+                    <td><code>shellPath</code></td>
+                    <td>string</td>
+                    <td>Terget shell binary path; the command will be executed by the specified shell. Optional, defaults to <code>"sh"</code>.</td>
                 </tr>
                 <tr>
                     <td><code>cmd</code></td>
