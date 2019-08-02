@@ -71,9 +71,6 @@ public class ServerMapper {
         if (server.getSudoNoPasswd() == null) {
             server.setSudoNoPasswd(false);
         }
-        if (StringUtils.isBlank(server.getShellPath())) {
-            server.setShellPath("sh");
-        }
         if (StringUtils.isBlank(server.getSudoPath())) {
             server.setSudoPath("sudo");
         }
@@ -97,6 +94,9 @@ public class ServerMapper {
         }
         if (command.getSudo() == null) {
             command.setSudo(Boolean.FALSE);
+        }
+        if (StringUtils.isBlank(command.getShellPath())) {
+            command.setShellPath("sh");
         }
         if (StringUtils.isBlank(command.getCmd())) {
             errors.put(String.format("commands[%d].cmd", index), getString(R.string.validation_missing));

@@ -46,10 +46,10 @@ public class SshCommandRegular extends SshCommand {
         this.user = command.getServer().getUser();
         this.password = command.getServer().getPassword();
         this.sudoNoPasswd = command.getServer().getSudoNoPasswd();
-        this.shellPath = command.getServer().getShellPath();
         this.sudoPath = command.getServer().getSudoPath();
         this.nohupPath = command.getServer().getNohupPath();
         this.sudo = command.getSudo();
+        this.shellPath = command.getShellPath();
         this.cmd = command.getCmd();
         this.confirm = command.getConfirm();
     }

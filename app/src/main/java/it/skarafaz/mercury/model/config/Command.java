@@ -1,6 +1,6 @@
 /*
  * Mercury-SSH
- * Copyright (C) 2018 Skarafaz
+ * Copyright (C) 2019 Skarafaz
  *
  * This file is part of Mercury-SSH.
  *
@@ -30,6 +30,7 @@ public class Command implements Serializable, Comparable<Command> {
     private static final long serialVersionUID = -1107949489549383265L;
     private String name;
     private Boolean sudo;
+    private String shellPath;
     private String cmd;
     private Boolean confirm;
     private Server server;
@@ -48,6 +49,14 @@ public class Command implements Serializable, Comparable<Command> {
 
     public void setSudo(Boolean sudo) {
         this.sudo = sudo;
+    }
+
+    public String getShellPath() {
+        return shellPath;
+    }
+
+    public void setShellPath(String shellPath) {
+        this.shellPath = shellPath;
     }
 
     public String getCmd() {
