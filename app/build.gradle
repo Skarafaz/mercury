@@ -27,8 +27,8 @@ android {
         applicationId "it.skarafaz.mercury"
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 9
-        versionName "1.2.3"
+        versionCode 10
+        versionName "1.2.4-SNAPSHOT"
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [eventBusIndex: 'it.skarafaz.mercury.EventBusIndex']
