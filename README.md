@@ -1,8 +1,10 @@
-# Mercury-SSH Commander
+# Mercury-SSH Commander EOL
+
+## This app reached the EOL stage; it will not be available on Google Play anymore, but you can download if from F-Droid.
 
 Simple Android app that sends pre-configured commands to remote servers via SSH.
 
-<a href="https://play.google.com/store/apps/details?id=it.skarafaz.mercury&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" width=200/></a>
+<a href="https://f-droid.org/en/packages/it.skarafaz.mercury"><img alt="Get it on F-Droid" src="https://f-droid.org/assets/fdroid-logo-text_S0MUfk_FsnAYL7n2MQye-34IoSNm6QM6xYjDnMqkufo=.svg" width=200/></a>
 
 ## Usage
 
